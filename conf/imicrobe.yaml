@@ -1,0 +1,6 @@
+db:
+  name: "imicrobe"
+  host: "localhost"
+  user: "imicrobe"
+  password: "l33ttlecr0b3s"
+  driver: "mysql"
