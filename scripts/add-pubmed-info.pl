@@ -18,27 +18,26 @@ for my $pub (@$pubs) {
     my $json      = decode_json(get(sprintf($url, $pubmed_id)));
     my $pubmed    = $json->{'result'}{ $pubmed_id } or next;
 
-    if (my $journal = $pubmed->{'fulljournalname'}) {
-        printf "%s => %s\n", $pub->{'publication_id'}, $journal;
-        $db->do(
-            'update publication set journal=?, pub_date=? where publication_id=?', 
-            {},
-            $journal,
-            $pubmed->{'pubdate'},
-            $pub->{'publication_id'}
-        );
-    }
-
-#    my $title     = $pubmed->{'title'} or next;
-#    $title        =~ s/\.$//;
-#    if ($title ne $pub->{'title'}) {
-#        printf "%s =>\n%s\n\n", $pub->{'title'}, $title;
-#
+#    if (my $journal = $pubmed->{'fulljournalname'}) {
+#        printf "%s => %s\n", $pub->{'publication_id'}, $journal;
 #        $db->do(
-#            'update pub set title=? where pub_id=?', {},
-#            ($pubmed_id, $pub->{'pub_id'})
+#            'update publication set journal=?, pub_date=? where publication_id=?', 
+#            {},
+#            $journal,
+#            $pubmed->{'pubdate'},
+#            $pub->{'publication_id'}
 #        );
 #    }
+
+    my $title = $pubmed->{'title'} or next;
+    $title    =~ s/\.$//;
+
+    printf "%s =>\n%s\n\n", $pub->{'title'}, $title;
+
+    $db->do(
+        'update publication set title=? where publication_id=?', {},
+        ($title, $pub->{'publication_id'})
+    );
 }
 
 say "Done";
