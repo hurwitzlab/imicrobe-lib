@@ -17,7 +17,12 @@ Readonly my %INDEX_FLDS = (
         sample_acc sample_description sample_name comments taxon_id
         biomaterial_name description material_acc site_name site_description
         country_name region habitat_name host_taxon_id host_description 
-        host_organism library_acc
+        host_organism library_acc description sequencing_method dna_type
+        additional_citations external_sample_id growth_medium importance
+        ncgr_sample_id sample_type primary_citation
+    )],
+    combined_assembly => [qw( 
+        assembly_name phylum class family genus species strain
     )],
 );
 
