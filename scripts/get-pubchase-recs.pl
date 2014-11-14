@@ -13,7 +13,7 @@ use Readonly;
 use WWW::Mechanize;
 
 Readonly my $URL => 'https://www.pubchase.com/api/v1/recommendations?' .
-    'email=imicrobe@imicrobe.us&key=e9026c0697dbc49d76680af5a825f0c9';
+    'key=e9026c0697dbc49d76680af5a825f0c9';
 
 my ( $help, $man_page );
 GetOptions(
@@ -81,20 +81,25 @@ sub add_articles {
    
     my $n = 0;
     for my $article (@articles) {
+        (my $title = $article->{'title'}) =~ s/\.$//; 
+
         $db->do(
             q[
                 insert 
                 into   pubchase (article_id, title, journal_title,
-                       doi, list_of_authors, article_date, url, created_on)
+                       doi, authors, article_date, url, created_on)
                 values (?, ?, ?, ?, ?, ?, ?, now())
             ],
             {},
             ( 
                 $article->{'article_id'}, 
-                $article->{'title'}, 
+                $title,
                 $article->{'journal_title'}, 
                 $article->{'ELocationID'}, 
-                join(', ', @{$article->{'list_of_authors'}}), 
+                join(', ', 
+                    map { join(' ', $_->{'last_name'}, $_->{'initials'}) }
+                    @{$article->{'authors'}}
+                ), 
                 $article->{'article_date'}, 
                 $article->{'url'}
             )
