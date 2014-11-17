@@ -83,29 +83,36 @@ sub add_articles {
     for my $article (@articles) {
         (my $title = $article->{'title'}) =~ s/\.$//; 
 
-        $db->do(
-            q[
-                insert 
-                into   pubchase (article_id, title, journal_title,
-                       doi, authors, article_date, url, created_on)
-                values (?, ?, ?, ?, ?, ?, ?, now())
-            ],
-            {},
-            ( 
-                $article->{'article_id'}, 
-                $title,
-                $article->{'journal_title'}, 
-                $article->{'ELocationID'}, 
-                join(', ', 
-                    map { join(' ', $_->{'last_name'}, $_->{'initials'}) }
-                    @{$article->{'authors'}}
-                ), 
-                $article->{'article_date'}, 
-                $article->{'url'}
-            )
+        my $exists = $db->selectrow_array(
+            'select count(*) from pubchase where article_id=?', {},
+            $article->{'article_id'}
         );
 
-        $n++;
+        if (!$exists) {
+            $db->do(
+                q[
+                    insert 
+                    into   pubchase (article_id, title, journal_title,
+                           doi, authors, article_date, url, created_on)
+                    values (?, ?, ?, ?, ?, ?, ?, now())
+                ],
+                {},
+                ( 
+                    $article->{'article_id'}, 
+                    $title,
+                    $article->{'journal_title'}, 
+                    $article->{'ELocationID'}, 
+                    join(', ', 
+                        map { join(' ', $_->{'last_name'}, $_->{'initials'}) }
+                        @{$article->{'authors'}}
+                    ), 
+                    $article->{'article_date'}, 
+                    $article->{'url'}
+                )
+            );
+
+            $n++;
+        }
     }
 
     return $n;
