@@ -14,12 +14,33 @@ Readonly my %INDEX_FLDS = (
     project     => [qw(project_code project_name pi institution description)],
     publication => [qw(journal pub_code author title)],
     sample      => [qw(
-        sample_acc sample_description sample_name comments taxon_id
-        biomaterial_name description material_acc site_name site_description
-        country_name region habitat_name host_taxon_id host_description 
-        host_organism library_acc description sequencing_method dna_type
-        additional_citations external_sample_id growth_medium importance
-        ncgr_sample_id sample_type primary_citation
+        genbank_acc isolation_method
+        sample_acc sample_type volume_unit
+        sample_description sample_name comments taxon_id
+        biomaterial_name description material_acc
+        site_name site_description country_name region
+        host_description host_organism library_acc
+        sequencing_method dna_type other
+        additional_citations assembly_accession_number
+        combined_assembly_name country
+        envo_term_for_habitat_primary_term
+        envo_term_for_habitat_secondary_term genus
+        growth_medium habitat habitat_description
+        importance investigation_type
+        modifications_to_growth_medium
+        other_collection_site_info
+        other_environmental_metadata_available
+        other_experimental_metadata_available
+        prey_organism_if_applicable primary_citation
+        principle_investigator sample_collection_site
+        sample_material species strain pi
+        environmental_salinity environmental_temperature
+        experimental_salinity experimental_temperature
+        class family mmetsp_id phylum torder superkingdom
+        comment current_land_use filter_type gene_name
+        habitat_name host_name host_species host_tissue
+        other_habitat phage_type plant_cover
+        template_preparation_method treatment
     )],
     combined_assembly => [qw( 
         assembly_name phylum class family genus species strain
