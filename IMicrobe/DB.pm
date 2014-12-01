@@ -4,27 +4,111 @@ use IMicrobe::Config;
 use DBI;
 use Moose;
 
+has config     => (
+    is         => 'rw',
+    isa        => 'IMicrobe::Config',
+    lazy_build => 1,
+);
+
+has dbd => (
+    is         => 'rw',
+    isa        => 'Str',
+    default    =>  'mysql',
+    predicate  => 'has_dbd',
+);
+
 has dbh => (
     is         => 'rw',
     isa        => 'DBI::db',
     lazy_build => 1,
 );
 
+has dsn => (
+    is         => 'rw',
+    isa        => 'Str',
+    lazy_build => 1,
+);
+
+has db_options => (
+    is         => 'rw',
+    isa        => 'HashRef',
+    default    => sub { { RaiseError => 1 } },
+);
+
+has host => (
+    is         => 'rw',
+    isa        => 'Str',
+    default    => 'localhost',
+);
+
+has name => (
+    is         => 'rw',
+    isa        => 'Str',
+    default    => 'imicrobe',
+    predicate  => 'has_name',
+);
+
+has password   => (
+    is         => 'rw',
+    isa        => 'Str',
+    lazy_build => 1,
+);
+
+has user => (
+    is         => 'rw',
+    isa        => 'Str',
+    default    => 'imicrobe',
+    predicate  => 'has_user',
+);
+
+# ----------------------------------------------------------------
+sub BUILD {
+    my $self    = shift;
+    my $config  = $self->config;
+    my $db_conf = $config->get('db');
+
+    if (!$self->has_user && defined $db_conf->{'user'}) {
+        $self->user($db_conf->{'user'});
+    }
+
+    if (!$self->has_password && defined $db_conf->{'password'}) {
+        $self->password($db_conf->{'password'});
+    }
+
+    if (!$self->has_name && defined $db_conf->{'name'}) {
+        $self->name($db_conf->{'name'});
+    }
+
+    if ( !$self->has_dsn ) {
+        my $host = $self->host;
+        my $name = $self->name;
+
+        $self->dsn(
+            sprintf( "dbi:%s:%s",
+                $self->dbd,
+                $host ? "database=$name;host=$host" : $name
+            )
+        );
+    }
+}
+
+# ----------------------------------------------------------------
+sub _build_config {
+    return IMicrobe::Config->new;
+}
+
 # ----------------------------------------------------------------
 sub _build_dbh {
-    my $self        = shift;
-    my $config      = IMicrobe::Config->new;
-    my $db_info     = $config->get('db');
-    my $db_name     = $db_info->{'name'}     || 'imicrobe';
-    my $driver      = $db_info->{'driver'}   || 'mysql';
-    my $user        = $db_info->{'user'}     || 'imicrobe';
-    my $host        = $db_info->{'host'}     || 'localhost';
-    my $password    = $db_info->{'password'} || '';
-    my $dsn         = sprintf("dbi:%s:db=%s;host=%s", $driver, $db_name, $host);
-
+    my $self = shift;
     my $dbh;
+
     eval {
-        $dbh = DBI->connect($dsn, $user, $password, { RaiseError => 1 });
+        $dbh = DBI->connect(
+            $self->dsn, 
+            $self->user, 
+            $self->password, 
+            $self->db_options
+        );
     };
 
     if ( my $err = $@ ) {
