@@ -60,6 +60,7 @@ CREATE TABLE `combined_assembly` (
   `nucleotides_file` varchar(255) DEFAULT NULL,
   `cds_file` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`combined_assembly_id`),
+  UNIQUE KEY `assembly_name` (`assembly_name`),
   KEY `project_id` (`project_id`),
   CONSTRAINT `combined_assembly_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=latin1;
@@ -118,6 +119,8 @@ CREATE TABLE `project` (
   `assembly_file` varchar(100) DEFAULT NULL,
   `peptide_file` varchar(100) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
+  `read_pep_file` varchar(100) DEFAULT NULL,
+  `nt_file` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`project_id`),
   UNIQUE KEY `project_code` (`project_code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8;
@@ -161,7 +164,7 @@ CREATE TABLE `pubchase` (
   `url` text,
   PRIMARY KEY (`pubchase_id`),
   UNIQUE KEY `article_id` (`article_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -176,7 +179,7 @@ CREATE TABLE `pubchase_rec` (
   `rec_date` datetime DEFAULT NULL,
   `checksum` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pubchase_rec_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -210,6 +213,10 @@ CREATE TABLE `reference` (
   `reference_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `file` varchar(20) NOT NULL,
   `name` varchar(100) NOT NULL,
+  `revision` text,
+  `length` int(10) unsigned DEFAULT NULL,
+  `seq_count` int(10) unsigned DEFAULT NULL,
+  `build_date` text,
   PRIMARY KEY (`reference_id`),
   UNIQUE KEY `file` (`file`,`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
@@ -248,7 +255,6 @@ CREATE TABLE `sample` (
   `site_description` varchar(255) DEFAULT NULL,
   `country_name` varchar(255) DEFAULT NULL,
   `region` varchar(255) DEFAULT NULL,
-  `habitat_name` varchar(255) DEFAULT NULL,
   `host_taxon_id` varchar(255) DEFAULT NULL,
   `host_description` varchar(255) DEFAULT NULL,
   `host_organism` varchar(255) DEFAULT NULL,
@@ -258,7 +264,7 @@ CREATE TABLE `sample` (
   `num_of_reads` varchar(255) DEFAULT NULL,
   `material_id` varchar(255) DEFAULT NULL,
   `other` varchar(255) DEFAULT NULL,
-  `18s_rrna` text,
+  `rrna_18s` text,
   `additional_citations` text,
   `ammonium` text,
   `assembly_accession_number` text,
@@ -290,7 +296,6 @@ CREATE TABLE `sample` (
   `light` text,
   `list_of_amino_acids_and_concentrations_with_units` text,
   `modifications_to_growth_medium` text,
-  `ncgr_sample_id` text,
   `night_portion_of_day_night_cycle_in_hours` text,
   `nitrate` text,
   `other_collection_site_info` text,
@@ -304,22 +309,226 @@ CREATE TABLE `sample` (
   `prey_organism_if_applicable` text,
   `primary_citation` text,
   `principle_investigator` text,
-  `salinity` text,
-  `sample_accession_number` text,
   `sample_collection_site` text,
   `sample_material` text,
   `silicate` text,
   `species` text,
   `strain` text,
-  `temperature` text,
   `total_fe` text,
   `trace_elements` text,
   `urea` text,
   `volume_filtered` text,
+  `reads_file` varchar(200) DEFAULT NULL,
+  `annotations_file` varchar(200) DEFAULT NULL,
+  `peptides_file` varchar(200) DEFAULT NULL,
+  `contigs_file` varchar(200) DEFAULT NULL,
+  `cds_file` varchar(200) DEFAULT NULL,
+  `pi` text,
+  `environmental_salinity` text,
+  `environmental_temperature` text,
+  `experimental_salinity` text,
+  `experimental_temperature` text,
+  `class` text,
+  `family` text,
+  `mmetsp_id` text,
+  `phylum` text,
+  `pcr_amp` text,
+  `rrna_16s` text,
+  `torder` text,
+  `superkingdom` text,
+  `abundance_bacterial_cells_ml` text,
+  `abundance_bacterial_cells_ml_h` text,
+  `abundance_synechococcus_cells_ml` text,
+  `alkalinityalk_mm` text,
+  `altitude_m` text,
+  `aluminiumal_um` text,
+  `ammonianh4_um` text,
+  `ammonium_umol_kg` text,
+  `antimonysb_um` text,
+  `arsenicas_um` text,
+  `atmospheric_general_weather` text,
+  `atmospheric_pressure_atm` text,
+  `atmospheric_wind_speed_m_s` text,
+  `bacterial_production_cells_ml_h` text,
+  `bariumba_um` text,
+  `biofilm_g` text,
+  `biomass_concentration_ug_kg` text,
+  `biomass_mass_g` text,
+  `boronb_um` text,
+  `caesiumcs_um` text,
+  `calciumca_um` text,
+  `carbon_dioxideco2_um` text,
+  `carbon_dioxideco2_umol_kg` text,
+  `cdom_rfu` text,
+  `cfu_cjejuni_cfu` text,
+  `charge__mmol` text,
+  `charge_mmol` text,
+  `chla_mg_1000l` text,
+  `chlorinitycl_mm` text,
+  `chlorinitycl_um` text,
+  `chlorophyll_density_annual_ug_kg` text,
+  `chlorophyll_density_annual_ug_l` text,
+  `chlorophyll_density_psu` text,
+  `chlorophyll_density_sample_month_ug_kg` text,
+  `chlorophyll_density_ug_kg` text,
+  `chloropigment` text,
+  `comment` text,
+  `current_land_use` text,
+  `dissolved_inorg_cdic_mm` text,
+  `dissolved_inorg_cdic_um` text,
+  `dissolved_inorganic_carbon_umol_kg` text,
+  `dissolved_inorganic_nitrogen_umol_l` text,
+  `dissolved_inorganic_phosphate_nmol_kg` text,
+  `dissolved_organic_carbon_um` text,
+  `dissolved_organic_carbon_umol_kg` text,
+  `dissolved_organic_nitrogen_umol_kg` text,
+  `dissolved_oxygen_nmol_kg` text,
+  `dissolved_oxygen_umol_kg` text,
+  `filter_type` text,
+  `filter_type_m` text,
+  `fluorescence_ug_l` text,
+  `fluorinef_um` text,
+  `gene_name` text,
+  `glucose_mg` text,
+  `h2_um` text,
+  `habitat_name` text,
+  `health_status` text,
+  `host_name` text,
+  `host_species` text,
+  `host_tissue` text,
+  `ironfe_um` text,
+  `isolation` text,
+  `leg` text,
+  `leucine_umol_kg` text,
+  `light_intensity_umol_m2_s` text,
+  `lithiumli_um` text,
+  `magnesiummg_um` text,
+  `manganesemn_um` text,
+  `mean_annual_precipitation_cm` text,
+  `methane_um` text,
+  `method_of_isolation` text,
+  `molybdenummo_um` text,
+  `nitratenitrite_nmol_kg` text,
+  `nitrateno3_um` text,
+  `nitrateno3_umol_l` text,
+  `nitrite_umol_l` text,
+  `number_of_samples_pooled` text,
+  `number_of_stations_sampled` text,
+  `nutrients_dmsp_nm` text,
+  `nutrients_nh4_microm` text,
+  `nutrients_nox_microm` text,
+  `nutrients_po3_microm` text,
+  `nutrients_po4_microm` text,
+  `nutrients_potassium_phosphate_um` text,
+  `nutrients_putrescine_c4h12n2_nm` text,
+  `nutrients_so4_microm` text,
+  `nutrients_sodium_nitrate_um` text,
+  `nutrients_spermidine_c7h19n3_nm` text,
+  `other_habitat` text,
+  `oxygen` text,
+  `oxygen_mass_um` text,
+  `oxygen_um` text,
+  `oxygen_umol_kg` text,
+  `particulate_carbon_umol_kg` text,
+  `particulate_nigrogen_umol_kg` text,
+  `particulate_nitrogen_umol_kg` text,
+  `particulate_organic_carbon_umol_kg` text,
+  `particulate_phosphate_umol_kg` text,
+  `phage_type` text,
+  `phosphate_umol_kg` text,
+  `phosphate_umol_l` text,
+  `plant_cover` text,
+  `potassium` text,
+  `potassiumk_um` text,
+  `pressure_atm` text,
+  `rain_fall` text,
+  `rubidiumrb_um` text,
+  `salinity_ppm` text,
+  `salinity_psu` text,
+  `sample_depth` text,
+  `sample_depth_m` text,
+  `sigma_kg_1000l` text,
+  `silicah4sio4_um_l` text,
+  `silicate_umol_kg` text,
+  `siliconsi_um` text,
+  `siliconsi_umol_l` text,
+  `sodium` text,
+  `sodium_um` text,
+  `soil_depth_m` text,
+  `soil_type` text,
+  `strontiumsr_um` text,
+  `sulfateso4_mm` text,
+  `sulfateso4_um` text,
+  `sulfurs2_um` text,
+  `temperature` text,
+  `temperature_c` text,
+  `template_preparation_method` text,
+  `theta_its_90` text,
+  `time_count` text,
+  `time_hour` text,
+  `transmission` text,
+  `treatment` text,
+  `tungstenw_um` text,
+  `turbidity_ntu` text,
+  `turbidity_umol_kg` text,
+  `urea_umol_l` text,
+  `vanadiumv_um` text,
+  `viral_abundance_viruses_ml` text,
+  `viral_production_viruses_ml_h` text,
+  `volume_filtered_l` text,
+  `volume_l` text,
+  `water_depth` text,
+  `water_depth_m` text,
+  `wave_height_m` text,
+  `zinczn_um` text,
+  `bact_chl_a_ug_l` text,
+  `bchl_cd_ug_l` text,
+  `bchl_e_ug_l` text,
+  `organism_count` text,
+  `sulfide_um` text,
+  `total_phosphorus` text,
+  `genbank_acc` text,
+  `isolation_method` text,
   PRIMARY KEY (`sample_id`),
   UNIQUE KEY `project_id` (`project_id`,`sample_acc`),
   CONSTRAINT `sample_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2468 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2523 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sample_attr`
+--
+
+DROP TABLE IF EXISTS `sample_attr`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sample_attr` (
+  `sample_attr_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sample_attr_type_id` int(10) unsigned NOT NULL,
+  `sample_id` int(10) unsigned NOT NULL,
+  `attr_value` varchar(255) NOT NULL,
+  PRIMARY KEY (`sample_attr_id`),
+  KEY `sample_attr_type_id` (`sample_attr_type_id`),
+  KEY `sample_id` (`sample_id`),
+  CONSTRAINT `sample_attr_ibfk_1` FOREIGN KEY (`sample_attr_type_id`) REFERENCES `sample_attr_type` (`sample_attr_type_id`),
+  CONSTRAINT `sample_attr_ibfk_2` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=586 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sample_attr_type`
+--
+
+DROP TABLE IF EXISTS `sample_attr_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sample_attr_type` (
+  `sample_attr_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(255) NOT NULL,
+  `url_template` varchar(255) NOT NULL,
+  PRIMARY KEY (`sample_attr_type_id`),
+  UNIQUE KEY `type` (`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -336,7 +545,7 @@ CREATE TABLE `search` (
   `search_text` longtext,
   PRIMARY KEY (`search_id`),
   FULLTEXT KEY `search_text` (`search_text`)
-) ENGINE=MyISAM AUTO_INCREMENT=38125 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=55101 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -348,4 +557,4 @@ CREATE TABLE `search` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-11-14 16:27:19
+-- Dump completed on 2014-12-01 15:57:05
