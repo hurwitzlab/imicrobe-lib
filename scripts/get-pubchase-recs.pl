@@ -7,10 +7,12 @@ use feature 'say';
 use Digest::MD5 'md5_hex';
 use Getopt::Long;
 use JSON::XS qw'decode_json encode_json';
-use IMicrobe::DB;
 use Pod::Usage;
 use Readonly;
 use WWW::Mechanize;
+
+use lib '/usr/local/imicrobe/lib';
+use IMicrobe::DB;
 
 Readonly my $URL => 'https://www.pubchase.com/api/v1/recommendations?' .
     'key=e9026c0697dbc49d76680af5a825f0c9';
