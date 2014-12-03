@@ -10,10 +10,11 @@ use IMicrobe::DB;
 use Readonly;
 
 Readonly my %INDEX_FLDS = (
-    assembly    => [qw(assembly_code assembly_name organism)],
-    project     => [qw(project_code project_name pi institution description)],
-    publication => [qw(journal pub_code author title)],
-    sample      => [qw(
+    assembly     => [qw(assembly_code assembly_name organism)],
+    project      => [qw(project_code project_name pi institution description)],
+    project_page => [qw(title contents)],
+    publication  => [qw(journal pub_code author title)],
+    sample       => [qw(
         genbank_acc isolation_method
         sample_acc sample_type volume_unit
         sample_description sample_name comments taxon_id
