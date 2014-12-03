@@ -14,6 +14,7 @@ requires 'Template::Plugin::Comma'  => '0.04';
 requires 'namespace::autoclean'     => '';
 requires 'YAML'                     => '';
 requires 'Readonly'                 => '';
+requires 'Text::Markdown'           => '';
 
 test_requires 'Test::More'          => '0.98';
 test_requires 'Test::Exception'     => '';
