@@ -1,6 +1,7 @@
 package IMicrobe::DB;
 
 use IMicrobe::Config;
+use IMicrobe::Schema;
 use DBI;
 use Moose;
 
@@ -51,6 +52,12 @@ has name => (
 has password   => (
     is         => 'rw',
     isa        => 'Str',
+    lazy_build => 1,
+);
+
+has schema => (
+    is         => 'ro',
+    isa        => 'DBIx::Class::Schema',
     lazy_build => 1,
 );
 
@@ -117,6 +124,13 @@ sub _build_dbh {
     else {
         return $dbh;
     }
+}
+
+# ----------------------------------------------------------------
+sub _build_schema {
+    my $self = shift;
+
+    return IMicrobe::Schema->connect( sub { $self->dbh } );
 }
 
 1;
