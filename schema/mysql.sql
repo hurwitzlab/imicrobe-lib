@@ -127,6 +127,26 @@ CREATE TABLE `project` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `project_page`
+--
+
+DROP TABLE IF EXISTS `project_page`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `project_page` (
+  `project_page_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_id` int(10) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `contents` text,
+  `display_order` int(11) DEFAULT NULL,
+  PRIMARY KEY (`project_page_id`),
+  UNIQUE KEY `project_id` (`project_id`,`title`),
+  KEY `project_id_2` (`project_id`),
+  CONSTRAINT `project_page_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `project_to_domain`
 --
 
@@ -191,6 +211,7 @@ DROP TABLE IF EXISTS `publication`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `publication` (
   `publication_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_id` int(10) unsigned DEFAULT NULL,
   `pub_code` varchar(255) DEFAULT NULL,
   `doi` text,
   `author` varchar(255) DEFAULT NULL,
@@ -508,11 +529,11 @@ CREATE TABLE `sample_attr` (
   `sample_id` int(10) unsigned NOT NULL,
   `attr_value` varchar(255) NOT NULL,
   PRIMARY KEY (`sample_attr_id`),
+  UNIQUE KEY `sample_id` (`sample_id`,`sample_attr_type_id`,`attr_value`),
   KEY `sample_attr_type_id` (`sample_attr_type_id`),
-  KEY `sample_id` (`sample_id`),
   CONSTRAINT `sample_attr_ibfk_1` FOREIGN KEY (`sample_attr_type_id`) REFERENCES `sample_attr_type` (`sample_attr_type_id`),
   CONSTRAINT `sample_attr_ibfk_2` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=586 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2613 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -557,4 +578,4 @@ CREATE TABLE `search` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-12-01 15:57:05
+-- Dump completed on 2014-12-03  9:45:24
