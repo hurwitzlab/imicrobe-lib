@@ -56,6 +56,13 @@ __PACKAGE__->table("project_page");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 format
+
+  data_type: 'enum'
+  default_value: 'html'
+  extra: {list => ["html","markdown"]}
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -79,6 +86,13 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "display_order",
   { data_type => "integer", is_nullable => 1 },
+  "format",
+  {
+    data_type => "enum",
+    default_value => "html",
+    extra => { list => ["html", "markdown"] },
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -127,8 +141,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 19:11:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rwpguZNiPgh66Feu4wku3w
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-03 10:42:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EmQIDvz0JtB3cbPW91j5CQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

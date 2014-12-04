@@ -93,6 +93,27 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("sample_attr_id");
 
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<sample_id>
+
+=over 4
+
+=item * L</sample_id>
+
+=item * L</sample_attr_type_id>
+
+=item * L</attr_value>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint(
+  "sample_id",
+  ["sample_id", "sample_attr_type_id", "attr_value"],
+);
+
 =head1 RELATIONS
 
 =head2 sample
@@ -126,8 +147,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 15:54:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ATGtOp5a1VxFEnCLJBHsVg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-03 10:42:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yO8vobNyhdxiNjOGtW5z2w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
