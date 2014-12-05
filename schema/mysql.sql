@@ -123,7 +123,7 @@ CREATE TABLE `project` (
   `nt_file` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`project_id`),
   UNIQUE KEY `project_code` (`project_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,11 +139,12 @@ CREATE TABLE `project_page` (
   `title` varchar(255) NOT NULL,
   `contents` text,
   `display_order` int(11) DEFAULT NULL,
+  `format` enum('html','markdown') DEFAULT 'html',
   PRIMARY KEY (`project_page_id`),
   UNIQUE KEY `project_id` (`project_id`,`title`),
   KEY `project_id_2` (`project_id`),
   CONSTRAINT `project_page_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,8 +220,9 @@ CREATE TABLE `publication` (
   `pubmed_id` int(11) DEFAULT NULL,
   `journal` text,
   `pub_date` text,
-  PRIMARY KEY (`publication_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`publication_id`),
+  KEY `project_id` (`project_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -566,7 +568,7 @@ CREATE TABLE `search` (
   `search_text` longtext,
   PRIMARY KEY (`search_id`),
   FULLTEXT KEY `search_text` (`search_text`)
-) ENGINE=MyISAM AUTO_INCREMENT=55101 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=59010 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -578,4 +580,4 @@ CREATE TABLE `search` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-12-03  9:45:24
+-- Dump completed on 2014-12-05 10:12:17
