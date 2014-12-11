@@ -2,5 +2,5 @@ db:
   name: "imicrobe"
   host: "localhost"
   user: "imicrobe"
-  password: "l33ttlecr0b3s"
+  password: "imicrobe"
   driver: "mysql"
