@@ -4,43 +4,58 @@ use strict;
 use warnings;
 use autodie;
 use feature 'say';
+use Class::Load 'load_class';
 use Digest::MD5 'md5_hex';
 use Getopt::Long;
 use JSON::XS qw'decode_json encode_json';
 use Pod::Usage;
+use Perl6::Slurp 'slurp';
 use Readonly;
 use WWW::Mechanize;
 
-use lib '/usr/local/imicrobe/lib';
-use IMicrobe::DB;
-
-Readonly my $URL => 'https://www.pubchase.com/api/v1/recommendations?' .
-    'key=e9026c0697dbc49d76680af5a825f0c9';
-
-my ( $help, $man_page );
-GetOptions(
-    'help' => \$help,
-    'man'  => \$man_page,
-) or pod2usage(2);
-
-if ( $help || $man_page ) {
-    pod2usage({
-        -exitval => 0,
-        -verbose => $man_page ? 2 : 1
-    });
-}; 
+Readonly my $URL => 'https://www.pubchase.com/api/v1/recommendations?key=';
+Readonly my $KEY_FILE => '/usr/local/hurwitzlab/configs/pubchase/api-key.';
 
 main();
 
 # ----------------------------------------------------
 sub main {
+    my $site = 'imicrobe';
+    my ($help, $man_page);
+    GetOptions(
+        's|site:s' => \$site,
+        'help'     => \$help,
+        'man'      => \$man_page,
+    ) or pod2usage(2);
+
+    if ($help || $man_page) {
+        pod2usage({
+            -exitval => 0,
+            -verbose => $man_page ? 2 : 1
+        });
+    }; 
+
+    my $config_file = $KEY_FILE . $site;
+    my $api_key     = '';
+    if (-e $config_file) {
+        chomp($api_key = slurp($config_file));
+    }
+    else {
+        die "Unknown site ($site), no API key file.\n";
+    }
+
+    my $db_class = $site eq 'imicrobe' ? 'IMicrobe::DB' : 'IVirus::DB';
+    my $db;
+    if (load_class($db_class)) {
+        $db = $db_class->new->dbh;
+    }
+
     my $www = WWW::Mechanize->new;
-    my $res = $www->get($URL);
+    my $res = $www->get($URL . $api_key);
 
     if ($res->is_success) {
         my $content = $res->decoded_content;
         my $md5     = md5_hex($content);
-        my $db      = IMicrobe::DB->new->dbh;
 
         my ($last_checksum) = $db->selectrow_array(q'
             select   checksum
@@ -54,11 +69,26 @@ sub main {
             return;
         }
 
-        my $json  = decode_json($content);
-        my $added = add_articles($db, @{ $json->{'recommendations'} });
+        my $json = decode_json($content);
+        my @recs = @{ $json->{'recommendations'} };
 
-        if ($added) {
-            say STDERR "Added $added articles.";
+        if (!@recs) {
+            say STDERR "There are no recommendations.";
+            return;
+        }
+
+        my $added = add_articles($db, @recs);
+        if (defined $added) {
+            printf STDERR "Added %s article%s to %s.\n", 
+                $added, 
+                $added == 1 ? '' : 's', 
+                $site;
+        }
+        else {
+            say STDERR "Error adding articles.";
+        }
+
+        if ($added > 0) {
             $db->do(
                 q[
                     insert 
@@ -68,9 +98,6 @@ sub main {
                 {},
                 $md5
             );
-        }
-        else {
-            say STDERR "Error adding articles.";
         }
     }
 
