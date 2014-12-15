@@ -163,8 +163,9 @@ get-pubchase-recs.pl - a script
 
 Options:
 
-  --help   Show brief help and exit
-  --man    Show full documentation
+  -s|--site  Either "imicrobe" (default) or "ivirus"
+  --help     Show brief help and exit
+  --man      Show full documentation
 
 =head1 DESCRIPTION
 
