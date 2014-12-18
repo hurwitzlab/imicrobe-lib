@@ -99,7 +99,7 @@ __PACKAGE__->belongs_to(
   "combined_assembly",
   "IMicrobe::Schema::Result::CombinedAssembly",
   { combined_assembly_id => "combined_assembly_id" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 =head2 sample
@@ -114,12 +114,12 @@ __PACKAGE__->belongs_to(
   "sample",
   "IMicrobe::Schema::Result::Sample",
   { sample_id => "sample_id" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 15:54:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VEDGLna6nWl3oIj8KUr+LQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-18 16:00:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hlbACiaXmBWPIyjsU/qj/g
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

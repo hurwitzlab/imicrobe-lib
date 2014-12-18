@@ -128,7 +128,7 @@ __PACKAGE__->belongs_to(
   "sample",
   "IMicrobe::Schema::Result::Sample",
   { sample_id => "sample_id" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 =head2 sample_attr_type
@@ -147,8 +147,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-03 10:42:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yO8vobNyhdxiNjOGtW5z2w
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-18 16:00:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Cp03QtX30DmyglwDd8PQKQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

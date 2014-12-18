@@ -1362,6 +1362,12 @@ __PACKAGE__->table("sample");
   data_type: 'text'
   is_nullable: 1
 
+=head2 fastq_file
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 200
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -1893,6 +1899,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "isolation_method",
   { data_type => "text", is_nullable => 1 },
+  "fastq_file",
+  { data_type => "varchar", is_nullable => 1, size => 200 },
 );
 
 =head1 PRIMARY KEY
@@ -1955,7 +1963,7 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "RESTRICT",
+    on_delete     => "CASCADE",
     on_update     => "RESTRICT",
   },
 );
@@ -1976,8 +1984,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 15:54:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2NJ6pgQuZqL+Vsvh6PTMoA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-18 16:00:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EyZYkYp6MBo9YfhO0tsNeg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

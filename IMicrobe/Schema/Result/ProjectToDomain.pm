@@ -114,12 +114,12 @@ __PACKAGE__->belongs_to(
   "project",
   "IMicrobe::Schema::Result::Project",
   { project_id => "project_id" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 15:54:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7UgFfMRvku7laS0lbmqACw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-18 16:00:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NyM68RLB17+PYo49qquSwA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
