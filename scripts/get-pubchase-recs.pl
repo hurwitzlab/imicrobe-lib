@@ -7,11 +7,14 @@ use feature 'say';
 use Class::Load 'load_class';
 use Digest::MD5 'md5_hex';
 use Getopt::Long;
+use FindBin '$Bin';
 use JSON::XS qw'decode_json encode_json';
 use Pod::Usage;
 use Perl6::Slurp 'slurp';
 use Readonly;
 use WWW::Mechanize;
+
+use lib "$Bin/..";
 
 Readonly my $URL => 'https://www.pubchase.com/api/v1/recommendations?key=';
 Readonly my $KEY_FILE => '/usr/local/hurwitzlab/configs/pubchase/api-key.';
