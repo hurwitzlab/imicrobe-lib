@@ -1,12 +1,13 @@
 #!/usr/bin/env perl
 
-$| = 1;
-
 use strict;
 use warnings;
-use feature 'say';
 use autodie;
+use feature 'say';
+use Data::Dump 'dump';
+use Getopt::Long;
 use IMicrobe::DB;
+use Pod::Usage;
 use Readonly;
 
 Readonly my %INDEX_FLDS = (
@@ -48,40 +49,115 @@ Readonly my %INDEX_FLDS = (
     )],
 );
 
-my $db = IMicrobe::DB->new->dbh;
+main();
 
-for my $table (sort keys %INDEX_FLDS) {
-    my @flds    = @{ $INDEX_FLDS{$table} } or next;
-    my $pk_name = $table . '_id'; 
-    unshift @flds, $pk_name;
+# --------------------------------------------------
+sub main {
+    my $tables = '';
+    my ($help, $man_page);
+    GetOptions(
+        't|tables:s' => \$tables,
+        'help'       => \$help,
+        'man'        => \$man_page,
+    ) or pod2usage(2);
 
-    my $records = $db->selectall_arrayref(
-        sprintf('select %s from %s', join(', ', @flds), $table), 
-        { Columns => {} }
-    );
+    if ($help || $man_page) {
+        pod2usage({
+            -exitval => 0,
+            -verbose => $man_page ? 2 : 1
+        });
+    }; 
 
-    printf "Processing %s from %s\n", scalar @$records, $table;
-
-    $db->do('delete from search where table_name=?', {}, $table);
-
-    my $i;
-    for my $rec (@$records) {
-        my $text = join(' ', map { $rec->{$_} || '' } @flds) or next;
-        my $pk   = $rec->{ $pk_name } or next;
-
-        printf "%-78s\r", ++$i;
-
-        $db->do(
-            q[
-                insert
-                into   search (table_name, primary_key, search_text)
-                values (?, ?, ?)
-            ],
-            {},
-            ($table, $pk, $text)
-        );
+    my %valid  = map { $_, 1 } keys %INDEX_FLDS;
+    my @tables = $tables ? split /\s*,\s*/, $tables : keys %valid;
+    my @bad    = grep { !$valid{ $_ } } @tables;
+    
+    if (@bad) {
+        die join "\n", "Bad tables:", (map { "  - $_" } @bad), '';
     }
-    print "\n";
+
+    process(@tables);
 }
 
-say "Done.";
+# --------------------------------------------------
+sub process {
+    my @tables = @_;
+    my $db     = IMicrobe::DB->new->dbh;
+
+    for my $table (@tables) {
+        my @flds    = @{ $INDEX_FLDS{$table} } or next;
+        my $pk_name = $table . '_id'; 
+        unshift @flds, $pk_name;
+
+        my $records = $db->selectall_arrayref(
+            sprintf('select %s from %s', join(', ', @flds), $table), 
+            { Columns => {} }
+        );
+
+        printf "Processing %s from %s\n", scalar @$records, $table;
+
+        $db->do('delete from search where table_name=?', {}, $table);
+
+        my $i;
+        for my $rec (@$records) {
+            my $text = join(' ', map { $rec->{$_} || '' } @flds) or next;
+            my $pk   = $rec->{ $pk_name } or next;
+
+            printf "%-78s\r", ++$i;
+
+            $db->do(
+                q[
+                    insert
+                    into   search (table_name, primary_key, search_text)
+                    values (?, ?, ?)
+                ],
+                {},
+                ($table, $pk, $text)
+            );
+        }
+        print "\n";
+    }
+
+    say "Done.";
+}
+
+
+__END__
+
+# --------------------------------------------------
+
+=pod
+
+=head1 NAME
+
+load-search.pl - a script
+
+=head1 SYNOPSIS
+
+  load-search.pl 
+
+Options:
+
+  -t|--tables  Comma-separated list of tables to index
+  --help       Show brief help and exit
+  --man        Show full documentation
+
+=head1 DESCRIPTION
+
+Indexes the iMicrobe "search" table.
+
+=head1 AUTHOR
+
+Ken Youens-Clark E<lt>E<gt>.
+
+=head1 COPYRIGHT
+
+Copyright (c) 2015 Ken Youens-Clark
+
+This module is free software; you can redistribute it and/or
+modify it under the terms of the GPL (either version 1, or at
+your option, any later version) or the Artistic License 2.0.
+Refer to LICENSE for the full license text and to DISCLAIMER for
+additional warranty disclaimers.
+
+=cut
