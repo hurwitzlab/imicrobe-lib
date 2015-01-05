@@ -14,7 +14,7 @@ Readonly my %INDEX_FLDS = (
     assembly     => [qw(assembly_code assembly_name organism)],
     project      => [qw(project_code project_name pi institution description)],
     project_page => [qw(title contents)],
-    publication  => [qw(journal pub_code author title)],
+    publication  => [qw(journal pub_code author title pubmed_id doi)],
     sample       => [qw(
         genbank_acc isolation_method
         sample_acc sample_type volume_unit
