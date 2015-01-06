@@ -37,6 +37,7 @@ __PACKAGE__->table("publication");
 
   data_type: 'integer'
   extra: {unsigned => 1}
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 pub_code
@@ -88,7 +89,12 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "project_id",
-  { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 1 },
+  {
+    data_type => "integer",
+    extra => { unsigned => 1 },
+    is_foreign_key => 1,
+    is_nullable => 1,
+  },
   "pub_code",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "doi",
@@ -117,9 +123,31 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("publication_id");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-02 10:06:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FmdmQOSetVff52pJiHMEXQ
+=head2 project
+
+Type: belongs_to
+
+Related object: L<IMicrobe::Schema::Result::Project>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "project",
+  "IMicrobe::Schema::Result::Project",
+  { project_id => "project_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-01-05 15:15:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xCBxWnuRRPQuL5LH/PlxDQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

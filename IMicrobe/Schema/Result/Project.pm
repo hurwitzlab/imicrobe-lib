@@ -236,6 +236,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 publications
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::Publication>
+
+=cut
+
+__PACKAGE__->has_many(
+  "publications",
+  "IMicrobe::Schema::Result::Publication",
+  { "foreign.project_id" => "self.project_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 samples
 
 Type: has_many
@@ -252,8 +267,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 17:27:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zYPN6xQLAZ5OCCjz9dm8xg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-01-05 15:15:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G2CKJulB3ROWfnEOSyo3Sg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
