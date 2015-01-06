@@ -54,8 +54,10 @@ main();
 # --------------------------------------------------
 sub main {
     my $tables = '';
+    my $list   = '';
     my ($help, $man_page);
     GetOptions(
+        'l|list'     => \$list,
         't|tables:s' => \$tables,
         'help'       => \$help,
         'man'        => \$man_page,
@@ -67,6 +69,15 @@ sub main {
             -verbose => $man_page ? 2 : 1
         });
     }; 
+
+    if ($list) {
+        say join "\n", 
+            "Valid tables:",
+            (map { " - $_" } sort keys %INDEX_FLDS),
+            '',
+        ;
+        exit 0;
+    }
 
     my %valid  = map { $_, 1 } keys %INDEX_FLDS;
     my @tables = $tables ? split /\s*,\s*/, $tables : keys %valid;
