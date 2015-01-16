@@ -1,0 +1,269 @@
+From Ken's list of all fields	From Hurowitz CAMERA data.xls	category	MIxS package	maps to MIxS term
+bact_chl_a_ug_l	-	???		chlorophyll?
+bchl_cd_ug_l	-	???		chlorophyll?
+bchl_e_ug_l	-	???		chlorophyll?
+cds_file	-	???		?
+importance	-	???		maybe remove
+pi	-	???		?
+sigma_kg_1000l	Sigma - (kg/1---L)	???		?
+theta_its_90	Theta - (ITS-9-)	???		?
+time_count	Time (count)	???		?
+alkalinityalk_mm	Alkalinity(ALK) - (mM)	chemical	multi	alkalinity
+aluminiumal_um	Aluminium(Al) - (uM)	chemical		
+ammonianh4_um	Ammonia(NH4) - (uM)	chemical		
+ammonium	-	chemical		
+ammonium_umol_kg	Ammonium - (umol/kg)	chemical	multi	ammonium
+antimonysb_um	Antimony(Sb) - (uM)	chemical		
+arsenicas_um	Arsenic(As) - (uM)	chemical		
+bariumba_um	Barium(Ba) - (uM)	chemical		
+boronb_um	Boron(B) - (uM)	chemical		
+caesiumcs_um	Caesium(Cs) - (uM)	chemical		
+calciumca_um	Calcium(Ca) - (uM)	chemical		
+carbon_dioxideco2_um	Carbon dioxide(CO2) - (uM)	chemical	multi	dissolved carbon dioxide
+carbon_dioxideco2_umol_kg	Carbon dioxide(CO2) - (umol/kg)	chemical	multi	dissolved carbon dioxide
+cdom_rfu	CDOM - (RFU)	chemical		
+cfu_cjejuni_cfu	CFU/C.jejuni - (CFU)	chemical		
+chla_mg_1000l	Chla - (mg/1---L)	chemical	multi	chlorophyll
+chlorinitycl_mm	Chlorinity(Cl) - (mM)	chemical		
+chlorinitycl_um	Chlorinity(Cl) - (uM)	chemical		
+chlorophyll	-	chemical		
+chlorophyll_density_annual_ug_kg	chlorophyll density/annual - (ug/kg)	chemical	multi	chlorophyll
+chlorophyll_density_annual_ug_l	chlorophyll density/annual - (ug/l)	chemical	multi	chlorophyll
+chlorophyll_density_psu	chlorophyll density - (psu)	chemical	multi	chlorophyll
+chlorophyll_density_sample_month_ug_kg	chlorophyll density/sample month - (ug/kg)	chemical	multi	chlorophyll
+chlorophyll_density_ug_kg	chlorophyll density - (ug/kg)	chemical	multi	chlorophyll
+chloropigment	Chloropigment	chemical	mulit	chlorophyll
+co2	-	chemical		
+dissolved_inorg_cdic_mm	Dissolved Inorg C(DIC) - (mM)	chemical	multi	dissolved inorganic carbon
+dissolved_inorg_cdic_um	Dissolved Inorg C(DIC) - (uM)	chemical	multi	dissolved inorganic carbon
+dissolved_inorganic_carbon_umol_kg	dissolved inorganic carbon - (umol/kg)	chemical	multi	dissolved organic carbon
+dissolved_inorganic_nitrogen_umol_l	dissolved inorganic nitrogen - (ðmol/l)	chemical	water	total inorganic nitrogen
+dissolved_inorganic_phosphate_nmol_kg	dissolved inorganic phosphate - (nmol/kg)	chemical	water	dissolved inorganic phosphorus
+dissolved_organic_carbon_um	dissolved organic carbon - (uM)	chemical	multi	dissolved organic carbon
+dissolved_organic_carbon_umol_kg	dissolved organic carbon - (umol/kg)	chemical	multi	dissolved organic carbon
+dissolved_organic_nitrogen_umol_kg	Dissolved Organic Nitrogen - (ðmol/kg)	chemical	multi	dissolved organic nitrogen | organic nitrogen
+dissolved_organic_nitrogen_umol_kg	Dissolved Organic Nitrogen - (ðmol/Kg)	chemical	multi	dissolved organic nitrogen | organic nitrogen
+dissolved_oxygen	-	chemical		
+dissolved_oxygen_nmol_kg	dissolved oxygen - (nmol/kg)	chemical	multi	dissolved oxygen
+dissolved_oxygen_umol_kg	dissolved oxygen - (umol/kg)	chemical	multi	dissolved oxygen
+experimental_salinity	-	chemical		
+fluorescence_ug_l	Fluorine(F) - (uM)	chemical		
+glucose_mg	glucose - (mg)	chemical		
+h2_um	H2 - (uM)	chemical	multi	dissolved hydrogen
+ironfe_um	Iron(Fe) - (uM)	chemical		
+leucine_umol_kg	Leucine - (umol/kg)	chemical		
+lithiumli_um	Lithium(Li) - (uM)	chemical		
+magnesiummg_um	Magnesium(Mg) - (uM)	chemical		
+manganesemn_um	Manganese(Mn) - (uM)	chemical		
+methane_um	Methane - (uM)	chemical	multi	methane
+molybdenummo_um	Molybdenum(Mo) - (uM)	chemical		
+nitrate	nitrate(NO3) - (ðmol/l)	chemical	water	nitrate
+nitratenitrite_nmol_kg	nitrate+nitrite - (nmol/kg)	chemical	multi	"nitrate, nitrite (none really)"
+nitrateno3_um	nitrate(NO3) - (uM)	chemical	multi	nitrate
+nitrateno3_umol_l	nitrate(NO3) - (umol/l)	chemical	multi	nitrate
+nitrite_umol_l	nitrite - (ðmol/l)	chemical	water	nitrite
+nutrients_dmsp_nm	nutrients/DMSP - (nM)	chemical		
+nutrients_nh4_microm	nutrients/NH4 - (microM)	chemical	multi	ammonium
+nutrients_nox_microm	nutrients/NOx - (microM)	chemical		
+nutrients_po3_microm	nutrients/PO3 - (microM)	chemical	multi	phosphate
+nutrients_po4_microm	nutrients/PO4 - (microM)	chemical	multi	phosphate
+nutrients_potassium_phosphate_um	nutrients/potassium phosphate - (uM)	chemical		
+nutrients_putrescine_c4h12n2_nm	nutrients/putrescine (C4H12N2) - (nM)	chemical		
+nutrients_so4_microm	nutrients/SO4 - (microM)	chemical	multi	sulfate
+nutrients_sodium_nitrate_um	nutrients/sodium nitrate - (uM)	chemical		
+nutrients_spermidine_c7h19n3_nm	nutrients/spermidine (C7H19N3) - (nM)	chemical		
+oxygen	oxygen	chemical	multi	oxygenation status of sample
+oxygen_mass_um	oxygen/mass - (uM)	chemical	multi	dissolved oxygen
+oxygen_um	oxygen - (uM)	chemical	multi	dissolved oxygen
+oxygen_umol_kg	oxygen - (umol/kg)	chemical	multi	dissolved oxygen
+particulate_carbon_umol_kg	Particulate Carbon - (ðmol/kg)	chemical	water	total particulate carbon
+particulate_nigrogen_umol_kg	Particulate Nigrogen - (ðmol/Kg)	chemical	water	particulate organic nitrogen
+particulate_nitrogen_umol_kg	Particulate Nitrogen - (ðmol/kg)	chemical	water	particulate organic nitrogen
+particulate_organic_carbon_umol_kg	Particulate Organic Carbon - (umol/kg)	chemical	multi	particulate organic carbon
+particulate_phosphate_umol_kg	Particulate Phosphate - (ðmol/kg)	chemical		
+ph	pH	chemical	built env/plant-associated/soil	"surface moisture pH/pH regimen/pH, pH method"
+ph	pH - (null)	chemical	multi	pH
+phosphate	-	chemical		
+phosphate_umol_kg	phosphate - (umol/kg)	chemical	multi	phosphate
+phosphate_umol_l	phosphate - (ðmol/l)	chemical	multi	phosphate
+plant_cover	Plant Cover	chemical		
+poc	-	chemical	multi	particulate organic carbon
+potassium	Potassium - (null)	chemical	multi	potassium
+potassiumk_um	Potassium(K) - (uM)	chemical	multi	potassium
+pressure_atm	pressure - (atm)	chemical	multi	pressure
+rubidiumrb_um	Rubidium(Rb) - (uM)	chemical		
+salinity_ppm	salinity - (ppm)	chemical	multi	salinity or sample salinity
+salinity_psu	salinity - (psu)	chemical	multi	salinity or sample salinity
+sample_depth	sample depth	chemical	multi	depth | total depth of water column
+silicah4sio4_um_l	Silica(H4SiO4) - (uM/l)	chemical	multi	silicate
+silicate	-	chemical		
+silicate_umol_kg	Silicate - (ðmol/kg)	chemical	multi	silicate
+silicate_umol_kg	Silicate - (umol/kg)	chemical	multi	silicate
+siliconsi_um	Silicon(Si) - (uM)	chemical	multi	silicate
+siliconsi_umol_l	Silicon(Si) - (ðmol/l)	chemical		
+sodium	Sodium - (null)	chemical	multi	sodium
+sodium_um	Sodium - (uM)	chemical	multi	sodium
+strontiumsr_um	Strontium(Sr) - (uM)	chemical		
+sulfateso4_mm	Sulfate(SO4) - (mM)	chemical	multi	sulfate
+sulfateso4_um	Sulfate(SO4) - (uM)	chemical	multi	sulfate
+sulfide_um	-	chemical		
+sulfurs2_um	-	chemical		
+total_fe	-	chemical		
+total_phosphorus	-	chemical		
+trace_elements	-	chemical		
+tungstenw_um	Tungsten(W) - (uM)	chemical		
+urea	-	chemical		
+urea_umol_l	Urea - (ðmol/l)	chemical	sediment | microbial matt/biofilm	turbidity
+vanadiumv_um	Vanadium(V) - (uM)	chemical		
+zinczn_um	Zinc(Zn) - (uM)	chemical		none
+	oxygen - (umol/Kg)	chemical	multi	dissolved oxygen
+atmospheric_general_weather	atmospheric/general weather	environment	none	none
+atmospheric_pressure_atm	atmospheric/pressure - (atm)	environment	air	pressure
+atmospheric_wind_speed_m_s	atmospheric/wind speed - (m/s)	environment	air	wind speed
+day_portion_of_day_night_cycle_in_hours	-	environment		
+environmental_salinity	-	environment		
+environmental_temperature	-	environment		
+envo_term_for_habitat_primary_term	-	environment		
+envo_term_for_habitat_secondary_term	-	environment		
+experimental_temperature	-	environment		
+growth_medium	-	environment		
+habitat	-	environment		
+habitat_description	-	environment		
+habitat_name	HABITAT_NAME	environment		
+health_status	health status	environment	core//human-associated	"health or disease status of specific host at time of collection//amniotic fluid/maternal health status, amniotic fluid/foetal health status,"
+host_description	HOST_DESCRIPTION	environment		
+host_name	Host Name	environment	host-associated	host common name
+host_organism	HOST_ORGANISM	environment		
+host_species	host species	environment	core/host-associated	specific host/host common name
+host_taxon_id	host taxon ID	environment	host-associated	host taxid
+host_taxon_id	HOST_TAXON_ID	environment		
+host_tissue	host tissue	environment		
+leg	leg	environment		
+light	Light	environment		
+light_intensity_umol_m2_s	Light Intensity - (umol/m2/s)	environment	water	light intensity
+mean_annual_precipitation_cm	mean annual precipitation - (cm)	environment	soil	mean annual and seasonal precipitation
+modifications_to_growth_medium	-	environment		
+night_portion_of_day_night_cycle_in_hours	-	environment		
+other	Other habitat - (null)	environment		
+other_environmental_metadata_available	-	environment		
+other_experimental_metadata_available	-	environment		
+other_habitat	Other habitat	environment		
+pressure	-	environment		
+prey_organism_if_applicable	-	environment		
+rain_fall	Rain Fall	environment	plant-associated	rainfall regimen
+region	REGION	environment		
+soil_depth_m	Soil Depth - (m)	environment	soil	depth
+soil_type	Soil Type	environment	soil	soil type
+temperature	temperature	environment		
+temperature_c	temperature - (C)	environment	multi	temperature
+transmission	transmission	environment		
+treatment	Treatment	environment		
+wave_height_m	wave height - (m)	environment	water	depth | total depth of water column
+altitude	ALTITUDE	location		
+altitude_m	Altitude - (m)	location	core/multi	geographic location (altitude/elevation)/altitude
+country	-	location		
+country_name	COUNTRY_NAME	location		
+current_land_use	Current Land Use	location	soil	current land use
+depth	-	location		
+elevation	-	location		
+latitude	LATITUDE	location		
+longitude	LONGITUDE	location		
+other_collection_site_info	-	location		
+sample_collection_site	-	location		
+sample_depth_m	sample depth - (M)	location	multi	depth
+sample_depth_m	sample depth - (m)	location	multi	depth
+site_depth	SITE_DEPTH	location		
+site_description	SITE_DESCRIPTION	location		
+site_name	SITE_NAME	location		
+water_depth	water depth	location		
+water_depth_m	water depth - (m)	location	water	depth | total depth of water column
+wave_height_m	water depth - (M)	location	water	depth
+additional_citations	-	misc		
+annotations_file	-	misc		
+assembly_accession_number	-	misc		
+class	-	taxon		
+combined_assembly_name	-	misc		
+comment	Comment	misc		
+comments	COMMENTS	misc		
+contigs_file	-	misc		
+description	DESCRIPTION	misc		
+doc	-	misc		
+gene_name	gene name	misc		
+investigation_type	-	misc		
+isolation_method	-	misc		
+list_of_amino_acids_and_concentrations_with_units	-	misc		
+mmetsp_id	-	misc		
+num_of_reads	NUM_OF_READS	misc		
+number_of_samples_pooled	number of samples pooled	misc		move to project?
+pcr_amp	-	misc		
+peptides_file	-	misc		
+phage_type	phage type	misc		
+primary_citation	-	misc		
+principle_investigator	-	misc		
+project_id	-	misc		
+reads_file	-	misc		
+rrna_16s	-	misc		
+rrna_18s	-	misc		
+sequencing_method	SEQUENCING_METHOD	misc		
+template_preparation_method	Template preparation method	misc	multi	temperature
+collection_date	-	process		
+collection_start_time	COLLECTION_START_TIME	process		
+collection_stop_time	COLLECTION_STOP_TIME	process		
+collection_time	-	process		
+date_of_experiment	-	process		
+filter_fraction_maximum	-	process		
+filter_fraction_minimum	-	process		
+filter_max	FILTER_MAX	process		
+filter_min	FILTER_MIN	process		
+filter_type	Filter Type	process	built environment	filter type
+filter_type	Filter Type - (null)	process	built environment	filter type
+filter_type_m	Filter Type - (M)	process	built environment	filter type
+isolation	Isolation	process	core	isolation and growth condition
+library_acc	LIBRARY_ACC	process		
+method_of_isolation	method of isolation	process	core	isolation and growth condition
+number_of_stations_sampled	number of stations sampled	process		move to project
+time_hour	Time - (hour)	process		???
+volume_filtered	-	process		
+abundance_bacterial_cells_ml	abundance/bacterial - (cells/ml)	specimen	multi	organism count
+abundance_bacterial_cells_ml_h	abundance/bacterial - (cells/ml/h)	specimen	multi	organism count
+abundance_synechococcus_cells_ml	abundance/synechococcus - (cells/ml)	specimen	multi	organism count
+axenic	-	specimen		
+bacterial_production_cells_ml_h	bacterial production - (cells/ml/h)	specimen	water	bacterial production
+biofilm_g	biofilm - (g)	specimen	multi	biomass
+biomass_concentration_ug_kg	biomass/concentration - (ug/kg)	specimen	multi	biomass | soil biomass
+biomass_mass_g	biomass/mass - (g)	specimen	multi	biomass | soil biomass
+biomaterial_name	BIOMATERIAL_NAME	specimen		source_mat_id
+charge__mmol	Charge(-) - (mMol)	specimen		
+charge_mmol	Charge(+) - (mMol)	specimen		
+clonal	-	specimen		
+dna_type	DNA_TYPE	specimen		
+external_sample_id	-	specimen		
+fluorescence_ug_l	-	specimen		
+fluorinef_um	fluorescence - (ug/L)	specimen	water	fluorescence
+genbank_acc	-	specimen		
+material_acc	MATERIAL_ACC	specimen		source_mat_id
+material_id	MATERIAL_ID	specimen		
+organism_count	-	specimen	multi	organism count
+sample_acc	SAMPLE_ACC	specimen	core	source_mat_id
+sample_description	SAMPLE_DESCRIPTION	specimen		
+sample_id	-	specimen		
+sample_material	-	specimen		
+sample_name	SAMPLE_NAME	specimen		
+sample_type	Sample Type	specimen		
+sample_volume	SAMPLE_VOLUME	specimen		
+taxon_id	TAXON_ID	specimen		
+turbidity_ntu	Turbidity - (ntu)	specimen		
+turbidity_umol_kg	Turbidity - (umol/kg)	specimen	none	none
+viral_abundance_viruses_ml	viral abundance - (viruses/ml)	specimen		
+viral_production_viruses_ml_h	viral production - (viruses/ml/h)	specimen	multi	organism count
+volume_filtered_l	volume filtered - (L)	specimen	multi	sample volume or weight for DNA extraction
+volume_l	volume - (L)	specimen		
+volume_unit	VOLUME_UNIT	specimen		
+family	-	taxon		
+genus	-	taxon		
+phylum	-	taxon		
+prelim_ncbi_taxon_id	-	taxon		
+species	-	taxon		
+strain	-	taxon		
+superkingdom	-	taxon		
+torder	-	taxon		
