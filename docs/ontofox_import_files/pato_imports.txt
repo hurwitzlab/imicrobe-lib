@@ -1,0 +1,42 @@
+[URI of the OWL(RDF/XML) output file]
+http://purl.obolibrary.org/obo/meowl/external/pato_meowl_imports.owl
+
+[Source ontology]
+PATO
+
+[Low level source term URIs]
+http://purl.obolibrary.org/obo/PATO_0000117 #size
+includeAllChildren
+http://purl.obolibrary.org/obo/PATO_0000033 #concentration of
+http://purl.obolibrary.org/obo/PATO_0001842 #acidity
+includeAllChildren
+http://purl.obolibrary.org/obo/PATO_0001986 #dissolved
+http://purl.obolibrary.org/obo/PATO_0000070 #count
+http://purl.obolibrary.org/obo/PATO_0000125 #mass
+http://purl.obolibrary.org/obo/PATO_0001681 #molar mass
+http://purl.obolibrary.org/obo/PATO_0000161 #rate
+http://purl.obolibrary.org/obo/PATO_0000044 #frequency
+http://purl.obolibrary.org/obo/PATO_0001025 #pressure
+http://purl.obolibrary.org/obo/PATO_0000049 #intensity
+http://purl.obolibrary.org/obo/PATO_0002193 #electric charge
+includeAllChildren
+http://purl.obolibrary.org/obo/PATO_0000001 #quality
+http://purl.obolibrary.org/obo/PATO_0001236 #process quality
+http://purl.obolibrary.org/obo/PATO_0001241 #physical object quality
+http://purl.obolibrary.org/obo/PATO_0001018 #physical quality
+
+[Top level source term URIs and target direct superclass URIs]
+http://purl.obolibrary.org/obo/PATO_0001236 #process quality
+subClassOf http://purl.obolibrary.org/obo/PATO_0000001 #quality
+http://purl.obolibrary.org/obo/PATO_0001241 #physical object quality
+subClassOf http://purl.obolibrary.org/obo/PATO_0000001 #quality
+http://purl.obolibrary.org/obo/PATO_0001018 #physical quality
+subClassOf http://purl.obolibrary.org/obo/PATO_0001241 #physical object quality
+
+[Source term retrieval setting]
+includeComputedIntermediates
+
+[Source annotation URIs]
+includeAllAxiomsRecursively
+
+[Source annotation URIs to be excluded]
