@@ -74,8 +74,11 @@ sub parse {
     for my $line (<$fh>) {
         chomp $line;
 
-        if ($line =~ m!^\s+C-\s+(.+)!) {
+        if ($line =~ m{^(/[^:]+)}) {
             $dir = $1;
+            next LINE;
+        }
+        elsif ($line =~ m{^\s{2}C-\s+}) {
             next LINE;
         }
         elsif ($line =~ m!^\s{2}([^/]+)! && $dir) {
