@@ -4,6 +4,7 @@ use IMicrobe::Config;
 use IMicrobe::Schema;
 use DBI;
 use Moose;
+use Data::Dump 'dump';
 
 has config     => (
     is         => 'rw',
@@ -74,19 +75,19 @@ sub BUILD {
     my $config  = $self->config;
     my $db_conf = $config->get('db');
 
-    if (!$self->has_user && defined $db_conf->{'user'}) {
+    if ($db_conf->{'user'}) {
         $self->user($db_conf->{'user'});
     }
 
-    if (!$self->has_password && defined $db_conf->{'password'}) {
+    if ($db_conf->{'password'}) {
         $self->password($db_conf->{'password'});
     }
 
-    if (!$self->has_name && defined $db_conf->{'name'}) {
+    if ($db_conf->{'name'}) {
         $self->name($db_conf->{'name'});
     }
 
-    if ( !$self->has_dsn ) {
+    if (!$self->has_dsn) {
         my $host = $self->host;
         my $name = $self->name;
 
