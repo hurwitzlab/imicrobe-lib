@@ -45,6 +45,17 @@ __PACKAGE__->table("sample_attr_type");
   is_nullable: 0
   size: 255
 
+=head2 description
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 category
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 100
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -59,6 +70,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "url_template",
   { data_type => "varchar", is_nullable => 0, size => 255 },
+  "description",
+  { data_type => "text", is_nullable => 1 },
+  "category",
+  { data_type => "varchar", is_nullable => 1, size => 100 },
 );
 
 =head1 PRIMARY KEY
@@ -105,8 +120,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 15:54:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rJLh+rar154E3ec2+Z5PDQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-02-06 10:25:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fBpdwIfVfaD4FmCM7oamjQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
