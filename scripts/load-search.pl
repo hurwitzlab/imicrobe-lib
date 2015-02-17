@@ -49,6 +49,16 @@ Readonly my %INDEX_FLDS = (
     )],
 );
 
+Readonly my %ADDITIONAL_SQL => {
+    sample => [
+        q'select a.sample_id, a.attr_value, t.type
+          from   sample_attr a, sample_attr_type t
+          where  a.sample_attr_type_id=t.sample_attr_type_id
+          and    a.sample_id=?
+        ',
+    ],
+};
+
 main();
 
 # --------------------------------------------------
@@ -100,19 +110,30 @@ sub process {
         my $pk_name = $table . '_id'; 
         unshift @flds, $pk_name;
 
-        my $records = $db->selectall_arrayref(
+        my @records = @{$db->selectall_arrayref(
             sprintf('select %s from %s', join(', ', @flds), $table), 
             { Columns => {} }
-        );
+        )};
 
-        printf "Processing %s from %s\n", scalar @$records, $table;
+        printf "Processing %s from %s\n", scalar @records, $table;
 
         $db->do('delete from search where table_name=?', {}, $table);
 
+        my @additional_sql = @{ $ADDITIONAL_SQL{ $table } || [] };
+
         my $i;
-        for my $rec (@$records) {
-            my $text = join(' ', map { $rec->{$_} || '' } @flds) or next;
+        for my $rec (@records) {
             my $pk   = $rec->{ $pk_name } or next;
+            my $text = join(' ', map { $rec->{$_} || '' } @flds) or next;
+
+            for my $sql (@additional_sql) {
+                $text .= 
+                    join ' ', 
+                    map { @$_ } 
+                    @{ $db->selectall_arrayref($sql, {}, $pk) };
+            }
+
+            $text =~ s/\s+/ /g;
 
             printf "%-78s\r", ++$i;
 
