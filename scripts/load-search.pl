@@ -15,8 +15,6 @@ use Pod::Usage;
 use Readonly;
 use String::Trim qw(trim);
 
-Readonly my $SOLR_URL => 'http://test.hurwitzlab.org/solr/imicrobe/';
-
 Readonly my %INDEX_FLDS = (
     assembly     => [qw(assembly_code assembly_name organism)],
     project      => [qw(project_code project_name pi institution description)],
@@ -56,7 +54,7 @@ Readonly my %INDEX_FLDS = (
     )],
 );
 
-Readonly my %ADDITIONAL_SQL => {
+Readonly my %MONGO_SQL => {
     sample => [
         q'select t.type as name, a.attr_value as value
           from   sample_attr a, sample_attr_type t
@@ -73,18 +71,17 @@ Readonly my %ADDITIONAL_SQL => {
           where  s2o.sample_id=?
           and    s2o.ontology_id=o.ontology_id
         ',
-        q'select "latitude" as name, latitude as value
-          from   sample
-          where  sample_id=?
-        ',
-        q'select "longitude" as name, longitude as value
-          from   sample
-          where  sample_id=?
-        ',
         q'select "is_metagenome" as name, 
                  sample_type like "metagenome" as value
           from   sample
           where  sample_id=?
+        ',
+        q'select "publication" as name, 
+                 concat_ws(" ", p.title, p.author) as value
+          from   publication p, sample s, project pr
+          where  s.sample_id=?
+          and    s.project_id=pr.project_id
+          and    pr.project_id=p.project_id
         ',
     ],
 };
@@ -156,7 +153,7 @@ sub process {
 
         $db->do('delete from search where table_name=?', {}, $table);
 
-        my @additional_sql = @{ $ADDITIONAL_SQL{ $table } || [] };
+        my @mongo_sql = @{ $MONGO_SQL{ $table } || [] };
 
         my $i;
         for my $rec (@records) {
@@ -164,18 +161,6 @@ sub process {
             my $text = join(' ', map { $rec->{$_} || '' } @flds) or next;
 
             $rec->{'primary_key'} = $pk;
-
-            for my $sql (@additional_sql) {
-                my $other 
-                    = $db->selectall_arrayref($sql, { Columns => {} }, $pk);
-
-                for my $tuple (@$other) {
-                    my $key = normalize($tuple->{'name'}) or next;
-                    my $val = trim($tuple->{'value'})     or next;
-                    $rec->{$key} = $val;
-                    $text .= " $val";
-                }
-            }
 
             $text =~ s/\s+/ /g;
 
@@ -191,8 +176,21 @@ sub process {
                 ($table, $pk, $text)
             );
 
-            $rec->{'text'} = $text;
-            $coll->insert(lean_hash($rec));
+            my %mongo_rec;
+            for my $sql (@mongo_sql) {
+                my $data 
+                    = $db->selectall_arrayref($sql, { Columns => {} }, $pk);
+
+                for my $rec (@$data) {
+                    my $key = normalize($rec->{'name'}) or next;
+                    my $val = trim($rec->{'value'})     or next;
+                    $mongo_rec{ $key } = $val;
+                }
+            }
+
+            $mongo_rec{'text'} = join ' ', values %mongo_rec;
+
+            $coll->insert(\%mongo_rec);
         }
         print "\n";
     }
