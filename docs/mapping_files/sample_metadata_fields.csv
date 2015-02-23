@@ -2,7 +2,7 @@ imicrobe,camera,category,mixs_package,mixs_term,alternate_name
 bact_chl_a_ug_l,-,???,,chlorophyll?,
 bchl_cd_ug_l,-,???,,chlorophyll?,
 bchl_e_ug_l,-,???,,chlorophyll?,
-cds_file,-,???,,?,
+cds_file,-,???,,?,SKIP
 importance,-,???,,delete?,
 pi,-,???,,?,
 sigma_kg_1000l,Sigma - (kg/1---L),???,,?,
@@ -179,7 +179,7 @@ water_depth,water depth,location,,,
 water_depth_m,water depth - (m),location,water,depth,
 wave_height_m,water depth - (M),location,water,depth,
 additional_citations,-,misc,,,
-annotations_file,-,misc,,,
+annotations_file,-,misc,,,SKIP
 assembly_accession_number,-,misc,,,
 class,-,taxon,,,
 combined_assembly_name,-,misc,,,
@@ -196,14 +196,14 @@ mmetsp_id,-,misc,,,SKIP
 num_of_reads,NUM_OF_READS,misc,,,
 number_of_samples_pooled,number of samples pooled,misc,,move to project?,
 pcr_amp,-,misc,,,
-peptides_file,-,misc,,,
+peptides_file,-,misc,,,SKIP
 phage_type,phage type,misc,,,
 primary_citation,-,misc,,,
 principle_investigator,-,misc,,,
 project_id,-,misc,,,
-reads_file,-,misc,,,
-rrna_16s,-,misc,,,
-rrna_18s,-,misc,,,
+reads_file,-,misc,,,SKIP
+rrna_16s,-,misc,,,SKIP
+rrna_18s,-,misc,,,SKIP
 sequencing_method,SEQUENCING_METHOD,misc,,,
 template_preparation_method,Template preparation method,misc,multi,temperature,
 collection_date,-,process,,,
