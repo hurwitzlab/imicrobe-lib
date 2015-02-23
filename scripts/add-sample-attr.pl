@@ -69,6 +69,16 @@ sub process {
                     category => $attr_cat,
                 });
 
+            if (my $desc = trim($rec->{'attr_description'})) {
+                $SampleAttrType->description($desc);
+                $SampleAttrType->update;
+            }
+
+            if (my $url = trim($rec->{'attr_url'})) {
+                $SampleAttrType->url($url);
+                $SampleAttrType->update;
+            }
+
             my ($SampleAttr) =
                 $schema->resultset('SampleAttr')->find_or_create({
                     sample_id           => $Sample->id,
