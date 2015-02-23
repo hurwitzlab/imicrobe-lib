@@ -6,9 +6,16 @@ use autodie;
 use feature 'say';
 use Data::Dump 'dump';
 use Getopt::Long;
+use HTTP::Request;
 use IMicrobe::DB;
+use MongoDB;
+use JSON::XS;
+use LWP::UserAgent;
 use Pod::Usage;
 use Readonly;
+use String::Trim qw(trim);
+
+Readonly my $SOLR_URL => 'http://test.hurwitzlab.org/solr/imicrobe/';
 
 Readonly my %INDEX_FLDS = (
     assembly     => [qw(assembly_code assembly_name organism)],
@@ -51,13 +58,38 @@ Readonly my %INDEX_FLDS = (
 
 Readonly my %ADDITIONAL_SQL => {
     sample => [
-        q'select a.sample_id, a.attr_value, t.type
+        q'select t.type as name, a.attr_value as value
           from   sample_attr a, sample_attr_type t
           where  a.sample_attr_type_id=t.sample_attr_type_id
           and    a.sample_id=?
         ',
+        q'select "ontology_acc" as name, o.ontology_acc as value
+          from   ontology o, sample_to_ontology s2o
+          where  s2o.sample_id=?
+          and    s2o.ontology_id=o.ontology_id
+        ',
+        q'select "ontology_label" as name, o.label as value
+          from   ontology o, sample_to_ontology s2o
+          where  s2o.sample_id=?
+          and    s2o.ontology_id=o.ontology_id
+        ',
+        q'select "latitude" as name, latitude as value
+          from   sample
+          where  sample_id=?
+        ',
+        q'select "longitude" as name, longitude as value
+          from   sample
+          where  sample_id=?
+        ',
+        q'select "is_metagenome" as name, 
+                 sample_type like "metagenome" as value
+          from   sample
+          where  sample_id=?
+        ',
     ],
 };
+
+$MongoDB::BSON::looks_like_number = 1;
 
 main();
 
@@ -104,8 +136,13 @@ sub main {
 sub process {
     my @tables = @_;
     my $db     = IMicrobe::DB->new->dbh;
+    my $mongo  = MongoDB::MongoClient->new(host => 'localhost', port => 27017);
+    my $mdb    = $mongo->get_database('imicrobe');
 
     for my $table (@tables) {
+        my $coll = $mdb->get_collection($table);
+        $coll->drop();
+
         my @flds    = @{ $INDEX_FLDS{$table} } or next;
         my $pk_name = $table . '_id'; 
         unshift @flds, $pk_name;
@@ -126,11 +163,18 @@ sub process {
             my $pk   = $rec->{ $pk_name } or next;
             my $text = join(' ', map { $rec->{$_} || '' } @flds) or next;
 
+            $rec->{'primary_key'} = $pk;
+
             for my $sql (@additional_sql) {
-                $text .= 
-                    join ' ', 
-                    map { @$_ } 
-                    @{ $db->selectall_arrayref($sql, {}, $pk) };
+                my $other 
+                    = $db->selectall_arrayref($sql, { Columns => {} }, $pk);
+
+                for my $tuple (@$other) {
+                    my $key = normalize($tuple->{'name'}) or next;
+                    my $val = trim($tuple->{'value'})     or next;
+                    $rec->{$key} = $val;
+                    $text .= " $val";
+                }
             }
 
             $text =~ s/\s+/ /g;
@@ -146,6 +190,9 @@ sub process {
                 {},
                 ($table, $pk, $text)
             );
+
+            $rec->{'text'} = $text;
+            $coll->insert(lean_hash($rec));
         }
         print "\n";
     }
@@ -153,6 +200,26 @@ sub process {
     say "Done.";
 }
 
+# --------------------------------------------------
+sub lean_hash {
+    my $in = shift;
+    my %out;
+    while (my ($k, $v) = each %$in) {
+        if (defined $v && $v ne '') {
+            $out{ $k } = $v;
+        }
+    }
+    return \%out;
+}
+
+# --------------------------------------------------
+sub normalize {
+    my $s   = shift or return;
+    my $ret = lc trim($s);
+    $ret    =~ s/[\s,-]+/_/g;
+    $ret    =~ s/[^\w_]//g;
+    return $ret;
+}
 
 __END__
 
