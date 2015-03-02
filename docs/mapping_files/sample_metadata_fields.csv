@@ -37,12 +37,12 @@ co2,,carbon dioxide,chemical,,-
 dissolved_inorg_cdic_mm,dissolved inorganic carbon,,chemical,multi,Dissolved Inorg C(DIC) - (mM)
 dissolved_inorg_cdic_um,dissolved inorganic carbon,,chemical,multi,Dissolved Inorg C(DIC) - (uM)
 dissolved_inorganic_carbon_umol_kg,dissolved organic carbon,,chemical,multi,dissolved inorganic carbon - (umol/kg)
-dissolved_inorganic_nitrogen_umol_l,total inorganic nitrogen,,chemical,water,dissolved inorganic nitrogen - (ðmol/l)
+dissolved_inorganic_nitrogen_umol_l,total inorganic nitrogen,,chemical,water,dissolved inorganic nitrogen - (̡mol/l)
 dissolved_inorganic_phosphate_nmol_kg,dissolved inorganic phosphorus,,chemical,water,dissolved inorganic phosphate - (nmol/kg)
 dissolved_organic_carbon_um,dissolved organic carbon,,chemical,multi,dissolved organic carbon - (uM)
 dissolved_organic_carbon_umol_kg,dissolved organic carbon,,chemical,multi,dissolved organic carbon - (umol/kg)
-dissolved_organic_nitrogen_umol_kg,dissolved organic nitrogen,,chemical,multi,Dissolved Organic Nitrogen - (ðmol/kg)
-dissolved_organic_nitrogen_umol_kg,dissolved organic nitrogen,,chemical,multi,Dissolved Organic Nitrogen - (ðmol/Kg)
+dissolved_organic_nitrogen_umol_kg,dissolved organic nitrogen,,chemical,multi,Dissolved Organic Nitrogen - (̡mol/kg)
+dissolved_organic_nitrogen_umol_kg,dissolved organic nitrogen,,chemical,multi,Dissolved Organic Nitrogen - (̡mol/Kg)
 dissolved_oxygen,,dissolved oxygen,chemical,,-
 dissolved_oxygen_nmol_kg,dissolved oxygen,,chemical,multi,dissolved oxygen - (nmol/kg)
 dissolved_oxygen_umol_kg,dissolved oxygen,,chemical,multi,dissolved oxygen - (umol/kg)
@@ -57,11 +57,11 @@ magnesiummg_um,,magnesium,chemical,,Magnesium(Mg) - (uM)
 manganesemn_um,,manganese,chemical,,Manganese(Mn) - (uM)
 methane_um,methane,,chemical,multi,Methane - (uM)
 molybdenummo_um,,molybdenum,chemical,,Molybdenum(Mo) - (uM)
-nitrate,nitrate,nitrate,chemical,water,nitrate(NO3) - (ðmol/l)
+nitrate,nitrate,nitrate,chemical,water,nitrate(NO3) - (̡mol/l)
 nitratenitrite_nmol_kg,,nitrate and nitrite,chemical,multi,nitrate+nitrite - (nmol/kg)
 nitrateno3_um,nitrate,,chemical,multi,nitrate(NO3) - (uM)
 nitrateno3_umol_l,nitrate,,chemical,multi,nitrate(NO3) - (umol/l)
-nitrite_umol_l,nitrite,,chemical,water,nitrite - (ðmol/l)
+nitrite_umol_l,nitrite,,chemical,water,nitrite - (̡mol/l)
 nutrients_dmsp_nm,,nutrients DMSP,chemical,,nutrients/DMSP - (nM)
 nutrients_nh4_microm,ammonium,,chemical,multi,nutrients/NH4 - (microM)
 nutrients_nox_microm,,nutrients NOx,chemical,,nutrients/NOx - (microM)
@@ -76,16 +76,16 @@ oxygen,oxygenation status of sample,,chemical,multi,oxygen
 oxygen_mass_um,dissolved oxygen,,chemical,multi,oxygen/mass - (uM)
 oxygen_um,dissolved oxygen,,chemical,multi,oxygen - (uM)
 oxygen_umol_kg,dissolved oxygen,,chemical,multi,oxygen - (umol/kg)
-particulate_carbon_umol_kg,total particulate carbon,,chemical,water,Particulate Carbon - (ðmol/kg)
-particulate_nigrogen_umol_kg,particulate organic nitrogen,,chemical,water,Particulate Nigrogen - (ðmol/Kg)
-particulate_nitrogen_umol_kg,particulate organic nitrogen,,chemical,water,Particulate Nitrogen - (ðmol/kg)
+particulate_carbon_umol_kg,total particulate carbon,,chemical,water,Particulate Carbon - (̡mol/kg)
+particulate_nigrogen_umol_kg,particulate organic nitrogen,,chemical,water,Particulate Nigrogen - (̡mol/Kg)
+particulate_nitrogen_umol_kg,particulate organic nitrogen,,chemical,water,Particulate Nitrogen - (̡mol/kg)
 particulate_organic_carbon_umol_kg,particulate organic carbon,,chemical,multi,Particulate Organic Carbon - (umol/kg)
-particulate_phosphate_umol_kg,,particulate phosphate,chemical,,Particulate Phosphate - (ðmol/kg)
+particulate_phosphate_umol_kg,,particulate phosphate,chemical,,Particulate Phosphate - (̡mol/kg)
 ph,pH,,chemical,built env/plant-associated/soil,pH
 ph,pH,,chemical,multi,pH - (null)
 phosphate,,phosphate,chemical,,-
 phosphate_umol_kg,phosphate,,chemical,multi,phosphate - (umol/kg)
-phosphate_umol_l,phosphate,,chemical,multi,phosphate - (ðmol/l)
+phosphate_umol_l,phosphate,,chemical,multi,phosphate - (̡mol/l)
 plant_cover,,plant cover,chemical,,Plant Cover
 poc,particulate organic carbon,,chemical,multi,-
 potassium,potassium,,chemical,multi,Potassium - (null)
@@ -94,13 +94,13 @@ pressure_atm,pressure,,chemical,multi,pressure - (atm)
 rubidiumrb_um,,rubidium,chemical,,Rubidium(Rb) - (uM)
 salinity_ppm,salinity or sample salinity,,chemical,multi,salinity - (ppm)
 salinity_psu,salinity or sample salinity,,chemical,multi,salinity - (psu)
-sample_depth,depth,,chemical,multi,sample depth
+sample_depth,sample_depth,,chemical,multi,sample depth
 silicah4sio4_um_l,silicate,,chemical,multi,Silica(H4SiO4) - (uM/l)
 silicate,,silicate,chemical,,-
-silicate_umol_kg,silicate,,chemical,multi,Silicate - (ðmol/kg)
+silicate_umol_kg,silicate,,chemical,multi,Silicate - (̡mol/kg)
 silicate_umol_kg,silicate,,chemical,multi,Silicate - (umol/kg)
 siliconsi_um,silicate,,chemical,multi,Silicon(Si) - (uM)
-siliconsi_umol_l,,silicone,chemical,,Silicon(Si) - (ðmol/l)
+siliconsi_umol_l,,silicone,chemical,,Silicon(Si) - (̡mol/l)
 sodium,sodium,,chemical,multi,Sodium - (null)
 sodium_um,sodium,,chemical,multi,Sodium - (uM)
 strontiumsr_um,,strontium,chemical,,Strontium(Sr) - (uM)
@@ -113,7 +113,7 @@ total_phosphorus,,phosphorus,chemical,,-
 trace_elements,,trace elements,chemical,,-
 tungstenw_um,,tungsten,chemical,,Tungsten(W) - (uM)
 urea,,urea,chemical,,-
-urea_umol_l,turbidity,,chemical,sediment,Urea - (ðmol/l)
+urea_umol_l,turbidity,,chemical,sediment,Urea - (̡mol/l)
 vanadiumv_um,,vanadium,chemical,,Vanadium(V) - (uM)
 zinczn_um,,zinc,chemical,,Zinc(Zn) - (uM)
 ,dissolved oxygen,,chemical,multi,oxygen - (umol/Kg)
@@ -152,13 +152,13 @@ pressure,,,environment,,-
 prey_organism_if_applicable,,,environment,,-
 rain_fall,rainfall regimen,,environment,plant-associated,Rain Fall
 region,,,environment,,REGION
-soil_depth_m,depth,,environment,soil,Soil Depth - (m)
+soil_depth_m,soil_depth,,environment,soil,Soil Depth - (m)
 soil_type,soil type,,environment,soil,Soil Type
 temperature,,temperature,environment,,temperature
 temperature_c,temperature,,environment,multi,temperature - (C)
 transmission,,,environment,,transmission
 treatment,,,environment,,Treatment
-wave_height_m,depth,,environment,water,wave height - (m)
+wave_height_m,wave_height,,environment,water,wave height - (m)
 altitude,,,location,,ALTITUDE
 altitude_m,,altitude,location,core/multi,Altitude - (m)
 country,,,location,,-
@@ -170,14 +170,14 @@ latitude,,,location,,LATITUDE
 longitude,,,location,,LONGITUDE
 other_collection_site_info,,,location,,-
 sample_collection_site,,,location,,-
-sample_depth_m,depth,,location,multi,sample depth - (M)
-sample_depth_m,depth,,location,multi,sample depth - (m)
+sample_depth_m,sample_depth,,location,multi,sample depth - (M)
+sample_depth_m,sample_depth,,location,multi,sample depth - (m)
 site_depth,,,location,,SITE_DEPTH
 site_description,,,location,,SITE_DESCRIPTION
 site_name,,,location,,SITE_NAME
-water_depth,,depth,location,,water depth
-water_depth_m,depth,,location,water,water depth - (m)
-wave_height_m,depth,,location,water,water depth - (M)
+water_depth,,,location,,water depth
+water_depth_m,water_depth,,location,water,water depth - (m)
+wave_height_m,wave_height,,location,water,water depth - (M)
 additional_citations,,,misc,,-
 annotations_file,,SKIP,misc,,-
 assembly_accession_number,,,misc,,-
