@@ -4,3 +4,7 @@ db:
   user: "imicrobe"
   password: "imicrobe"
   driver: "mysql"
+
+mongo:
+  host: "localhost"
+  port: "27017"
