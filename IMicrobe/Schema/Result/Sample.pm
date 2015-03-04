@@ -1983,6 +1983,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sample_files
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::SampleFile>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sample_files",
+  "IMicrobe::Schema::Result::SampleFile",
+  { "foreign.sample_id" => "self.sample_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 sample_to_ontologies
 
 Type: has_many
@@ -1999,8 +2014,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-02-16 13:55:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:k0H6ZCz0NhGLB1dsPHLjrw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-03-04 13:32:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OxuRHpbjYp7+2T8in6PVKw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
