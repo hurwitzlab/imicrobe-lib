@@ -4,6 +4,7 @@ use IMicrobe::Config;
 use IMicrobe::Schema;
 use DBI;
 use Moose;
+use MongoDB;
 use Data::Dump 'dump';
 
 has config     => (
@@ -15,7 +16,7 @@ has config     => (
 has dbd => (
     is         => 'rw',
     isa        => 'Str',
-    default    =>  'mysql',
+    default    => 'mysql',
     predicate  => 'has_dbd',
 );
 
@@ -41,6 +42,12 @@ has host => (
     is         => 'rw',
     isa        => 'Str',
     default    => 'localhost',
+);
+
+has mongo => (
+    is         => 'rw',
+    #isa        => 'MongoDB::Client',
+    lazy_build => 1,
 );
 
 has name => (
@@ -125,6 +132,19 @@ sub _build_dbh {
     else {
         return $dbh;
     }
+}
+
+# ----------------------------------------------------------------
+sub _build_mongo {
+    my $self       = shift;
+    my $config     = $self->config;
+    my $mongo_conf = $config->get('mongo');
+    my $mongo      = MongoDB::MongoClient->new(
+        host => $mongo_conf->{'host'} || 'localhost', 
+        port => $mongo_conf->{'port'} || 27017
+    );
+
+    return $mongo;
 }
 
 # ----------------------------------------------------------------
