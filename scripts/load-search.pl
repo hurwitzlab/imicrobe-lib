@@ -56,10 +56,17 @@ Readonly my %INDEX_FLDS = (
 
 Readonly my %MONGO_SQL => {
     sample => [
-        q'select t.type as name, a.attr_value as value
-          from   sample_attr a, sample_attr_type t
-          where  a.sample_attr_type_id=t.sample_attr_type_id
-          and    a.sample_id=?
+        q'select "domain_of_life" as name, d.domain_name as value
+          from   sample s, project p, project_to_domain p2d, domain d
+          where  s.sample_id=?
+          and    s.project_id=p.project_id
+          and    p.project_id=p2d.project_id
+          and    p2d.domain_id=d.domain_id
+        ',
+        q'select "project_name" as name, p.project_name as value
+          from   sample s, project p
+          where  s.sample_id=?
+          and    s.project_id=p.project_id
         ',
         q'select "ontology_acc" as name, o.ontology_acc as value
           from   ontology o, sample_to_ontology s2o
@@ -82,6 +89,11 @@ Readonly my %MONGO_SQL => {
           where  s.sample_id=?
           and    s.project_id=pr.project_id
           and    pr.project_id=p.project_id
+        ',
+        q'select t.type as name, a.attr_value as value
+          from   sample_attr a, sample_attr_type t
+          where  a.sample_attr_type_id=t.sample_attr_type_id
+          and    a.sample_id=?
         ',
     ],
 };
@@ -194,6 +206,10 @@ sub process {
         }
         print "\n";
     }
+
+    say "Updating Mongo keys";
+
+    `/usr/bin/mongo imicrobe --eval "var collection = 'sample', persistResults=1" /usr/local/imicrobe/variety/variety.js`;
 
     say "Done.";
 }
