@@ -1368,6 +1368,13 @@ __PACKAGE__->table("sample");
   is_nullable: 1
   size: 200
 
+=head2 combined_assembly_id
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_foreign_key: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -1901,6 +1908,13 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "fastq_file",
   { data_type => "varchar", is_nullable => 1, size => 200 },
+  "combined_assembly_id",
+  {
+    data_type => "integer",
+    extra => { unsigned => 1 },
+    is_foreign_key => 1,
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -1932,6 +1946,41 @@ __PACKAGE__->set_primary_key("sample_id");
 __PACKAGE__->add_unique_constraint("project_id", ["project_id", "sample_acc"]);
 
 =head1 RELATIONS
+
+=head2 assemblies
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::Assembly>
+
+=cut
+
+__PACKAGE__->has_many(
+  "assemblies",
+  "IMicrobe::Schema::Result::Assembly",
+  { "foreign.sample_id" => "self.sample_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 combined_assembly
+
+Type: belongs_to
+
+Related object: L<IMicrobe::Schema::Result::CombinedAssembly>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "combined_assembly",
+  "IMicrobe::Schema::Result::CombinedAssembly",
+  { combined_assembly_id => "combined_assembly_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
+  },
+);
 
 =head2 combined_assembly_to_samples
 
@@ -2014,8 +2063,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-03-04 13:32:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OxuRHpbjYp7+2T8in6PVKw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-03-12 14:58:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KKjX1v7QLjGrJRxYkB6qVg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
