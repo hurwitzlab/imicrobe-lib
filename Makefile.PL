@@ -25,6 +25,7 @@ requires 'Template'                 => '2.25';
 requires 'Template::Plugin::Comma'  => '0.04';
 requires 'Text::Markdown';
 requires 'YAML';
+requires 'LWP::Protocol::https';
 
 test_requires 'Test::More'          => '0.98';
 test_requires 'Test::Exception'     => '';
