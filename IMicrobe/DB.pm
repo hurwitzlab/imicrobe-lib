@@ -154,4 +154,14 @@ sub _build_schema {
     return IMicrobe::Schema->connect( sub { $self->dbh } );
 }
 
+# ----------------------------------------------------------------
+#sub DEMOLISH {
+#    my $self = shift;
+#    my $dbh  = $self->dbh;
+#
+#    if (defined $dbh) {
+#        $dbh->disconnect;
+#    }
+#}
+
 1;

@@ -28,6 +28,7 @@ requires 'YAML';
 requires 'HTTP::Request';
 requires 'LWP';
 requires 'LWP::Protocol::https';
+requires 'WWW::Mechanize';
 
 test_requires 'Test::More'          => '0.98';
 test_requires 'Test::Exception'     => '';

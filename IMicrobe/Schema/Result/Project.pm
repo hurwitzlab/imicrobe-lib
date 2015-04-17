@@ -206,6 +206,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 ftps
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::Ftp>
+
+=cut
+
+__PACKAGE__->has_many(
+  "ftps",
+  "IMicrobe::Schema::Result::Ftp",
+  { "foreign.project_id" => "self.project_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 project_pages
 
 Type: has_many
@@ -267,8 +282,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-01-05 15:15:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G2CKJulB3ROWfnEOSyo3Sg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-04-17 10:04:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wowfbE25b+48dIIBguzJWg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
