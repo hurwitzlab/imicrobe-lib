@@ -18,26 +18,14 @@ main(@ARGV);
 
 # --------------------------------------------------
 sub main {
-    my ($help, $man_page);
-    GetOptions(
-        'help'    => \$help,
-        'man'     => \$man_page,
-    ) or pod2usage(2);
-
-    if ($help || $man_page) {
-        pod2usage({
-            -exitval => 0,
-            -verbose => $man_page ? 2 : 1
-        });
-    }; 
-
+    my %args   = get_args();
     my $schema = IMicrobe::DB->new->schema;
 
     if (@ARGV) {
         process_files($schema, @ARGV);
     }
     else {
-        process_db($schema); 
+        process_db($schema, \%args); 
     }
 
     say "Done.";
@@ -45,14 +33,17 @@ sub main {
 
 # --------------------------------------------------
 sub process_db {
-    my $schema = shift;
+    my ($schema, $args) = @_;
 
     say 'Processing database records.';
 
     my %attr_fld = map {$_->type, 1} $schema->resultset('SampleAttrType')->all;
-    my $i = 0;
-    my $Samples = $schema->resultset('Sample')->search;
+    my %search_args = ($args->{'project_id'}) 
+        ? (project_id => $args->{'project_id'})
+        : ();
+    my $Samples = $schema->resultset('Sample')->search(\%search_args);
 
+    my $i = 0;
     while (my $Sample = $Samples->next) {
         printf("%5d: %s\n", ++$i, $Sample->sample_name);
 
@@ -150,6 +141,30 @@ sub add_attr {
         });
 
     return $SampleAttr;
+}
+
+# --------------------------------------------------
+sub get_args {
+    my %args = (
+        project_id => 0,
+        help       => 0,
+        man_page   => 0,
+    );
+
+    GetOptions(\%args,
+        'project_id|p=i',
+        'help',
+        'man'
+    );
+
+    if ($args{'help'} || $args{'man_page'}) {
+        pod2usage({
+            -exitval => 0,
+            -verbose => $args{'man_page'} ? 2 : 1
+        });
+    };
+
+    return %args;
 }
 
 __END__

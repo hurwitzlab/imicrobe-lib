@@ -161,7 +161,7 @@ sub process {
             { Columns => {} }
         )};
 
-        printf "Processing %s from %s\n", scalar @records, $table;
+        printf "Processing %s from table '%s.'\n", scalar(@records), $table;
 
         $db->do('delete from search where table_name=?', {}, $table);
 
@@ -169,24 +169,23 @@ sub process {
 
         my $i;
         for my $rec (@records) {
-            my $pk   = $rec->{ $pk_name } or next;
-            my $text = join(' ', map { $rec->{$_} || '' } @flds) or next;
+            my $pk  = $rec->{ $pk_name } or next;
+            my $raw = join(' ', map { trim($rec->{$_} // '') } @flds);
+
+            my @tmp;
+            for my $w (split(/\s+/, $raw)) {
+                push @tmp, $w;
+                if ($w =~ /_/) {
+                    $w =~ s/_/ /g;
+                    push @tmp, $w;
+                }
+            }
+
+            my $text = join(' ', @tmp);
 
             $rec->{'primary_key'} = $pk;
 
-            $text =~ s/\s+/ /g;
-
             printf "%-78s\r", ++$i;
-
-            $db->do(
-                q[
-                    insert
-                    into   search (table_name, primary_key, search_text)
-                    values (?, ?, ?)
-                ],
-                {},
-                ($table, $pk, $text)
-            );
 
             my %mongo_rec;
             for my $sql (@mongo_sql) {
@@ -196,13 +195,33 @@ sub process {
                 for my $rec (@$data) {
                     my $key = normalize($rec->{'name'}) or next;
                     my $val = trim($rec->{'value'})     or next;
-                    $mongo_rec{ $key } = $val;
+                    if ($mongo_rec{ $key }) {
+                        $mongo_rec{ $key } .= " $val";
+                    }
+                    else {
+                        $mongo_rec{ $key } = $val;
+                    }
                 }
             }
 
-            $mongo_rec{'text'} = join ' ', values %mongo_rec;
+            $mongo_rec{'text'} = join(' ', 
+                grep { ! /^-?\d+(\.\d+)?$/ }
+                map  { split(/\s+/, $_) }
+                values %mongo_rec
+            );
 
             $coll->insert(\%mongo_rec);
+
+            $db->do(
+                q[
+                    insert
+                    into   search (table_name, primary_key, search_text)
+                    values (?, ?, ?)
+                ],
+                {},
+                ($table, $pk, join(' ', $text, $mongo_rec{'text'}))
+            );
+
         }
         print "\n";
     }

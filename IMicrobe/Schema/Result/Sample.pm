@@ -1375,6 +1375,28 @@ __PACKAGE__->table("sample");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 ncbi_acc
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 100
+
+=head2 cast_num
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 100
+
+=head2 ncbi_sra_experiment
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 ncbi_sra_seq_run
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -1915,6 +1937,14 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable => 1,
   },
+  "ncbi_acc",
+  { data_type => "varchar", is_nullable => 1, size => 100 },
+  "cast_num",
+  { data_type => "varchar", is_nullable => 1, size => 100 },
+  "ncbi_sra_experiment",
+  { data_type => "text", is_nullable => 1 },
+  "ncbi_sra_seq_run",
+  { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -2063,8 +2093,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-03-12 14:58:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KKjX1v7QLjGrJRxYkB6qVg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-11 14:27:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Uunm6uxOq2MebPZffTxFdQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
