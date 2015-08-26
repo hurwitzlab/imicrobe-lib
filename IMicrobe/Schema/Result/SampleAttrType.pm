@@ -42,7 +42,7 @@ __PACKAGE__->table("sample_attr_type");
 =head2 url_template
 
   data_type: 'varchar'
-  is_nullable: 0
+  is_nullable: 1
   size: 255
 
 =head2 description
@@ -69,7 +69,7 @@ __PACKAGE__->add_columns(
   "type",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "url_template",
-  { data_type => "varchar", is_nullable => 0, size => 255 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "description",
   { data_type => "text", is_nullable => 1 },
   "category",
@@ -104,6 +104,21 @@ __PACKAGE__->add_unique_constraint("type", ["type"]);
 
 =head1 RELATIONS
 
+=head2 sample_attr_type_aliases
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::SampleAttrTypeAlias>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sample_attr_type_aliases",
+  "IMicrobe::Schema::Result::SampleAttrTypeAlias",
+  { "foreign.sample_attr_type_id" => "self.sample_attr_type_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 sample_attrs
 
 Type: has_many
@@ -120,8 +135,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-03-04 13:37:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:I0F3OnE+k430mcTDkHBudQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-26 14:08:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iJ/7t6JAUotvvRA9gB4IcQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
