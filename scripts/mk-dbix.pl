@@ -9,7 +9,7 @@ use FindBin '$Bin';
 use File::Path 'mkpath';
 use File::Spec::Functions 'canonpath';
 use Getopt::Long;
-use IMicrobe::DB;
+use CMore::DB;
 use Pod::Usage;
 use Readonly;
 
@@ -33,10 +33,10 @@ if (!-d $out_dir) {
     mkpath $out_dir;
 }
 
-my $db = IMicrobe::DB->new;
+my $db = CMore::DB->new;
 
 make_schema_at(
-    'IMicrobe::Schema',
+    'CMore::Schema',
     {
         debug          => 0,
         dump_directory => $out_dir,

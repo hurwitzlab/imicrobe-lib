@@ -1,4 +1,4 @@
-package IMicrobe::Config;
+package CMore::Config;
 
 use namespace::autoclean;
 use Carp qw( croak );
@@ -16,7 +16,7 @@ subtype 'ExistingFile'
 
 has default_filename => (
     is      => 'ro',
-    default => '/usr/local/imicrobe/lib/conf/imicrobe.yaml',
+    default => '/usr/local/cmore/lib/conf/cmore.yaml',
 );
 
 has config     => (
@@ -56,7 +56,7 @@ sub _build_filename {
 
     $self->clear_config;
 
-    return $_[0] || $ENV{'IMICROBE_CONF'} || $self->default_filename;
+    return $_[0] || $ENV{'CMORE_CONF'} || $self->default_filename;
 }
 
 # ----------------------------------------------------------------
@@ -117,13 +117,13 @@ __END__
 
 =head1 NAME
 
-IMicrobe::Config - Read local configuration information
+CMore::Config - Read local configuration information
 
 =head1 SYNOPSIS
 
-  use IMicrobe::Conf;
+  use CMore::Conf;
 
-  my $config  = IMicrobe::Conf->new;
+  my $config  = CMore::Conf->new;
   my $db_info = $config->get('db');
 
 =head1 DESCRIPTION

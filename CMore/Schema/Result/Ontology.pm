@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::Ontology;
+package CMore::Schema::Result::Ontology;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::Ontology
+CMore::Schema::Result::Ontology
 
 =cut
 
@@ -79,20 +79,20 @@ __PACKAGE__->set_primary_key("ontology_id");
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::SampleToOntology>
+Related object: L<CMore::Schema::Result::SampleToOntology>
 
 =cut
 
 __PACKAGE__->has_many(
   "sample_to_ontologies",
-  "IMicrobe::Schema::Result::SampleToOntology",
+  "CMore::Schema::Result::SampleToOntology",
   { "foreign.ontology_id" => "self.ontology_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-02-16 13:55:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bz6FK58GxUAdI8MhBdAo4g
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tRiiEY5UIb36xX1AFj9vOw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::Assembly;
+package CMore::Schema::Result::Assembly;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::Assembly
+CMore::Schema::Result::Assembly
 
 =cut
 
@@ -145,13 +145,13 @@ __PACKAGE__->set_primary_key("assembly_id");
 
 Type: belongs_to
 
-Related object: L<IMicrobe::Schema::Result::Project>
+Related object: L<CMore::Schema::Result::Project>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "project",
-  "IMicrobe::Schema::Result::Project",
+  "CMore::Schema::Result::Project",
   { project_id => "project_id" },
   {
     is_deferrable => 1,
@@ -165,13 +165,13 @@ __PACKAGE__->belongs_to(
 
 Type: belongs_to
 
-Related object: L<IMicrobe::Schema::Result::Sample>
+Related object: L<CMore::Schema::Result::Sample>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "sample",
-  "IMicrobe::Schema::Result::Sample",
+  "CMore::Schema::Result::Sample",
   { sample_id => "sample_id" },
   {
     is_deferrable => 1,
@@ -182,8 +182,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-03-12 14:58:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4n3czH4eXqE3xNnaDgWhAA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gBghP1GtXPxGG0V4r9QPtw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

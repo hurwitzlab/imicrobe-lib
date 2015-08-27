@@ -1,0 +1,10 @@
+db:
+  name: "cmore"
+  host: "localhost"
+  user: "cmore"
+  password: "cmore"
+  driver: "mysql"
+
+mongo:
+  host: "lipothrix.hpc.arizona.edu"
+  port: "27017"

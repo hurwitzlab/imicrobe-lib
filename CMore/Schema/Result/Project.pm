@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::Project;
+package CMore::Schema::Result::Project;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::Project
+CMore::Schema::Result::Project
 
 =cut
 
@@ -180,13 +180,13 @@ __PACKAGE__->add_unique_constraint("project_code", ["project_code"]);
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::Assembly>
+Related object: L<CMore::Schema::Result::Assembly>
 
 =cut
 
 __PACKAGE__->has_many(
   "assemblies",
-  "IMicrobe::Schema::Result::Assembly",
+  "CMore::Schema::Result::Assembly",
   { "foreign.project_id" => "self.project_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -195,13 +195,13 @@ __PACKAGE__->has_many(
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::CombinedAssembly>
+Related object: L<CMore::Schema::Result::CombinedAssembly>
 
 =cut
 
 __PACKAGE__->has_many(
   "combined_assemblies",
-  "IMicrobe::Schema::Result::CombinedAssembly",
+  "CMore::Schema::Result::CombinedAssembly",
   { "foreign.project_id" => "self.project_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -210,13 +210,13 @@ __PACKAGE__->has_many(
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::Ftp>
+Related object: L<CMore::Schema::Result::Ftp>
 
 =cut
 
 __PACKAGE__->has_many(
   "ftps",
-  "IMicrobe::Schema::Result::Ftp",
+  "CMore::Schema::Result::Ftp",
   { "foreign.project_id" => "self.project_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -225,13 +225,13 @@ __PACKAGE__->has_many(
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::ProjectPage>
+Related object: L<CMore::Schema::Result::ProjectPage>
 
 =cut
 
 __PACKAGE__->has_many(
   "project_pages",
-  "IMicrobe::Schema::Result::ProjectPage",
+  "CMore::Schema::Result::ProjectPage",
   { "foreign.project_id" => "self.project_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -240,13 +240,13 @@ __PACKAGE__->has_many(
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::ProjectToDomain>
+Related object: L<CMore::Schema::Result::ProjectToDomain>
 
 =cut
 
 __PACKAGE__->has_many(
   "project_to_domains",
-  "IMicrobe::Schema::Result::ProjectToDomain",
+  "CMore::Schema::Result::ProjectToDomain",
   { "foreign.project_id" => "self.project_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -255,13 +255,13 @@ __PACKAGE__->has_many(
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::Publication>
+Related object: L<CMore::Schema::Result::Publication>
 
 =cut
 
 __PACKAGE__->has_many(
   "publications",
-  "IMicrobe::Schema::Result::Publication",
+  "CMore::Schema::Result::Publication",
   { "foreign.project_id" => "self.project_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -270,20 +270,20 @@ __PACKAGE__->has_many(
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::Sample>
+Related object: L<CMore::Schema::Result::Sample>
 
 =cut
 
 __PACKAGE__->has_many(
   "samples",
-  "IMicrobe::Schema::Result::Sample",
+  "CMore::Schema::Result::Sample",
   { "foreign.project_id" => "self.project_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-04-17 10:04:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wowfbE25b+48dIIBguzJWg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IxlON+0qr51P2MWa0hxkHQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

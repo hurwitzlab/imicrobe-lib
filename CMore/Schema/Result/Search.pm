@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::Search;
+package CMore::Schema::Result::Search;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::Search
+CMore::Schema::Result::Search
 
 =cut
 
@@ -81,8 +81,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("search_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 15:54:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UN169t3cY+rtzhhFMLtDGQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eEzirZ1wFxGnXKSQxnFfKw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

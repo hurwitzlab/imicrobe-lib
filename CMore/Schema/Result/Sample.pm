@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::Sample;
+package CMore::Schema::Result::Sample;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::Sample
+CMore::Schema::Result::Sample
 
 =cut
 
@@ -1981,13 +1981,13 @@ __PACKAGE__->add_unique_constraint("project_id", ["project_id", "sample_acc"]);
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::Assembly>
+Related object: L<CMore::Schema::Result::Assembly>
 
 =cut
 
 __PACKAGE__->has_many(
   "assemblies",
-  "IMicrobe::Schema::Result::Assembly",
+  "CMore::Schema::Result::Assembly",
   { "foreign.sample_id" => "self.sample_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -1996,13 +1996,13 @@ __PACKAGE__->has_many(
 
 Type: belongs_to
 
-Related object: L<IMicrobe::Schema::Result::CombinedAssembly>
+Related object: L<CMore::Schema::Result::CombinedAssembly>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "combined_assembly",
-  "IMicrobe::Schema::Result::CombinedAssembly",
+  "CMore::Schema::Result::CombinedAssembly",
   { combined_assembly_id => "combined_assembly_id" },
   {
     is_deferrable => 1,
@@ -2016,13 +2016,13 @@ __PACKAGE__->belongs_to(
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::CombinedAssemblyToSample>
+Related object: L<CMore::Schema::Result::CombinedAssemblyToSample>
 
 =cut
 
 __PACKAGE__->has_many(
   "combined_assembly_to_samples",
-  "IMicrobe::Schema::Result::CombinedAssemblyToSample",
+  "CMore::Schema::Result::CombinedAssemblyToSample",
   { "foreign.sample_id" => "self.sample_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -2031,13 +2031,13 @@ __PACKAGE__->has_many(
 
 Type: belongs_to
 
-Related object: L<IMicrobe::Schema::Result::Project>
+Related object: L<CMore::Schema::Result::Project>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "project",
-  "IMicrobe::Schema::Result::Project",
+  "CMore::Schema::Result::Project",
   { project_id => "project_id" },
   {
     is_deferrable => 1,
@@ -2051,13 +2051,13 @@ __PACKAGE__->belongs_to(
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::SampleAttr>
+Related object: L<CMore::Schema::Result::SampleAttr>
 
 =cut
 
 __PACKAGE__->has_many(
   "sample_attrs",
-  "IMicrobe::Schema::Result::SampleAttr",
+  "CMore::Schema::Result::SampleAttr",
   { "foreign.sample_id" => "self.sample_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -2066,13 +2066,13 @@ __PACKAGE__->has_many(
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::SampleFile>
+Related object: L<CMore::Schema::Result::SampleFile>
 
 =cut
 
 __PACKAGE__->has_many(
   "sample_files",
-  "IMicrobe::Schema::Result::SampleFile",
+  "CMore::Schema::Result::SampleFile",
   { "foreign.sample_id" => "self.sample_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -2081,20 +2081,20 @@ __PACKAGE__->has_many(
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::SampleToOntology>
+Related object: L<CMore::Schema::Result::SampleToOntology>
 
 =cut
 
 __PACKAGE__->has_many(
   "sample_to_ontologies",
-  "IMicrobe::Schema::Result::SampleToOntology",
+  "CMore::Schema::Result::SampleToOntology",
   { "foreign.sample_id" => "self.sample_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-11 14:27:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Uunm6uxOq2MebPZffTxFdQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MJPPM8RC3snctaDwqvYnbA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

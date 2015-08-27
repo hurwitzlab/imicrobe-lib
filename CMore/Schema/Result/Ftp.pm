@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::Publication;
+package CMore::Schema::Result::Ftp;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::Publication
+CMore::Schema::Result::Ftp
 
 =cut
 
@@ -18,15 +18,15 @@ use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 
-=head1 TABLE: C<publication>
+=head1 TABLE: C<ftp>
 
 =cut
 
-__PACKAGE__->table("publication");
+__PACKAGE__->table("ftp");
 
 =head1 ACCESSORS
 
-=head2 publication_id
+=head2 ftp_id
 
   data_type: 'integer'
   extra: {unsigned => 1}
@@ -40,48 +40,28 @@ __PACKAGE__->table("publication");
   is_foreign_key: 1
   is_nullable: 1
 
-=head2 pub_code
+=head2 name
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 255
+
+=head2 path
 
   data_type: 'varchar'
   is_nullable: 1
   size: 255
 
-=head2 doi
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 author
+=head2 size
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 255
-
-=head2 title
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 255
-
-=head2 pubmed_id
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 journal
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 pub_date
-
-  data_type: 'text'
-  is_nullable: 1
+  size: 20
 
 =cut
 
 __PACKAGE__->add_columns(
-  "publication_id",
+  "ftp_id",
   {
     data_type => "integer",
     extra => { unsigned => 1 },
@@ -95,33 +75,25 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable => 1,
   },
-  "pub_code",
+  "name",
+  { data_type => "varchar", is_nullable => 0, size => 255 },
+  "path",
   { data_type => "varchar", is_nullable => 1, size => 255 },
-  "doi",
-  { data_type => "text", is_nullable => 1 },
-  "author",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
-  "title",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
-  "pubmed_id",
-  { data_type => "integer", is_nullable => 1 },
-  "journal",
-  { data_type => "text", is_nullable => 1 },
-  "pub_date",
-  { data_type => "text", is_nullable => 1 },
+  "size",
+  { data_type => "varchar", is_nullable => 1, size => 20 },
 );
 
 =head1 PRIMARY KEY
 
 =over 4
 
-=item * L</publication_id>
+=item * L</ftp_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("publication_id");
+__PACKAGE__->set_primary_key("ftp_id");
 
 =head1 RELATIONS
 
@@ -129,13 +101,13 @@ __PACKAGE__->set_primary_key("publication_id");
 
 Type: belongs_to
 
-Related object: L<IMicrobe::Schema::Result::Project>
+Related object: L<CMore::Schema::Result::Project>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "project",
-  "IMicrobe::Schema::Result::Project",
+  "CMore::Schema::Result::Project",
   { project_id => "project_id" },
   {
     is_deferrable => 1,
@@ -146,8 +118,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-01-05 15:15:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xCBxWnuRRPQuL5LH/PlxDQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZKPZA0CxfC76JIeO+Dzqgw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

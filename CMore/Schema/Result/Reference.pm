@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::Reference;
+package CMore::Schema::Result::Reference;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::Reference
+CMore::Schema::Result::Reference
 
 =cut
 
@@ -127,8 +127,8 @@ __PACKAGE__->set_primary_key("reference_id");
 __PACKAGE__->add_unique_constraint("file", ["file", "name"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-26 16:37:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yIa190Dz7BJudfkFQvpbdA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lTOwbtr9WB26X+DzWYT4kw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

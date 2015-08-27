@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::QueryLog;
+package CMore::Schema::Result::QueryLog;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::QueryLog
+CMore::Schema::Result::QueryLog
 
 =cut
 
@@ -114,8 +114,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("query_log_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-26 16:37:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:J7rRx6knpWUpK/g09pJT9g
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aCkLBNdjXHxarLgKmVdnfA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

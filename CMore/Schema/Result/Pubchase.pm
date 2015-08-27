@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::Pubchase;
+package CMore::Schema::Result::Pubchase;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::Pubchase
+CMore::Schema::Result::Pubchase
 
 =cut
 
@@ -133,8 +133,8 @@ __PACKAGE__->set_primary_key("pubchase_id");
 __PACKAGE__->add_unique_constraint("article_id", ["article_id"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 15:54:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gMb2yyOoW1LczqKbz5VYCg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zqm6pwP9uPD85AXJdaC2cA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

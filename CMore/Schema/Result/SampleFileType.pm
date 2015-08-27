@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::SampleFileType;
+package CMore::Schema::Result::SampleFileType;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::SampleFileType
+CMore::Schema::Result::SampleFileType
 
 =cut
 
@@ -85,20 +85,20 @@ __PACKAGE__->add_unique_constraint("type", ["type"]);
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::SampleFile>
+Related object: L<CMore::Schema::Result::SampleFile>
 
 =cut
 
 __PACKAGE__->has_many(
   "sample_files",
-  "IMicrobe::Schema::Result::SampleFile",
+  "CMore::Schema::Result::SampleFile",
   { "foreign.sample_file_type_id" => "self.sample_file_type_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-03-04 13:32:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YjsJaJRq2jVk4fbPzyn7aQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:l5JUprDl0Sq+kCAQ4Y8vpA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

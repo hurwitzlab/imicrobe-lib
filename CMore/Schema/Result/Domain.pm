@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::Domain;
+package CMore::Schema::Result::Domain;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::Domain
+CMore::Schema::Result::Domain
 
 =cut
 
@@ -71,20 +71,20 @@ __PACKAGE__->set_primary_key("domain_id");
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::ProjectToDomain>
+Related object: L<CMore::Schema::Result::ProjectToDomain>
 
 =cut
 
 __PACKAGE__->has_many(
   "project_to_domains",
-  "IMicrobe::Schema::Result::ProjectToDomain",
+  "CMore::Schema::Result::ProjectToDomain",
   { "foreign.domain_id" => "self.domain_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 15:54:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aIOfGtK3QDos4UxN/0ky4A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:E+wOph8H+86zrhPEEaUU2Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::PubchaseRec;
+package CMore::Schema::Result::PubchaseRec;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::PubchaseRec
+CMore::Schema::Result::PubchaseRec
 
 =cut
 
@@ -78,8 +78,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("pubchase_rec_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 15:54:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QgEJ0umQWxkksUSjU1UUHw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:d8CI9RXARMt5oYWp14Mssg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

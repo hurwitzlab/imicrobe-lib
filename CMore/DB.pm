@@ -1,7 +1,7 @@
-package IMicrobe::DB;
+package CMore::DB;
 
-use IMicrobe::Config;
-use IMicrobe::Schema;
+use CMore::Config;
+use CMore::Schema;
 use DBI;
 use Moose;
 use MongoDB;
@@ -9,7 +9,7 @@ use Data::Dump 'dump';
 
 has config     => (
     is         => 'rw',
-    isa        => 'IMicrobe::Config',
+    isa        => 'CMore::Config',
     lazy_build => 1,
 );
 
@@ -109,7 +109,7 @@ sub BUILD {
 
 # ----------------------------------------------------------------
 sub _build_config {
-    return IMicrobe::Config->new;
+    return CMore::Config->new;
 }
 
 # ----------------------------------------------------------------
@@ -151,7 +151,7 @@ sub _build_mongo {
 sub _build_schema {
     my $self = shift;
 
-    return IMicrobe::Schema->connect( sub { $self->dbh } );
+    return CMore::Schema->connect( sub { $self->dbh } );
 }
 
 # ----------------------------------------------------------------

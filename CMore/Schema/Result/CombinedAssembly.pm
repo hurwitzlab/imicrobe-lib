@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::CombinedAssembly;
+package CMore::Schema::Result::CombinedAssembly;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::CombinedAssembly
+CMore::Schema::Result::CombinedAssembly
 
 =cut
 
@@ -187,13 +187,13 @@ __PACKAGE__->add_unique_constraint("assembly_name", ["assembly_name"]);
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::CombinedAssemblyToSample>
+Related object: L<CMore::Schema::Result::CombinedAssemblyToSample>
 
 =cut
 
 __PACKAGE__->has_many(
   "combined_assembly_to_samples",
-  "IMicrobe::Schema::Result::CombinedAssemblyToSample",
+  "CMore::Schema::Result::CombinedAssemblyToSample",
   { "foreign.combined_assembly_id" => "self.combined_assembly_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -202,13 +202,13 @@ __PACKAGE__->has_many(
 
 Type: belongs_to
 
-Related object: L<IMicrobe::Schema::Result::Project>
+Related object: L<CMore::Schema::Result::Project>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "project",
-  "IMicrobe::Schema::Result::Project",
+  "CMore::Schema::Result::Project",
   { project_id => "project_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
@@ -217,20 +217,20 @@ __PACKAGE__->belongs_to(
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::Sample>
+Related object: L<CMore::Schema::Result::Sample>
 
 =cut
 
 __PACKAGE__->has_many(
   "samples",
-  "IMicrobe::Schema::Result::Sample",
+  "CMore::Schema::Result::Sample",
   { "foreign.combined_assembly_id" => "self.combined_assembly_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-03-12 14:58:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ei5RoGLzmsvMQ32jJv2jzQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:S3bfNlCqYZ5CxFYnM0zuMQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

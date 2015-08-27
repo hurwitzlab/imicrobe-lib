@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::MetadataType;
+package CMore::Schema::Result::MetadataType;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::MetadataType
+CMore::Schema::Result::MetadataType
 
 =cut
 
@@ -160,8 +160,8 @@ __PACKAGE__->set_primary_key("metadata_type_id");
 __PACKAGE__->add_unique_constraint("category", ["category", "tag"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-01-14 10:36:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JlrhhT2+jSv/q9AZnsGqGg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ew/e1QHpV8FuOEYAxpfgKQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

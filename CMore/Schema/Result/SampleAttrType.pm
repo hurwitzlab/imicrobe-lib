@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::SampleAttrType;
+package CMore::Schema::Result::SampleAttrType;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::SampleAttrType
+CMore::Schema::Result::SampleAttrType
 
 =cut
 
@@ -42,7 +42,7 @@ __PACKAGE__->table("sample_attr_type");
 =head2 url_template
 
   data_type: 'varchar'
-  is_nullable: 0
+  is_nullable: 1
   size: 255
 
 =head2 description
@@ -69,7 +69,7 @@ __PACKAGE__->add_columns(
   "type",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "url_template",
-  { data_type => "varchar", is_nullable => 0, size => 255 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "description",
   { data_type => "text", is_nullable => 1 },
   "category",
@@ -108,20 +108,20 @@ __PACKAGE__->add_unique_constraint("type", ["type"]);
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::SampleAttr>
+Related object: L<CMore::Schema::Result::SampleAttr>
 
 =cut
 
 __PACKAGE__->has_many(
   "sample_attrs",
-  "IMicrobe::Schema::Result::SampleAttr",
+  "CMore::Schema::Result::SampleAttr",
   { "foreign.sample_attr_type_id" => "self.sample_attr_type_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-03-04 13:37:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:I0F3OnE+k430mcTDkHBudQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Fh+z1xxrsCZWwTe4j6Hclg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

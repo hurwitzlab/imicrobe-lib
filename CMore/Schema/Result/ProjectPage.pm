@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::ProjectPage;
+package CMore::Schema::Result::ProjectPage;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::ProjectPage
+CMore::Schema::Result::ProjectPage
 
 =cut
 
@@ -129,20 +129,20 @@ __PACKAGE__->add_unique_constraint("project_id", ["project_id", "title"]);
 
 Type: belongs_to
 
-Related object: L<IMicrobe::Schema::Result::Project>
+Related object: L<CMore::Schema::Result::Project>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "project",
-  "IMicrobe::Schema::Result::Project",
+  "CMore::Schema::Result::Project",
   { project_id => "project_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-18 16:00:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5RSgFGTlMn7MHWwwGdXHKA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-21 17:14:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xr+wyujbRFGvILi3cWdUaA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
