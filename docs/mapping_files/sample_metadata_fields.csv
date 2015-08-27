@@ -75,19 +75,11 @@ dissolved_inorg_cdic_mm,dissolved inorganic carbon,,chemical parameter,multi,Dis
 dissolved_inorg_cdic_um,dissolved inorganic carbon,,chemical parameter,multi,Dissolved Inorg C(DIC)  (uM),,
 dissolved_inorganic_carbon,,,chemical parameter,,,DIC,
 dissolved_inorganic_carbon_umol_kg,dissolved organic carbon,,chemical parameter,multi,dissolved inorganic carbon  (umol/kg),,
-<<<<<<< Updated upstream
 dissolved_inorganic_nitrogen_umol_l,total inorganic nitrogen,,chemical parameter,water,dissolved inorganic nitrogen  (Õmol/l),,
 dissolved_inorganic_phosphate_nmol_kg,dissolved inorganic phosphorus,,chemical parameter,water,dissolved inorganic phosphate  (nmol/kg),,
 dissolved_organic_carbon_um,dissolved organic carbon,,chemical parameter,multi,dissolved organic carbon  (uM),DOC,
 dissolved_organic_carbon_umol_kg,dissolved organic carbon,,chemical parameter,multi,dissolved organic carbon  (umol/kg),,
 dissolved_organic_nitrogen_umol_kg,dissolved organic nitrogen,,chemical parameter,multi,Dissolved Organic Nitrogen  (Õmol/kg),DON,
-=======
-dissolved_inorganic_nitrogen_umol_l,total inorganic nitrogen,,chemical parameter,water,dissolved inorganic nitrogen  (’çmol/l),,
-dissolved_inorganic_phosphate_nmol_kg,dissolved inorganic phosphorus,,chemical parameter,water,dissolved inorganic phosphate  (nmol/kg),,
-dissolved_organic_carbon_um,dissolved organic carbon,,chemical parameter,multi,dissolved organic carbon  (uM),DOC,
-dissolved_organic_carbon_umol_kg,dissolved organic carbon,,chemical parameter,multi,dissolved organic carbon  (umol/kg),,
-dissolved_organic_nitrogen_umol_kg,dissolved organic nitrogen,,chemical parameter,multi,Dissolved Organic Nitrogen  (’çmol/kg),DON,
->>>>>>> Stashed changes
 dissolved_organic_phosphorus,,,chemical parameter,,,DOP,
 dissolved_oxygen,dissolved oxygen,dissolved oxygen,chemical parameter,,,O2,CTDOXY
 dissolved_oxygen,,,chemical parameter,,,O2,OXYGEN
@@ -112,19 +104,11 @@ manganesemn_um,,manganese,chemical parameter,,Manganese(Mn)  (uM),,
 methane_um,methane,,chemical parameter,multi,Methane  (uM),,
 molybdenummo_um,,molybdenum,chemical parameter,,Molybdenum(Mo)  (uM),,
 monovinyl chlorophyll a,,,chemical parameter,,,chl_a1,
-<<<<<<< Updated upstream
 nitrate,nitrate,nitrate,chemical parameter,water,nitrate(NO3)  (Õmol/l),,
 nitratenitrite_nmol_kg,,nitrate and nitrite,chemical parameter,multi,nitrate+nitrite  (nmol/kg),NO3_NO2,
 nitrateno3_um,nitrate,,chemical parameter,multi,nitrate(NO3)  (uM),,
 nitrateno3_umol_l,nitrate,,chemical parameter,multi,nitrate(NO3)  (umol/l),,
 nitrite_umol_l,nitrite,,chemical parameter,water,nitrite  (Õmol/l),NO2,
-=======
-nitrate,nitrate,nitrate,chemical parameter,water,nitrate(NO3)  (’çmol/l),,
-nitratenitrite_nmol_kg,,nitrate and nitrite,chemical parameter,multi,nitrate+nitrite  (nmol/kg),NO3_NO2,
-nitrateno3_um,nitrate,,chemical parameter,multi,nitrate(NO3)  (uM),,
-nitrateno3_umol_l,nitrate,,chemical parameter,multi,nitrate(NO3)  (umol/l),,
-nitrite_umol_l,nitrite,,chemical parameter,water,nitrite  (’çmol/l),NO2,
->>>>>>> Stashed changes
 nutrients_dmsp_nm,,nutrients DMSP,chemical parameter,,nutrients/DMSP  (nM),,
 nutrients_nh4_microm,ammonium,,chemical parameter,multi,nutrients/NH4  (microM),,
 nutrients_nox_microm,,nutrients NOx,chemical parameter,,nutrients/NOx  (microM),,
@@ -139,30 +123,18 @@ oxygen,oxygenation status of sample,,chemical parameter,multi,oxygen,,
 oxygen_mass_um,dissolved oxygen,,chemical parameter,multi,oxygen/mass  (uM),,
 oxygen_um,dissolved oxygen,,chemical parameter,multi,oxygen  (uM),,
 oxygen_umol_kg,dissolved oxygen,,chemical parameter,multi,oxygen  (umol/kg),O2_umol_kg,
-<<<<<<< Updated upstream
 particulate_carbon_umol_kg,total particulate carbon,,chemical parameter,water,Particulate Carbon  (Õmol/kg),,
 particulate_nigrogen_umol_kg,particulate organic nitrogen,,chemical parameter,water,Particulate Nigrogen  (Õmol/Kg),,
 particulate_nitrogen_umol_kg,particulate organic nitrogen,,chemical parameter,water,Particulate Nitrogen  (Õmol/kg),,
 particulate_organic_carbon_umol_kg,particulate organic carbon,,chemical parameter,multi,Particulate Organic Carbon  (umol/kg),,
 particulate_phosphate_umol_kg,,particulate phosphate,chemical parameter,,Particulate Phosphate  (Õmol/kg),,
-=======
-particulate_carbon_umol_kg,total particulate carbon,,chemical parameter,water,Particulate Carbon  (’çmol/kg),,
-particulate_nigrogen_umol_kg,particulate organic nitrogen,,chemical parameter,water,Particulate Nigrogen  (’çmol/Kg),,
-particulate_nitrogen_umol_kg,particulate organic nitrogen,,chemical parameter,water,Particulate Nitrogen  (’çmol/kg),,
-particulate_organic_carbon_umol_kg,particulate organic carbon,,chemical parameter,multi,Particulate Organic Carbon  (umol/kg),,
-particulate_phosphate_umol_kg,,particulate phosphate,chemical parameter,,Particulate Phosphate  (’çmol/kg),,
->>>>>>> Stashed changes
 particulate_silica,,,chemical parameter,,,Si_part,
 peridinin,,,chemical parameter,,,peridinin,
 ph,pH,,chemical parameter,built env/plant-associated/soil,pH,pH,
 ph,pH,,chemical parameter,multi,pH  (null),,
 phosphate,phosphate,phosphate,chemical parameter,,,PO4,
 phosphate_umol_kg,phosphate,,chemical parameter,multi,phosphate  (umol/kg),,
-<<<<<<< Updated upstream
 phosphate_umol_l,phosphate,,chemical parameter,multi,phosphate  (Õmol/l),,
-=======
-phosphate_umol_l,phosphate,,chemical parameter,multi,phosphate  (’çmol/l),,
->>>>>>> Stashed changes
 phycoerythrin_10u,,,chemical parameter,,,PE_10u,
 phycoerythrin_5u,,,chemical parameter,,,PE_5u,
 phycoerythrin_point4u ,,,chemical parameter,,,PE_point4u,
@@ -177,17 +149,10 @@ salinity_ppm,salinity or sample salinity,,chemical parameter,multi,salinity  (pp
 salinity_psu,salinity or sample salinity,,chemical parameter,multi,salinity  (psu),,
 silicah4sio4_um_l,silicate,,chemical parameter,multi,Silica(H4SiO4)  (uM/l),,
 silicate,,silicate,chemical parameter,,,SiO4,
-<<<<<<< Updated upstream
 silicate_umol_kg,silicate,,chemical parameter,multi,Silicate  (Õmol/kg),,
 silicate_umol_kg,silicate,,chemical parameter,multi,Silicate  (umol/kg),,
 siliconsi_um,silicate,,chemical parameter,multi,Silicon(Si)  (uM),,
 siliconsi_umol_l,,silicone,chemical parameter,,Silicon(Si)  (Õmol/l),,
-=======
-silicate_umol_kg,silicate,,chemical parameter,multi,Silicate  (’çmol/kg),,
-silicate_umol_kg,silicate,,chemical parameter,multi,Silicate  (umol/kg),,
-siliconsi_um,silicate,,chemical parameter,multi,Silicon(Si)  (uM),,
-siliconsi_umol_l,,silicone,chemical parameter,,Silicon(Si)  (’çmol/l),,
->>>>>>> Stashed changes
 sodium,sodium,,chemical parameter,multi,Sodium  (null),,
 sodium_um,sodium,,chemical parameter,multi,Sodium  (uM),,
 strontiumsr_um,,strontium,chemical parameter,,Strontium(Sr)  (uM),,
@@ -208,11 +173,7 @@ total_pigment,,,chemical parameter,,,pig_tot,
 trace_elements,,trace elements,chemical parameter,,,,
 tungstenw_um,,tungsten,chemical parameter,,Tungsten(W)  (uM),,
 urea,,urea,chemical parameter,,,,
-<<<<<<< Updated upstream
 urea_umol_l,turbidity,,chemical parameter,sediment,Urea  (Õmol/l),,
-=======
-urea_umol_l,turbidity,,chemical parameter,sediment,Urea  (’çmol/l),,
->>>>>>> Stashed changes
 vanadiumv_um,,vanadium,chemical parameter,,Vanadium(V)  (uM),,
 violaxanthin,,,chemical parameter,,,violax,
 zeaxanthin,,,chemical parameter,,,zeax,
@@ -328,13 +289,8 @@ temperature,,temperature,physical environment parameter,,temperature,temp,
 temperature,,,physical environment parameter,,,temp,CTDTMP
 temperature_c,temperature,,physical environment parameter,multi,temperature  (C),,
 transmission,,,physical environment parameter,,transmission,trans,
-<<<<<<< Updated upstream
 plant_cover,,plant cover,habitat,,Plant Cover,,
 method_of_isolation,isolation and growth condition,,miscellaneous parameter,core,method of isolation,,
-=======
-plant_cover,,plant cover,plant_cover,,Plant Cover,,
-method_of_isolation,isolation and growth condition,,process,core,method of isolation,,
->>>>>>> Stashed changes
 assembly_accession_number,,,sequence,,,,
 combined_assembly_name,,,sequence,,,,
 contigs_file,,SKIP,sequence,,,,
