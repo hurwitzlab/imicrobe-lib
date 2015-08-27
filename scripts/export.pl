@@ -2,6 +2,7 @@
 
 use common::sense;
 use autodie;
+use Data::Dump 'dump';
 use DBI;
 use IMicrobe::DB;
 use File::Spec::Functions;
@@ -16,24 +17,8 @@ Readonly my @BASE_TABLES => qw(
     pubchase
     pubchase_rec
     sample_attr_type
-);
-
-Readonly my %OPTIONAL_TABLES => (
-    reference => [],
-    project   => [qw(
-        assembly
-        combined_assembly
-        combined_assembly_to_sample
-        ftp
-        project_page
-        project_to_domain
-        publication
-        sample
-        sample_attr
-        sample_file
-        sample_file_type
-        sample_to_ontology
-    )],
+    sample_attr_type_alias
+    sample_file_type
 );
 
 main();
@@ -75,49 +60,50 @@ sub main {
 
     say "Transferring to db '$to_db'";
 
-#    for my $tbl (@BASE_TABLES) {
-#        my $rs_name       = join('', map { ucfirst($_) } split(/_/, $tbl));
-#        my $result_set    = $schema->resultset($rs_name);
-#        my $result_source = $result_set->result_source;
-#        my ($pk_name)     = $result_source->primary_columns;
-#        my @flds          = grep { !/$pk_name/ } $result_source->columns;
-#
-#        say "Processing '$rs_name' ($pk_name) = ", join(', ', @flds);
-#
-#        my $insert_sql = sprintf("insert into %s (%s) values (%s)",
-#            $tbl,
-#            join(', ', ($pk_name, @flds)),
-#            join(', ', map { "?" } ($pk_name, @flds)),
-#        );
-#
-#        my $update_sql = sprintf("update %s set %s where %s=?",
-#            $tbl,
-#            join(', ', map { "$_=?" } @flds),
-#            $pk_name
-#        );
-#
-#        my $i = 0;
-#        for my $Rec ($result_set->search) {
-#            my $id   = $Rec->id;
-#            my @vals = map { $Rec->$_() } @flds;
-#
-#            my $report = sub { 
-#                my ($action) = @_;
-#                printf "%5d: %s (%s)\n", ++$i, $id, $action;
-#            };
-#
-#            if (db_exists($to_dbh, $tbl, $pk_name, $id)) {
-#                $report->("update");
-#                $to_dbh->do($update_sql, {}, (@vals, $id));
-#            }
-#            else {
-#                $report->("insert");
-#                $to_dbh->do($insert_sql, {}, ($id, @vals));
-#            }
-#        }
-#    }
+    for my $tbl (@BASE_TABLES) {
+        my $rs_name       = join('', map { ucfirst($_) } split(/_/, $tbl));
+        my $result_set    = $schema->resultset($rs_name);
+        my $result_source = $result_set->result_source;
+        my ($pk_name)     = $result_source->primary_columns;
+        my @flds          = grep { !/$pk_name/ } $result_source->columns;
 
-    export_projects($schema, $to_dbh, $args{'project_ids'});
+        say "Processing '$rs_name' ($pk_name) = ", join(', ', @flds);
+
+        my $insert_sql = sprintf("insert into %s (%s) values (%s)",
+            $tbl,
+            join(', ', ($pk_name, @flds)),
+            join(', ', map { "?" } ($pk_name, @flds)),
+        );
+
+        my $update_sql = sprintf("update %s set %s where %s=?",
+            $tbl,
+            join(', ', map { "$_=?" } @flds),
+            $pk_name
+        );
+
+        my $i = 0;
+        for my $Rec ($result_set->search) {
+            my $id   = $Rec->id;
+            my @vals = map { $Rec->$_() } @flds;
+
+            my $report = sub { 
+                my ($action) = @_;
+                printf "%-70s\r", sprintf("%5d: %s (%s)", ++$i, $id, $action);
+            };
+
+            if (db_exists($to_dbh, $tbl, $pk_name, $id)) {
+                $report->("update");
+                $to_dbh->do($update_sql, {}, (@vals, $id));
+            }
+            else {
+                $report->("insert");
+                $to_dbh->do($insert_sql, {}, ($id, @vals));
+            }
+        }
+        print "\n";
+    }
+
+    export_projects($schema, $to_dbh, $args{'project_id'});
 
     say "Done.";
 }
@@ -132,10 +118,9 @@ sub db_exists {
 }
 
 # --------------------------------------------------
-sub export_project {
+sub export_projects {
     my ($schema, $to_dbh, $project_ids) = @_;
     my @ids = split(/\s*,\s*/, $project_ids) or return;
-    say "project_ids = ", join(', ', @ids);
 
     for my $project_id (@ids) {
         my $Project = $schema->resultset('Project')->find($project_id)
@@ -146,13 +131,16 @@ sub export_project {
 
 # --------------------------------------------------
 sub copy_record {
-    my ($Rec, $to_db) = @_;
-    my $result_set    = $Rec->resultset;
-    my $result_source = $result_set->result_source;
-    my ($pk_name)     = $result_source->primary_columns;
-    my @flds          = grep { !/$pk_name/ } $result_source->columns;
+    my $Rec          = shift or return;
+    my $to_dbh       = shift or die 'No "to_dbh"';
+    my $parent_class = shift || '';
+    my $tbl          = $Rec->table;
+    my ($pk_name)    = $Rec->primary_columns;
+    my @flds         = grep { !/$pk_name/ } $Rec->columns;
+    my $id           = $Rec->id;
+    my @vals         = map { $Rec->$_() } @flds;
 
-#    say "Processing '$rame' ($pk_name) = ", join(', ', @flds);
+    say "Processing '$tbl' ($id)";
 
     my $insert_sql = sprintf("insert into %s (%s) values (%s)",
         $tbl,
@@ -166,23 +154,20 @@ sub copy_record {
         $pk_name
     );
 
-    my $i = 0;
-    for my $Rec ($result_set->search) {
-        my $id   = $Rec->id;
-        my @vals = map { $Rec->$_() } @flds;
+    if (db_exists($to_dbh, $tbl, $pk_name, $id)) {
+        $to_dbh->do($update_sql, {}, (@vals, $id));
+    }
+    else {
+        $to_dbh->do($insert_sql, {}, ($id, @vals));
+    }
 
-        my $report = sub { 
-            my ($action) = @_;
-            printf "%5d: %s (%s)\n", ++$i, $id, $action;
-        };
+    for my $relationship_name ($Rec->relationships) {
+        my $rel_info = $Rec->relationship_info($relationship_name);
 
-        if (db_exists($to_dbh, $tbl, $pk_name, $id)) {
-            $report->("update");
-            $to_dbh->do($update_sql, {}, (@vals, $id));
-        }
-        else {
-            $report->("insert");
-            $to_dbh->do($insert_sql, {}, ($id, @vals));
+        next if $rel_info->{'class'} eq $parent_class;
+
+        for my $Related ($Rec->$relationship_name()) {
+            copy_record($Related, $to_dbh, $Rec->result_class);
         }
     }
 }
@@ -195,15 +180,15 @@ __END__
 
 =head1 NAME
 
-export.pl - a script
+export.pl - export iMicrobe data to another db
 
 =head1 SYNOPSIS
 
-  export.pl 
+  export.pl -d cmore -p 129
 
 Required Arguments:
 
-  -d       DB to export to
+  -d       Target DB name (e.g., "cmore")
 
 Options:
 
@@ -213,12 +198,8 @@ Options:
 
 =head1 DESCRIPTION
 
-Describe what the script does, what input it expects, what output it
-creates, etc.
-
-=head1 SEE ALSO
-
-perl.
+Will insert/update data in the target db using primary keys from 
+"imicrobe" db.
 
 =head1 AUTHOR
 
