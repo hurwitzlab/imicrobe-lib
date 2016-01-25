@@ -221,6 +221,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 project_files
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::ProjectFile>
+
+=cut
+
+__PACKAGE__->has_many(
+  "project_files",
+  "IMicrobe::Schema::Result::ProjectFile",
+  { "foreign.project_id" => "self.project_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 project_pages
 
 Type: has_many
@@ -282,8 +297,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-04-17 10:04:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wowfbE25b+48dIIBguzJWg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-25 11:03:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sgHwyGomNErdS4cjM6BaoA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

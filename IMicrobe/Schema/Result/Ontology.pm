@@ -45,6 +45,13 @@ __PACKAGE__->table("ontology");
   is_nullable: 0
   size: 125
 
+=head2 ontology_type_id
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_foreign_key: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -59,6 +66,13 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 125 },
   "label",
   { data_type => "varchar", is_nullable => 0, size => 125 },
+  "ontology_type_id",
+  {
+    data_type => "integer",
+    extra => { unsigned => 1 },
+    is_foreign_key => 1,
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -74,6 +88,26 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("ontology_id");
 
 =head1 RELATIONS
+
+=head2 ontology_type
+
+Type: belongs_to
+
+Related object: L<IMicrobe::Schema::Result::OntologyType>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "ontology_type",
+  "IMicrobe::Schema::Result::OntologyType",
+  { ontology_type_id => "ontology_type_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
+  },
+);
 
 =head2 sample_to_ontologies
 
@@ -91,8 +125,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-02-16 13:55:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bz6FK58GxUAdI8MhBdAo4g
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-12 12:46:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3bGDHQUGVwU1KAmKnseNVg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

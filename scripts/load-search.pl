@@ -20,35 +20,37 @@ Readonly my %INDEX_FLDS = (
     project      => [qw(project_code project_name pi institution description)],
     project_page => [qw(title contents)],
     publication  => [qw(journal pub_code author title pubmed_id doi)],
-    sample       => [qw(
-        genbank_acc isolation_method
-        sample_acc sample_type volume_unit
-        sample_description sample_name comments taxon_id
-        biomaterial_name description material_acc
-        site_name site_description country_name region
-        host_description host_organism library_acc
-        sequencing_method dna_type other
-        additional_citations assembly_accession_number
-        combined_assembly_name country
-        envo_term_for_habitat_primary_term
-        envo_term_for_habitat_secondary_term genus
-        growth_medium habitat habitat_description
-        importance investigation_type
-        modifications_to_growth_medium
-        other_collection_site_info
-        other_environmental_metadata_available
-        other_experimental_metadata_available
-        prey_organism_if_applicable primary_citation
-        principle_investigator sample_collection_site
-        sample_material species strain pi
-        environmental_salinity environmental_temperature
-        experimental_salinity experimental_temperature
-        class family mmetsp_id phylum torder superkingdom
-        comment current_land_use filter_type gene_name
-        habitat_name host_name host_species host_tissue
-        other_habitat phage_type plant_cover
-        template_preparation_method treatment
-    )],
+    sample       => [qw(sample_acc sample_name sample_type sample_description
+                    comments)],
+#    sample       => [qw(
+#        genbank_acc isolation_method
+#        sample_acc sample_type volume_unit
+#        sample_description sample_name comments taxon_id
+#        biomaterial_name description material_acc
+#        site_name site_description country_name region
+#        host_description host_organism library_acc
+#        sequencing_method dna_type other
+#        additional_citations assembly_accession_number
+#        combined_assembly_name country
+#        envo_term_for_habitat_primary_term
+#        envo_term_for_habitat_secondary_term genus
+#        growth_medium habitat habitat_description
+#        importance investigation_type
+#        modifications_to_growth_medium
+#        other_collection_site_info
+#        other_environmental_metadata_available
+#        other_experimental_metadata_available
+#        prey_organism_if_applicable primary_citation
+#        principle_investigator sample_collection_site
+#        sample_material species strain pi
+#        environmental_salinity environmental_temperature
+#        experimental_salinity experimental_temperature
+#        class family mmetsp_id phylum torder superkingdom
+#        comment current_land_use filter_type gene_name
+#        habitat_name host_name host_species host_tissue
+#        other_habitat phage_type plant_cover
+#        template_preparation_method treatment
+#    )],
     combined_assembly => [qw( 
         assembly_name phylum class family genus species strain
     )],
@@ -90,7 +92,7 @@ Readonly my %MONGO_SQL => {
           and    s.project_id=pr.project_id
           and    pr.project_id=p.project_id
         ',
-        q'select "sample_id" as name, sample_id
+        q'select "specimen__sample_id" as name, sample_id as value
           from   sample
           where  sample_id=?
         ',
@@ -148,10 +150,16 @@ sub main {
 
 # --------------------------------------------------
 sub process {
-    my @tables = @_;
-    my $db     = IMicrobe::DB->new->dbh;
-    my $mongo  = MongoDB::MongoClient->new(host => 'localhost', port => 27017);
-    my $mdb    = $mongo->get_database('imicrobe');
+    my @tables     = @_;
+    my $db         = IMicrobe::DB->new;
+    my $mongo_conf = IMicrobe::Config->new->get('mongo');
+    my $dbh        = $db->dbh;
+    my $mongo      = $db->mongo;
+    my $db_name    = $mongo_conf->{'dbname'};
+    my $host       = $mongo_conf->{'host'};
+    my $coll_name  = 'sampleKeys';
+    my $mdb        = $mongo->get_database($db_name);
+    $mdb->drop($coll_name);
 
     for my $table (@tables) {
         my $coll = $mdb->get_collection($table);
@@ -161,21 +169,22 @@ sub process {
         my $pk_name = $table . '_id'; 
         unshift @flds, $pk_name;
 
-        my @records = @{$db->selectall_arrayref(
+        my @records = @{$dbh->selectall_arrayref(
             sprintf('select %s from %s', join(', ', @flds), $table), 
             { Columns => {} }
         )};
 
         printf "Processing %s from table '%s.'\n", scalar(@records), $table;
 
-        $db->do('delete from search where table_name=?', {}, $table);
+        $dbh->do('delete from search where table_name=?', {}, $table);
 
         my @mongo_sql = @{ $MONGO_SQL{ $table } || [] };
 
         my $i;
         for my $rec (@records) {
             my $pk  = $rec->{ $pk_name } or next;
-            my $raw = join(' ', map { trim($rec->{$_} // '') } @flds);
+            my $raw = join(' ', map { trim($rec->{$_} // '') } 
+                      grep { $_ ne $pk } @flds);
 
             my @tmp;
             for my $w (split(/\s+/, $raw)) {
@@ -193,47 +202,48 @@ sub process {
             printf "%-78s\r", ++$i;
 
             my %mongo_rec;
-            for my $sql (@mongo_sql) {
-                my $data 
-                    = $db->selectall_arrayref($sql, { Columns => {} }, $pk);
+            if ($table eq 'sample') {
+                for my $sql (@mongo_sql) {
+                    my $data =
+                      $dbh->selectall_arrayref($sql, { Columns => {} }, $pk);
 
-                for my $rec (@$data) {
-                    my $key = normalize($rec->{'name'}) or next;
-                    my $val = trim($rec->{'value'})     or next;
-                    if ($mongo_rec{ $key }) {
-                        $mongo_rec{ $key } .= " $val";
-                    }
-                    else {
-                        $mongo_rec{ $key } = $val;
+                    for my $rec (@$data) {
+                        my $key = normalize($rec->{'name'}) or next;
+                        my $val = trim($rec->{'value'})     or next;
+                        if ($mongo_rec{ $key }) {
+                            $mongo_rec{ $key } .= " $val";
+                        }
+                        else {
+                            $mongo_rec{ $key } = $val;
+                        }
                     }
                 }
+
+                $mongo_rec{'text'} = join(' ', 
+                    grep { ! /^-?\d+(\.\d+)?$/ }
+                    map  { split(/\s+/, $_) }
+                    values %mongo_rec
+                );
+
+                $coll->insert(\%mongo_rec);
             }
 
-            $mongo_rec{'text'} = join(' ', 
-                grep { ! /^-?\d+(\.\d+)?$/ }
-                map  { split(/\s+/, $_) }
-                values %mongo_rec
-            );
-
-            $coll->insert(\%mongo_rec);
-
-            $db->do(
+            $dbh->do(
                 q[
                     insert
                     into   search (table_name, primary_key, search_text)
                     values (?, ?, ?)
                 ],
                 {},
-                ($table, $pk, join(' ', $text, $mongo_rec{'text'}))
+                ($table, $pk, join(' ', $text, $mongo_rec{'text'} // ''))
             );
-
         }
         print "\n";
     }
 
     say "Updating Mongo keys";
 
-    `/usr/bin/mongo imicrobe --eval "var collection = 'sample', persistResults=1" /usr/local/imicrobe/variety/variety.js`;
+    `/usr/bin/mongo $host/$db_name --quiet --eval "var collection = 'sample', outputFormat='json'" /usr/local/imicrobe/variety/variety.js | mongoimport --host $host --db $db_name --collection $coll_name --jsonArray`;
 
     say "Done.";
 }

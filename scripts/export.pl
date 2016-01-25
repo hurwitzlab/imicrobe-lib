@@ -53,7 +53,7 @@ sub main {
     }
 
     my $to_db  = $args{'db'};
-    my $to_dbh = DBI->connect("dbi:mysql:$to_db", 'kyclark', 'g0p3rl!',
+    my $to_dbh = DBI->connect("dbi:mysql:$to_db", 'kyclark', 'L1ttlecrobes.',
                  { RaiseError => 1 });
     my $mdb    = IMicrobe::DB->new;
     my $schema = $mdb->schema;

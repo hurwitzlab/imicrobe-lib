@@ -16,6 +16,22 @@ Readonly my %SPLITTABLE_FIELDS  => map { $_, 1 } qw(
     ncbi_sra_seq_run
 );
 Readonly my @SAMPLE_TABLE_FIELDS => qw(latitude longitude);
+Readonly my @ONTO_PREFIXES => qw(
+    aao adw aeo aero apo ato bcgo bco bfo bila bootstrep bspo bto caro
+    cdao ceph chebi cheminf chmo cl clo cmf cmo cteno cvdo dc_cl ddanat
+    ddpheno dideo dinto doid dpo dron eco ehda ehdaa ehdaa2 emap emapa
+    envo eo epo ero ev exo fao fbbi fbbt fbcv fbdv fbsp fix flopo flu fma
+    fypo gaz geo go gro habronattus hao hom hp hsapdv iao ico id: ido
+    idomal imports imr ipr kisao lipro loggerhead ma mamo mao mat mf mfmo
+    mfo mfoem mfomd mi miapa micro mirnao miro mmo mmusdv mo mod mop mp
+    mpath mro ms nbo ncbitaxon ncithesaurus ncro nif_cell nif_dysfunction
+    nif_grossanatomy nmr oae oba obcs obi obib obo, obo_rel ogg ogi ogms
+    ogsf olatdv omit omp omrse opl ovae pao pato pco pd_st pdumdv pgdso
+    plo po poro pr propreo pw resid rex rnao ro rs rxno sao sbo sep sibo
+    so sopharm spd stato swo symp tads tahe tahh tao taxrank tgma to trans
+    tto uberon uo upheno vario vo vsao vt wbbt wbls wbphenotype xao xco
+    ypo zea zfa zfs
+    );
 
 main();
 
@@ -46,9 +62,9 @@ sub get_args {
         });
     }; 
 
-    unless ($args{'project_id'}) {
-        pod2usage('Missing project_id');
-    }
+    #unless ($args{'project_id'}) {
+    #    pod2usage('Missing project_id');
+    #}
 
     unless ($args{'sample_file'}) {
         pod2usage('Missing sample file argument');
@@ -77,22 +93,23 @@ sub main {
     my $db     = IMicrobe::DB->new;
     my $schema = $db->schema;
 
-    my $Project = $schema->resultset('Project')->find($args{'project_id'})
-        or die "Cannot find project id '$args{project_id}'\n";
-
-    printf "Project '%s' (%s)\n", $Project->project_name, $Project->id;
-
-    my $samples    = file_parse($args{'sample_file'});
-    my $sites      = file_parse($args{'site_file'});
-    my %attr_fld   = map { $_->type, $_->id } 
-                     $schema->resultset('SampleAttrType')->all;
-    my $iplant_dir = sprintf(
-        '/iplant/home/shared/imicrobe/projects/%s/samples/', $Project->id
-    );
+    my $samples   = file_parse($args{'sample_file'});
+    my $sites     = file_parse($args{'site_file'});
+    my %attr_fld  = map { $_->type, $_->id } 
+                    $schema->resultset('SampleAttrType')->all;
     my $ReadsType = $schema->resultset('SampleFileType')->find_or_create({ 
         type => 'Reads'
     });
 
+    my $DefaultProject;
+    if ($args{'project_id'}) {
+        $DefaultProject = $schema->resultset('Project')->find(
+            $args{'project_id'}
+        ) or die "Cannot find project id '$args{project_id}'\n";
+
+        printf "Project '%s' (%s)\n", 
+            $DefaultProject->project_name, $DefaultProject->id;
+    }
 
     printf "%s samples, %s sites\n", scalar @$samples, scalar @$sites;
 
@@ -104,6 +121,43 @@ sub main {
                      : {};
 
         next unless $sample->{'sample_name'};
+
+        my $Project = $DefaultProject;
+        unless ($Project) {
+            $Project = $schema->resultset('Project')->find_or_create({
+                project_code => get_val($sample, qw[project_code code sra_bioproject]),
+                project_name => get_val($sample, qw[project_name name]),
+            });
+
+            if ($Project) {
+                printf "Using project '%s' (%s)\n", 
+                    $Project->project_name, $Project->id;
+
+                for my $fld (
+                    'pi pi_name',
+                    'institution institute center_name',
+                    'project_type investigation_type',
+                    'description desc project_desc',
+                ) {
+                    #'library_name',
+                    my ($fld_name, @aliases) = split(/\s+/, $fld);
+
+                    if (my $val = get_val($sample, $fld_name, @aliases)) {
+                        say "  $fld_name => '$val'";
+                        $Project->$fld_name($val);
+                    }
+                }
+
+                $Project->update();
+            }
+            else {
+                say "Failed to find project for ", dump($sample);
+            }
+        }
+
+        unless ($Project) {
+            die "No project.\n";
+        }
 
         my $Sample = $schema->resultset('Sample')->find_or_create({
             project_id   => $Project->id,
@@ -149,6 +203,31 @@ sub main {
             }
         }
 
+        my $onto_prefix = join '|', @ONTO_PREFIXES;
+        my $onto_re     = qr/^(?:$onto_prefix):\d+$/io;
+        for my $fld (keys %$sample) {
+            my $val = $sample->{ $fld };
+            if ($val =~ $onto_re) {
+                my ($Ontology) = 
+                    $schema->resultset('Ontology')->find_or_create({
+                        ontology_acc => $val
+                    });
+
+                printf "      %25s (%s) => %s\n", 
+                       "ontology $fld", $Ontology->id, substr($val, 0, 25);
+
+                if (!$Ontology->label) {
+                    $Ontology->label($fld);
+                    $Ontology->update;
+                }
+
+                $schema->resultset('SampleToOntology')->find_or_create({
+                    sample_id   => $Sample->id,
+                    ontology_id => $Ontology->id,
+                });
+            }
+        }
+
 #        for my $fld (
 #            $schema->resultset('Sample')->result_source->columns
 #        ) {
@@ -172,6 +251,11 @@ sub main {
         }
 
         for my $reads_file (@reads) {
+            my $iplant_dir = sprintf(
+                '/iplant/home/shared/imicrobe/projects/%s/samples/', 
+                $Project->id
+            );
+
             printf "       %25s => %s\n", 'reads_file', $reads_file;
             $Sample->reads_file($reads_file);
             $schema->resultset('SampleFile')->find_or_create({
@@ -185,6 +269,19 @@ sub main {
     }
 
     say "Done.";
+}
+
+# --------------------------------------------------
+sub get_val {
+    my ($hash, @keys) = @_;
+    my $val = '';
+    for my $key (@keys) {
+        if (defined $hash->{$key}) {
+            $val = $hash->{$key};
+            last;
+        }
+    }
+    return $val;
 }
 
 __END__

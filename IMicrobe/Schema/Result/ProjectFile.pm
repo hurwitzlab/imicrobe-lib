@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::SampleFile;
+package IMicrobe::Schema::Result::ProjectFile;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::SampleFile
+IMicrobe::Schema::Result::ProjectFile
 
 =cut
 
@@ -18,29 +18,29 @@ use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 
-=head1 TABLE: C<sample_file>
+=head1 TABLE: C<project_file>
 
 =cut
 
-__PACKAGE__->table("sample_file");
+__PACKAGE__->table("project_file");
 
 =head1 ACCESSORS
 
-=head2 sample_file_id
+=head2 project_file_id
 
   data_type: 'integer'
   extra: {unsigned => 1}
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 sample_id
+=head2 project_id
 
   data_type: 'integer'
   extra: {unsigned => 1}
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 sample_file_type_id
+=head2 project_file_type_id
 
   data_type: 'integer'
   extra: {unsigned => 1}
@@ -56,21 +56,21 @@ __PACKAGE__->table("sample_file");
 =cut
 
 __PACKAGE__->add_columns(
-  "sample_file_id",
+  "project_file_id",
   {
     data_type => "integer",
     extra => { unsigned => 1 },
     is_auto_increment => 1,
     is_nullable => 0,
   },
-  "sample_id",
+  "project_id",
   {
     data_type => "integer",
     extra => { unsigned => 1 },
     is_foreign_key => 1,
     is_nullable => 0,
   },
-  "sample_file_type_id",
+  "project_file_type_id",
   {
     data_type => "integer",
     extra => { unsigned => 1 },
@@ -85,23 +85,23 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</sample_file_id>
+=item * L</project_file_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("sample_file_id");
+__PACKAGE__->set_primary_key("project_file_id");
 
 =head1 UNIQUE CONSTRAINTS
 
-=head2 C<sample_id>
+=head2 C<project_id>
 
 =over 4
 
-=item * L</sample_id>
+=item * L</project_id>
 
-=item * L</sample_file_type_id>
+=item * L</project_file_type_id>
 
 =item * L</file>
 
@@ -109,43 +109,43 @@ __PACKAGE__->set_primary_key("sample_file_id");
 
 =cut
 
-__PACKAGE__->add_unique_constraint("sample_id", ["sample_id", "sample_file_type_id", "file"]);
+__PACKAGE__->add_unique_constraint("project_id", ["project_id", "project_file_type_id", "file"]);
 
 =head1 RELATIONS
 
-=head2 sample
+=head2 project
 
 Type: belongs_to
 
-Related object: L<IMicrobe::Schema::Result::Sample>
+Related object: L<IMicrobe::Schema::Result::Project>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "sample",
-  "IMicrobe::Schema::Result::Sample",
-  { sample_id => "sample_id" },
+  "project",
+  "IMicrobe::Schema::Result::Project",
+  { project_id => "project_id" },
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
-=head2 sample_file_type
+=head2 project_file_type
 
 Type: belongs_to
 
-Related object: L<IMicrobe::Schema::Result::SampleFileType>
+Related object: L<IMicrobe::Schema::Result::ProjectFileType>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "sample_file_type",
-  "IMicrobe::Schema::Result::SampleFileType",
-  { sample_file_type_id => "sample_file_type_id" },
+  "project_file_type",
+  "IMicrobe::Schema::Result::ProjectFileType",
+  { project_file_type_id => "project_file_type_id" },
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-12 09:58:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:edFBrND7I9805bkdi3X3Bg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-25 11:03:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6J5PdF8feollJX2FMoy9Ow
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

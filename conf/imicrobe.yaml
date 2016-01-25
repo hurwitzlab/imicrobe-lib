@@ -1,10 +1,10 @@
 db:
   name: "imicrobe"
-  host: "localhost"
   user: "imicrobe"
-  password: "imicrobe"
+  password: "XgDeeWTAw4pI."
   driver: "mysql"
 
 mongo:
-  host: "localhost"
+  host: "lipothrix.hpc.arizona.edu"
   port: "27017"
+  dbname: "imicrobe"
