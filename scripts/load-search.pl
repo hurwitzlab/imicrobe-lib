@@ -22,35 +22,6 @@ Readonly my %INDEX_FLDS = (
     publication  => [qw(journal pub_code author title pubmed_id doi)],
     sample       => [qw(sample_acc sample_name sample_type sample_description
                     comments)],
-#    sample       => [qw(
-#        genbank_acc isolation_method
-#        sample_acc sample_type volume_unit
-#        sample_description sample_name comments taxon_id
-#        biomaterial_name description material_acc
-#        site_name site_description country_name region
-#        host_description host_organism library_acc
-#        sequencing_method dna_type other
-#        additional_citations assembly_accession_number
-#        combined_assembly_name country
-#        envo_term_for_habitat_primary_term
-#        envo_term_for_habitat_secondary_term genus
-#        growth_medium habitat habitat_description
-#        importance investigation_type
-#        modifications_to_growth_medium
-#        other_collection_site_info
-#        other_environmental_metadata_available
-#        other_experimental_metadata_available
-#        prey_organism_if_applicable primary_citation
-#        principle_investigator sample_collection_site
-#        sample_material species strain pi
-#        environmental_salinity environmental_temperature
-#        experimental_salinity experimental_temperature
-#        class family mmetsp_id phylum torder superkingdom
-#        comment current_land_use filter_type gene_name
-#        habitat_name host_name host_species host_tissue
-#        other_habitat phage_type plant_cover
-#        template_preparation_method treatment
-#    )],
     combined_assembly => [qw( 
         assembly_name phylum class family genus species strain
     )],
@@ -58,43 +29,53 @@ Readonly my %INDEX_FLDS = (
 
 Readonly my %MONGO_SQL => {
     sample => [
-        q'select "domain_of_life" as name, d.domain_name as value
+        q'select "specimen__sample_id" as name, sample_id as value
+          from   sample
+          where  sample_id=?
+        ',
+        q'select "specimen__project_id" as name, project_id as value
+          from   sample
+          where  sample_id=?
+        ',
+        q'select "specimen__project_name" as name, p.project_name as value
+          from   sample s, project p
+          where  s.sample_id=?
+          and    s.project_id=p.project_id
+        ',
+        q'select "specimen__is_metagenome" as name, 
+                 sample_type like "metagenome" as value
+          from   sample
+          where  sample_id=?
+        ',
+        q'select "specimen__domain_of_life" as name, d.domain_name as value
           from   sample s, project p, project_to_domain p2d, domain d
           where  s.sample_id=?
           and    s.project_id=p.project_id
           and    p.project_id=p2d.project_id
           and    p2d.domain_id=d.domain_id
         ',
-        q'select "project_name" as name, p.project_name as value
-          from   sample s, project p
-          where  s.sample_id=?
-          and    s.project_id=p.project_id
-        ',
-        q'select "ontology_acc" as name, o.ontology_acc as value
+        q'select "ontology__ontology_acc" as name, o.ontology_acc as value
           from   ontology o, sample_to_ontology s2o
           where  s2o.sample_id=?
           and    s2o.ontology_id=o.ontology_id
         ',
-        q'select "ontology_label" as name, o.label as value
+        q'select "ontology__ontology_label" as name, o.label as value
           from   ontology o, sample_to_ontology s2o
           where  s2o.sample_id=?
           and    s2o.ontology_id=o.ontology_id
         ',
-        q'select "is_metagenome" as name, 
-                 sample_type like "metagenome" as value
-          from   sample
-          where  sample_id=?
-        ',
-        q'select "publication" as name, 
-                 concat_ws(" ", p.title, p.author) as value
+        q'select "publication__pubmed_id" as name, pubmed_id as value
           from   publication p, sample s, project pr
           where  s.sample_id=?
           and    s.project_id=pr.project_id
           and    pr.project_id=p.project_id
         ',
-        q'select "specimen__sample_id" as name, sample_id as value
-          from   sample
-          where  sample_id=?
+        q'select "publication__title" as name, 
+                 concat_ws(" ", p.title, p.author) as value
+          from   publication p, sample s, project pr
+          where  s.sample_id=?
+          and    s.project_id=pr.project_id
+          and    pr.project_id=p.project_id
         ',
         q'select concat_ws("__", t.category, t.type) as name, 
                  a.attr_value as value

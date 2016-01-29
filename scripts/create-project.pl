@@ -3,6 +3,7 @@
 use common::sense;
 use autodie;
 use Data::Dump 'dump';
+use IO::Prompt 'prompt';
 use Getopt::Long;
 use IMicrobe::DB;
 use Pod::Usage;
@@ -46,12 +47,28 @@ sub main {
         if (
             my $Project = $schema->resultset('Project')->find_or_create(\%vals)
         ) {
+            select_domain($schema, $Project);
             printf "Created project (%s)\n", $Project->id;
         }
         else {
             say "There was an error.\n";
         }
     }
+
+}
+
+# --------------------------------------------------
+sub select_domain {
+    my ($schema, $Project) = @_;
+    my %domains   = map { $_->domain_name, $_->id } 
+                    $schema->resultset('Domain')->all;
+    my $domain_id = prompt -menu => \%domains, "Domain: ";
+    $schema->resultset('ProjectToDomain')->find_or_create({
+       project_id => $Project->id,
+       domain_id  => $domain_id,
+    });
+
+    return 1;
 }
 
 # --------------------------------------------------
@@ -86,6 +103,7 @@ sub import_file {
             }
 
             $Project->update();
+            select_domain($schema, $Project);
         }
         else {
             say "Failed to create project for ", dump($rec);

@@ -12,8 +12,8 @@ use IMicrobe::DB;
 use String::Trim 'trim';
 
 Readonly my $MAX_ATTR_VALUE_LEN => 255;
-Readonly my %SPLITTABLE_FIELDS  => map { $_, 1 } qw(
-    ncbi_sra_seq_run
+Readonly my %SPLITTABLE_FIELDS  => (
+    sra_run => qr/[,|]/,
 );
 Readonly my @SAMPLE_TABLE_FIELDS => qw(latitude longitude);
 Readonly my @ONTO_PREFIXES => qw(
@@ -180,8 +180,8 @@ sub main {
 
         for my $fld (keys %attr_fld) {
             my @vals = ($sample->{ $fld } // $site->{ $fld });
-            if ($SPLITTABLE_FIELDS{ $fld }) {
-                @vals = map { split(/\s*,\s*/, $_) } @vals; 
+            if (my $re = $SPLITTABLE_FIELDS{ $fld }) {
+                @vals = map { split($re, $_) } @vals; 
             }
 
             for my $val (@vals) {
