@@ -79,23 +79,28 @@ has user => (
 # ----------------------------------------------------------------
 sub BUILD {
     my $self    = shift;
-    my $config  = $self->config;
+    my $opts    = shift || {};
+    my $config  = $opts->{'config'} || $self->config;
     my $db_conf = $config->get('db');
 
-    if ($db_conf->{'user'}) {
-        $self->user($db_conf->{'user'});
+    if (my $user = $opts->{'user'} || $db_conf->{'user'}) {
+        $self->user($user);
     }
 
-    if ($db_conf->{'password'}) {
-        $self->password($db_conf->{'password'});
+    if (my $password = $opts->{'password'} || $db_conf->{'password'}) {
+        $self->password($password);
     }
 
-    if ($db_conf->{'name'}) {
-        $self->name($db_conf->{'name'});
+    if (my $name = $opts->{'name'} || $db_conf->{'name'}) {
+        $self->name($name);
+    }
+
+    if (my $host = $opts->{'host'} || $db_conf->{'host'}) {
+        $self->host($host);
     }
 
     if (!$self->has_dsn) {
-        my $host = $self->host;
+        my $host = $self->host || 'localhost';
         my $name = $self->name;
 
         $self->dsn(
@@ -153,15 +158,5 @@ sub _build_schema {
 
     return IMicrobe::Schema->connect( sub { $self->dbh } );
 }
-
-# ----------------------------------------------------------------
-#sub DEMOLISH {
-#    my $self = shift;
-#    my $dbh  = $self->dbh;
-#
-#    if (defined $dbh) {
-#        $dbh->disconnect;
-#    }
-#}
 
 1;
