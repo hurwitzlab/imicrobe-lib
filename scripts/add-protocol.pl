@@ -6,8 +6,15 @@ use Data::Dump 'dump';
 use Getopt::Long;
 use IMicrobe::DB;
 use IO::Prompt 'prompt';
+use LWP::Simple 'get';
+use JSON::XS 'decode_json';
 use Pod::Usage;
 use Readonly;
+
+Readonly my $PROTOCOLS_URL_JSON => 
+    'https://www.protocols.io/api/v2/get_protocol?uri=';
+Readonly my $PROTOCOLS_URL_VIEW => 
+    'https://www.protocols.io/api/v2/get_protocol?uri=';
 
 main();
 
@@ -16,8 +23,7 @@ sub get_args {
     my %args;
 
     GetOptions(\%args,
-        'id:i',
-        'name:s',
+        'project_id:i',
         'url:s',
         'help',
         'man',
@@ -37,18 +43,44 @@ sub main {
         });
     }
 
-    my $project_id    = $args{'id'}   || prompt('Project ID: ');
-    my $protocol_name = $args{'name'} || prompt('Protocol name: ');
-    my $url           = $args{'url'}  || prompt('URL: ');
-
     my $schema     = IMicrobe::DB->new->schema;
-    my $Project    = $schema->resultset('Project')->find($project_id)
-                     or die "Bad project id ($project_id)\n";
+    my $project_id = $args{'project_id'}   || prompt('Project ID: ');
+
+    unless ($project_id =~ /^\d+$/) {
+        die "Project ID must be an integer.\n";
+    }
+    my $Project = $schema->resultset('Project')->find($project_id)
+                  or die "Bad project id ($project_id)\n";
+
+    printf "Project: %s\n", $Project->project_name;
+
+    my $url = $args{'url'}  || prompt('URL: ');
+    unless ($url =~ /\S+/) {
+        die "URL is required.\n";
+    }
+
+    my $get_url    = $PROTOCOLS_URL_JSON . $url;
+    my $prot_json  = get($get_url) or die "Cannot get '$get_url'\n";
+    my $prot_data  = decode_json($prot_json) or die "Bad JSON ($prot_json)\n";
+    my $res_code   = $prot_data->{'status_code'} || 0;
+
+    if ($res_code != 0) {
+        my $msg = $prot_data->{'error_message'} or "Unknown error";
+        die join "\n", "Status: $res_code", "Error: $msg";
+    }
+    
+    my $protocol      = shift @{ $prot_data->{'protocol'} || [] }
+                        or die "Cannot find protocol in ", dump($prot_data);
+    my $protocol_name = $protocol->{'protocol_name'}
+                        or die "Cannot find protocol in ", dump($protocol);
+    printf "Protocol: %s\n", $protocol_name;
+
     my ($Protocol) = $schema->resultset('Protocol')->find_or_create({
         protocol_name => $protocol_name,
     }) or die "Failed to create protocol.\n";
 
-    if ($url && $Protocol->url ne $url) {
+    my $url = $PROTOCOLS_URL_VIEW . $url;
+    if ($Protocol->url ne $url) {
         $Protocol->url($url);
         $Protocol->update;
     }
@@ -58,12 +90,7 @@ sub main {
         protocol_id => $Protocol->id,
     });
 
-    printf "Linked project '%s' (%s)\nto protocol '%s' (%s)\n",
-        $Project->project_name,
-        $Project->id,
-        $Protocol->protocol_name,
-        $Protocol->id,
-    ;
+    say "Done.";
 }
 
 __END__
@@ -78,13 +105,13 @@ add-protocol.pl - add a protocol to a project
 
 =head1 SYNOPSIS
 
-  add-protocol.pl -i 94 -n 'Modeling ecological drivers in marine viral communities using comparative metagenomics and network analyses' -u 'https://www.protocols.io/view/Modeling-ecological-drivers-in-marine-viral-commun-efgbbjw'
+  add-protocol.pl -p 94 \
+    -u 'Modeling-ecological-drivers-in-marine-viral-commun-efgbbjw'
 
 Required arguments:
 
-  -i|--id    Project id
-  -n|--name  Protocol name
-  -u|--url   Protocol URL
+  -p|--project_id  Project id
+  -u|--url         Protocol URL
 
 Options:
 
