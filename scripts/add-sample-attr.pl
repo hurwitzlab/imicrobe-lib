@@ -22,7 +22,7 @@ sub main {
     my $schema = IMicrobe::DB->new->schema;
 
     if (@ARGV) {
-        process_files($schema, @ARGV);
+        process_files($schema, \%args, @ARGV);
     }
     else {
         process_db($schema, \%args); 
@@ -65,16 +65,16 @@ sub process_db {
                 sample_id  => $Sample->id,
                 attr_type  => $attr_type,
                 attr_value => $val,
+                args       => $args,
             });
         }
     }
-
-    say '';
 }
 
 # --------------------------------------------------
 sub process_files {
     my $schema = shift;
+    my $args   = shift;
     my @files  = @_;
 
     my $i = 0;
@@ -82,16 +82,12 @@ sub process_files {
         my $p = Text::RecordParser::Tab->new($file);
         say "Processing '$file'";
 
-        REC:
         while (my $rec = $p->fetchrow_hashref) {
-            printf "%-70s\r", sprintf('%5d', ++$i);
-            my $SampleAttr = add_attr($schema, $rec);
+            my $SampleAttr = add_attr($schema, $rec, $args);
         }
 
         say '';
     }
-
-    say "Done.";
 }
 
 # --------------------------------------------------
@@ -103,23 +99,54 @@ sub trim {
 
 # --------------------------------------------------
 sub add_attr {
-    my ($schema, $rec) = @_;
-    my $sample_id = $rec->{'sample_id'}        or return;
-    my $attr_type = trim($rec->{'attr_type'})  or return;
-    my $attr_val  = trim($rec->{'attr_value'}) or return;
-    my $attr_cat  = trim($rec->{'attr_category'});
-    my ($Sample)  = $schema->resultset('Sample')->find($sample_id);
+    my ($schema, $rec, $args) = @_;
+
+    my $sample_rs = $schema->resultset('Sample');
+    my $Sample;
+    if (my $sample_id = $rec->{'sample_id'}) {
+        ($Sample) = $sample_rs->find($sample_id);
+    }
+    elsif (my $sample_name = $rec->{'sample_name'}) {
+        my @Samples = $sample_rs->search({
+            sample_name => $sample_name
+        });
+
+        if (@Samples == 0) {
+            warn "Cannot find sample '$sample_name'\n";
+            return;
+        }
+        elsif (@Samples > 1) {
+            warn sprintf "Found %s samples for '%s'\n", 
+                scalar(@Samples), $sample_name;
+            return;
+        }
+
+        $Sample = shift @Samples;
+    }
+
+    unless ($Sample) {
+        warn "No sample ID/name\n";
+        return;
+    }
+
+    my $attr_type = trim($rec->{'attr_type'})  or die "No attr_type\n";
+    my $attr_val  = trim($rec->{'attr_value'}) or die "No attr_value\n";
+    my $unit      = trim($rec->{'unit'});
 
     if (!$Sample) {
-        say STDERR "Cannot find sample id '$sample_id'";
+        warn "Cannot find sample\n", dump($rec);
         return;
     }
 
     my ($SampleAttrType) 
         = $schema->resultset('SampleAttrType')->find_or_create({
             type     => $attr_type,
-            category => $attr_cat,
         });
+
+    if (my $attr_cat = trim($rec->{'attr_category'})) {
+        $SampleAttrType->category($attr_cat);
+        $SampleAttrType->update;
+    }
 
     if (my $desc = trim($rec->{'attr_description'})) {
         $SampleAttrType->description($desc);
@@ -131,13 +158,17 @@ sub add_attr {
         $SampleAttrType->update;
     }
 
-#    printf "%25s => '%s'\n", $SampleAttrType->type, $attr_val;
+    if ($args->{'verbose'}) {
+        printf "Sample %s: %s => %s\n", 
+            $Sample->id, $SampleAttrType->type, $attr_val;
+    }
 
     my ($SampleAttr) =
         $schema->resultset('SampleAttr')->find_or_create({
             sample_id           => $Sample->id,
             sample_attr_type_id => $SampleAttrType->id,
             attr_value          => substr($attr_val,0, $MAX_ATTR_VALUE_LEN - 1),
+            unit                => $unit,
         });
 
     return $SampleAttr;
@@ -149,10 +180,12 @@ sub get_args {
         project_id => 0,
         help       => 0,
         man_page   => 0,
+        verbose    => 0,
     );
 
     GetOptions(\%args,
         'project_id|p=i',
+        'verbose',
         'help',
         'man'
     );
