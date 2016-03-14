@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.24, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.10, for Linux (x86_64)
 --
 -- Host: localhost    Database: imicrobe
 -- ------------------------------------------------------
--- Server version	5.6.24
+-- Server version	5.7.10-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -85,7 +85,7 @@ CREATE TABLE `combined_assembly_to_sample` (
   KEY `combined_assembly_id` (`combined_assembly_id`),
   KEY `sample_id` (`sample_id`),
   CONSTRAINT `combined_assembly_to_sample_ibfk_3` FOREIGN KEY (`combined_assembly_id`) REFERENCES `combined_assembly` (`combined_assembly_id`) ON DELETE CASCADE,
-  CONSTRAINT `combined_assembly_to_sample_ibfk_4` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`) ON DELETE CASCADE
+  CONSTRAINT `combined_assembly_to_sample_ibfk_4` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=377 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -158,9 +158,28 @@ CREATE TABLE `ontology` (
   `ontology_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ontology_acc` varchar(125) NOT NULL,
   `label` varchar(125) NOT NULL,
+  `ontology_type_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`ontology_id`),
-  KEY `ontology_acc` (`ontology_acc`)
+  KEY `ontology_acc` (`ontology_acc`),
+  KEY `ontology_type_id` (`ontology_type_id`),
+  CONSTRAINT `ontology_ibfk_1` FOREIGN KEY (`ontology_type_id`) REFERENCES `ontology_type` (`ontology_type_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ontology_type`
+--
+
+DROP TABLE IF EXISTS `ontology_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ontology_type` (
+  `ontology_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(256) DEFAULT NULL,
+  `url_template` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`ontology_type_id`),
+  UNIQUE KEY `type` (`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,7 +206,43 @@ CREATE TABLE `project` (
   `nt_file` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`project_id`),
   UNIQUE KEY `project_code` (`project_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=261 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `project_file`
+--
+
+DROP TABLE IF EXISTS `project_file`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `project_file` (
+  `project_file_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_id` int(10) unsigned NOT NULL,
+  `project_file_type_id` int(10) unsigned NOT NULL,
+  `file` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`project_file_id`),
+  UNIQUE KEY `project_id` (`project_id`,`project_file_type_id`,`file`),
+  KEY `project_id_2` (`project_id`),
+  KEY `project_file_type_id` (`project_file_type_id`),
+  CONSTRAINT `project_file_ibfk_1` FOREIGN KEY (`project_file_type_id`) REFERENCES `project_file_type` (`project_file_type_id`),
+  CONSTRAINT `project_file_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=487 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `project_file_type`
+--
+
+DROP TABLE IF EXISTS `project_file_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `project_file_type` (
+  `project_file_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(255) NOT NULL,
+  PRIMARY KEY (`project_file_type_id`),
+  UNIQUE KEY `type` (`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,7 +282,42 @@ CREATE TABLE `project_to_domain` (
   KEY `domain_id` (`domain_id`),
   CONSTRAINT `project_to_domain_ibfk_2` FOREIGN KEY (`domain_id`) REFERENCES `domain` (`domain_id`),
   CONSTRAINT `project_to_domain_ibfk_3` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=226 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `project_to_protocol`
+--
+
+DROP TABLE IF EXISTS `project_to_protocol`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `project_to_protocol` (
+  `project_to_protocol_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_id` int(10) unsigned NOT NULL,
+  `protocol_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`project_to_protocol_id`),
+  KEY `project_id` (`project_id`),
+  KEY `protocol_id` (`protocol_id`),
+  CONSTRAINT `project_to_protocol_ibfk_1` FOREIGN KEY (`protocol_id`) REFERENCES `protocol` (`protocol_id`) ON DELETE CASCADE,
+  CONSTRAINT `project_to_protocol_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `protocol`
+--
+
+DROP TABLE IF EXISTS `protocol`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `protocol` (
+  `protocol_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `protocol_name` varchar(255) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`protocol_id`),
+  UNIQUE KEY `protocol_name` (`protocol_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -249,7 +339,7 @@ CREATE TABLE `pubchase` (
   `url` text,
   PRIMARY KEY (`pubchase_id`),
   UNIQUE KEY `article_id` (`article_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=429 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=454 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -264,7 +354,7 @@ CREATE TABLE `pubchase_rec` (
   `rec_date` datetime DEFAULT NULL,
   `checksum` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pubchase_rec_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -279,7 +369,7 @@ CREATE TABLE `publication` (
   `project_id` int(10) unsigned DEFAULT NULL,
   `pub_code` varchar(255) DEFAULT NULL,
   `doi` text,
-  `author` varchar(255) DEFAULT NULL,
+  `author` text,
   `title` varchar(255) DEFAULT NULL,
   `pubmed_id` int(11) DEFAULT NULL,
   `journal` text,
@@ -287,7 +377,7 @@ CREATE TABLE `publication` (
   PRIMARY KEY (`publication_id`),
   KEY `project_id` (`project_id`),
   CONSTRAINT `publication_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=134 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -307,7 +397,7 @@ CREATE TABLE `query_log` (
   `time` double DEFAULT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`query_log_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5134 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=10668 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -319,7 +409,7 @@ DROP TABLE IF EXISTS `reference`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reference` (
   `reference_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `file` varchar(20) NOT NULL,
+  `file` varchar(255) DEFAULT NULL,
   `name` varchar(100) NOT NULL,
   `revision` text,
   `length` bigint(20) unsigned DEFAULT NULL,
@@ -341,275 +431,21 @@ DROP TABLE IF EXISTS `sample`;
 CREATE TABLE `sample` (
   `sample_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` int(10) unsigned DEFAULT NULL,
+  `combined_assembly_id` int(10) unsigned DEFAULT NULL,
   `sample_acc` varchar(255) DEFAULT NULL,
-  `sample_type` varchar(255) DEFAULT NULL,
-  `sample_volume` varchar(255) DEFAULT NULL,
-  `volume_unit` varchar(255) DEFAULT NULL,
-  `filter_min` varchar(255) DEFAULT NULL,
-  `filter_max` varchar(255) DEFAULT NULL,
-  `sample_description` varchar(255) DEFAULT NULL,
   `sample_name` varchar(255) DEFAULT NULL,
+  `sample_type` varchar(255) DEFAULT NULL,
+  `sample_description` text,
   `comments` varchar(255) DEFAULT NULL,
   `taxon_id` varchar(255) DEFAULT NULL,
-  `collection_start_time` varchar(255) DEFAULT NULL,
-  `collection_stop_time` varchar(255) DEFAULT NULL,
-  `biomaterial_name` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `material_acc` varchar(255) DEFAULT NULL,
-  `site_name` varchar(255) DEFAULT NULL,
   `latitude` varchar(255) DEFAULT NULL,
   `longitude` varchar(255) DEFAULT NULL,
-  `altitude` varchar(255) DEFAULT NULL,
-  `site_depth` varchar(255) DEFAULT NULL,
-  `site_description` varchar(255) DEFAULT NULL,
-  `country_name` varchar(255) DEFAULT NULL,
-  `region` varchar(255) DEFAULT NULL,
-  `host_taxon_id` varchar(255) DEFAULT NULL,
-  `host_description` varchar(255) DEFAULT NULL,
-  `host_organism` varchar(255) DEFAULT NULL,
-  `library_acc` varchar(255) DEFAULT NULL,
-  `sequencing_method` varchar(255) DEFAULT NULL,
-  `dna_type` varchar(255) DEFAULT NULL,
-  `num_of_reads` varchar(255) DEFAULT NULL,
-  `material_id` varchar(255) DEFAULT NULL,
-  `other` varchar(255) DEFAULT NULL,
-  `rrna_18s` text,
-  `additional_citations` text,
-  `ammonium` text,
-  `assembly_accession_number` text,
-  `axenic` text,
-  `chlorophyll` text,
-  `clonal` text,
-  `co2` text,
-  `collection_date` text,
-  `collection_time` text,
-  `combined_assembly_name` text,
-  `country` text,
-  `date_of_experiment` text,
-  `day_portion_of_day_night_cycle_in_hours` text,
-  `depth` text,
-  `dissolved_oxygen` text,
-  `doc` text,
-  `elevation` text,
-  `envo_term_for_habitat_primary_term` text,
-  `envo_term_for_habitat_secondary_term` text,
-  `external_sample_id` text,
-  `filter_fraction_maximum` text,
-  `filter_fraction_minimum` text,
-  `genus` text,
-  `growth_medium` text,
-  `habitat` text,
-  `habitat_description` text,
-  `importance` text,
-  `investigation_type` text,
-  `light` text,
-  `list_of_amino_acids_and_concentrations_with_units` text,
-  `modifications_to_growth_medium` text,
-  `night_portion_of_day_night_cycle_in_hours` text,
-  `nitrate` text,
-  `other_collection_site_info` text,
-  `other_environmental_metadata_available` text,
-  `other_experimental_metadata_available` text,
-  `ph` text,
-  `phosphate` text,
-  `poc` text,
-  `prelim_ncbi_taxon_id` text,
-  `pressure` text,
-  `prey_organism_if_applicable` text,
-  `primary_citation` text,
-  `principle_investigator` text,
-  `sample_collection_site` text,
-  `sample_material` text,
-  `silicate` text,
-  `species` text,
-  `strain` text,
-  `total_fe` text,
-  `trace_elements` text,
-  `urea` text,
-  `volume_filtered` text,
-  `reads_file` varchar(200) DEFAULT NULL,
-  `annotations_file` varchar(200) DEFAULT NULL,
-  `peptides_file` varchar(200) DEFAULT NULL,
-  `contigs_file` varchar(200) DEFAULT NULL,
-  `cds_file` varchar(200) DEFAULT NULL,
-  `pi` text,
-  `environmental_salinity` text,
-  `environmental_temperature` text,
-  `experimental_salinity` text,
-  `experimental_temperature` text,
-  `class` text,
-  `family` text,
-  `mmetsp_id` text,
-  `phylum` text,
-  `pcr_amp` text,
-  `rrna_16s` text,
-  `torder` text,
-  `superkingdom` text,
-  `abundance_bacterial_cells_ml` text,
-  `abundance_bacterial_cells_ml_h` text,
-  `abundance_synechococcus_cells_ml` text,
-  `alkalinityalk_mm` text,
-  `altitude_m` text,
-  `aluminiumal_um` text,
-  `ammonianh4_um` text,
-  `ammonium_umol_kg` text,
-  `antimonysb_um` text,
-  `arsenicas_um` text,
-  `atmospheric_general_weather` text,
-  `atmospheric_pressure_atm` text,
-  `atmospheric_wind_speed_m_s` text,
-  `bacterial_production_cells_ml_h` text,
-  `bariumba_um` text,
-  `biofilm_g` text,
-  `biomass_concentration_ug_kg` text,
-  `biomass_mass_g` text,
-  `boronb_um` text,
-  `caesiumcs_um` text,
-  `calciumca_um` text,
-  `carbon_dioxideco2_um` text,
-  `carbon_dioxideco2_umol_kg` text,
-  `cdom_rfu` text,
-  `cfu_cjejuni_cfu` text,
-  `charge__mmol` text,
-  `charge_mmol` text,
-  `chla_mg_1000l` text,
-  `chlorinitycl_mm` text,
-  `chlorinitycl_um` text,
-  `chlorophyll_density_annual_ug_kg` text,
-  `chlorophyll_density_annual_ug_l` text,
-  `chlorophyll_density_psu` text,
-  `chlorophyll_density_sample_month_ug_kg` text,
-  `chlorophyll_density_ug_kg` text,
-  `chloropigment` text,
-  `comment` text,
-  `current_land_use` text,
-  `dissolved_inorg_cdic_mm` text,
-  `dissolved_inorg_cdic_um` text,
-  `dissolved_inorganic_carbon_umol_kg` text,
-  `dissolved_inorganic_nitrogen_umol_l` text,
-  `dissolved_inorganic_phosphate_nmol_kg` text,
-  `dissolved_organic_carbon_um` text,
-  `dissolved_organic_carbon_umol_kg` text,
-  `dissolved_organic_nitrogen_umol_kg` text,
-  `dissolved_oxygen_nmol_kg` text,
-  `dissolved_oxygen_umol_kg` text,
-  `filter_type` text,
-  `filter_type_m` text,
-  `fluorescence_ug_l` text,
-  `fluorinef_um` text,
-  `gene_name` text,
-  `glucose_mg` text,
-  `h2_um` text,
-  `habitat_name` text,
-  `health_status` text,
-  `host_name` text,
-  `host_species` text,
-  `host_tissue` text,
-  `ironfe_um` text,
-  `isolation` text,
-  `leg` text,
-  `leucine_umol_kg` text,
-  `light_intensity_umol_m2_s` text,
-  `lithiumli_um` text,
-  `magnesiummg_um` text,
-  `manganesemn_um` text,
-  `mean_annual_precipitation_cm` text,
-  `methane_um` text,
-  `method_of_isolation` text,
-  `molybdenummo_um` text,
-  `nitratenitrite_nmol_kg` text,
-  `nitrateno3_um` text,
-  `nitrateno3_umol_l` text,
-  `nitrite_umol_l` text,
-  `number_of_samples_pooled` text,
-  `number_of_stations_sampled` text,
-  `nutrients_dmsp_nm` text,
-  `nutrients_nh4_microm` text,
-  `nutrients_nox_microm` text,
-  `nutrients_po3_microm` text,
-  `nutrients_po4_microm` text,
-  `nutrients_potassium_phosphate_um` text,
-  `nutrients_putrescine_c4h12n2_nm` text,
-  `nutrients_so4_microm` text,
-  `nutrients_sodium_nitrate_um` text,
-  `nutrients_spermidine_c7h19n3_nm` text,
-  `other_habitat` text,
-  `oxygen` text,
-  `oxygen_mass_um` text,
-  `oxygen_um` text,
-  `oxygen_umol_kg` text,
-  `particulate_carbon_umol_kg` text,
-  `particulate_nigrogen_umol_kg` text,
-  `particulate_nitrogen_umol_kg` text,
-  `particulate_organic_carbon_umol_kg` text,
-  `particulate_phosphate_umol_kg` text,
-  `phage_type` text,
-  `phosphate_umol_kg` text,
-  `phosphate_umol_l` text,
-  `plant_cover` text,
-  `potassium` text,
-  `potassiumk_um` text,
-  `pressure_atm` text,
-  `rain_fall` text,
-  `rubidiumrb_um` text,
-  `salinity_ppm` text,
-  `salinity_psu` text,
-  `sample_depth` text,
-  `sample_depth_m` text,
-  `sigma_kg_1000l` text,
-  `silicah4sio4_um_l` text,
-  `silicate_umol_kg` text,
-  `siliconsi_um` text,
-  `siliconsi_umol_l` text,
-  `sodium` text,
-  `sodium_um` text,
-  `soil_depth_m` text,
-  `soil_type` text,
-  `strontiumsr_um` text,
-  `sulfateso4_mm` text,
-  `sulfateso4_um` text,
-  `sulfurs2_um` text,
-  `temperature` text,
-  `temperature_c` text,
-  `template_preparation_method` text,
-  `theta_its_90` text,
-  `time_count` text,
-  `time_hour` text,
-  `transmission` text,
-  `treatment` text,
-  `tungstenw_um` text,
-  `turbidity_ntu` text,
-  `turbidity_umol_kg` text,
-  `urea_umol_l` text,
-  `vanadiumv_um` text,
-  `viral_abundance_viruses_ml` text,
-  `viral_production_viruses_ml_h` text,
-  `volume_filtered_l` text,
-  `volume_l` text,
-  `water_depth` text,
-  `water_depth_m` text,
-  `wave_height_m` text,
-  `zinczn_um` text,
-  `bact_chl_a_ug_l` text,
-  `bchl_cd_ug_l` text,
-  `bchl_e_ug_l` text,
-  `organism_count` text,
-  `sulfide_um` text,
-  `total_phosphorus` text,
-  `genbank_acc` text,
-  `isolation_method` text,
-  `fastq_file` varchar(200) DEFAULT NULL,
-  `combined_assembly_id` int(10) unsigned DEFAULT NULL,
-  `ncbi_acc` varchar(100) DEFAULT NULL,
-  `cast_num` varchar(100) DEFAULT NULL,
-  `ncbi_sra_experiment` text,
-  `ncbi_sra_seq_run` text,
   PRIMARY KEY (`sample_id`),
   UNIQUE KEY `project_id` (`project_id`,`sample_acc`),
   KEY `combined_assembly_id` (`combined_assembly_id`),
   CONSTRAINT `sample_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE,
   CONSTRAINT `sample_ibfk_2` FOREIGN KEY (`combined_assembly_id`) REFERENCES `combined_assembly` (`combined_assembly_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2681 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5166 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -624,12 +460,13 @@ CREATE TABLE `sample_attr` (
   `sample_attr_type_id` int(10) unsigned NOT NULL,
   `sample_id` int(10) unsigned NOT NULL,
   `attr_value` varchar(255) NOT NULL,
+  `unit` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`sample_attr_id`),
   UNIQUE KEY `sample_id` (`sample_id`,`sample_attr_type_id`,`attr_value`),
   KEY `sample_attr_type_id` (`sample_attr_type_id`),
   CONSTRAINT `sample_attr_ibfk_1` FOREIGN KEY (`sample_attr_type_id`) REFERENCES `sample_attr_type` (`sample_attr_type_id`),
   CONSTRAINT `sample_attr_ibfk_2` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=282603 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=312429 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -648,7 +485,24 @@ CREATE TABLE `sample_attr_type` (
   PRIMARY KEY (`sample_attr_type_id`),
   UNIQUE KEY `type` (`type`),
   KEY `category` (`category`)
-) ENGINE=InnoDB AUTO_INCREMENT=709 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=937 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sample_attr_type_alias`
+--
+
+DROP TABLE IF EXISTS `sample_attr_type_alias`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sample_attr_type_alias` (
+  `sample_attr_type_alias_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sample_attr_type_id` int(10) unsigned NOT NULL,
+  `alias` varchar(200) NOT NULL,
+  PRIMARY KEY (`sample_attr_type_alias_id`),
+  UNIQUE KEY `sample_attr_type_id` (`sample_attr_type_id`,`alias`),
+  CONSTRAINT `sample_attr_type_alias_ibfk_1` FOREIGN KEY (`sample_attr_type_id`) REFERENCES `sample_attr_type` (`sample_attr_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=462 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -663,13 +517,17 @@ CREATE TABLE `sample_file` (
   `sample_id` int(10) unsigned NOT NULL,
   `sample_file_type_id` int(10) unsigned NOT NULL,
   `file` varchar(200) DEFAULT NULL,
+  `num_seqs` int(11) DEFAULT NULL,
+  `num_bp` bigint(20) unsigned DEFAULT NULL,
+  `avg_len` int(11) DEFAULT NULL,
+  `pct_gc` double DEFAULT NULL,
   PRIMARY KEY (`sample_file_id`),
   UNIQUE KEY `sample_id` (`sample_id`,`sample_file_type_id`,`file`),
   KEY `sample_id_2` (`sample_id`),
   KEY `sample_file_type_id` (`sample_file_type_id`),
-  CONSTRAINT `sample_file_ibfk_1` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`),
-  CONSTRAINT `sample_file_ibfk_2` FOREIGN KEY (`sample_file_type_id`) REFERENCES `sample_file_type` (`sample_file_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5319 DEFAULT CHARSET=latin1;
+  CONSTRAINT `sample_file_ibfk_2` FOREIGN KEY (`sample_file_type_id`) REFERENCES `sample_file_type` (`sample_file_type_id`),
+  CONSTRAINT `sample_file_ibfk_3` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18482 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -681,10 +539,10 @@ DROP TABLE IF EXISTS `sample_file_type`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sample_file_type` (
   `sample_file_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(25) NOT NULL,
+  `type` varchar(255) NOT NULL,
   PRIMARY KEY (`sample_file_type_id`),
   UNIQUE KEY `type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -701,9 +559,9 @@ CREATE TABLE `sample_to_ontology` (
   PRIMARY KEY (`sample_to_ontology_id`),
   KEY `sample_id` (`sample_id`),
   KEY `ontology_id` (`ontology_id`),
-  CONSTRAINT `sample_to_ontology_ibfk_1` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`),
-  CONSTRAINT `sample_to_ontology_ibfk_2` FOREIGN KEY (`ontology_id`) REFERENCES `ontology` (`ontology_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4479 DEFAULT CHARSET=latin1;
+  CONSTRAINT `sample_to_ontology_ibfk_2` FOREIGN KEY (`ontology_id`) REFERENCES `ontology` (`ontology_id`),
+  CONSTRAINT `sample_to_ontology_ibfk_3` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4723 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -720,7 +578,7 @@ CREATE TABLE `search` (
   `search_text` longtext,
   PRIMARY KEY (`search_id`),
   FULLTEXT KEY `search_text` (`search_text`)
-) ENGINE=MyISAM AUTO_INCREMENT=86557 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=342778 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -732,4 +590,4 @@ CREATE TABLE `search` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-08-25 11:25:04
+-- Dump completed on 2016-03-14 14:51:21
