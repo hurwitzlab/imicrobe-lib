@@ -53,6 +53,27 @@ __PACKAGE__->table("sample_file");
   is_nullable: 1
   size: 200
 
+=head2 num_seqs
+
+  data_type: 'integer'
+  is_nullable: 1
+
+=head2 num_bp
+
+  data_type: 'bigint'
+  extra: {unsigned => 1}
+  is_nullable: 1
+
+=head2 avg_len
+
+  data_type: 'integer'
+  is_nullable: 1
+
+=head2 pct_gc
+
+  data_type: 'double precision'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -79,6 +100,14 @@ __PACKAGE__->add_columns(
   },
   "file",
   { data_type => "varchar", is_nullable => 1, size => 200 },
+  "num_seqs",
+  { data_type => "integer", is_nullable => 1 },
+  "num_bp",
+  { data_type => "bigint", extra => { unsigned => 1 }, is_nullable => 1 },
+  "avg_len",
+  { data_type => "integer", is_nullable => 1 },
+  "pct_gc",
+  { data_type => "double precision", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -144,8 +173,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-12 09:58:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:edFBrND7I9805bkdi3X3Bg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-01 12:52:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Y13IOJKyUU64mnh8Yn4IFw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

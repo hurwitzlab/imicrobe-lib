@@ -53,9 +53,8 @@ __PACKAGE__->table("publication");
 
 =head2 author
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 255
 
 =head2 title
 
@@ -100,7 +99,7 @@ __PACKAGE__->add_columns(
   "doi",
   { data_type => "text", is_nullable => 1 },
   "author",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "text", is_nullable => 1 },
   "title",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "pubmed_id",
@@ -146,8 +145,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-01-05 15:15:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xCBxWnuRRPQuL5LH/PlxDQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-02-08 10:53:01
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HCrHwmWuAaatFUTcGXGkBw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

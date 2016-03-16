@@ -67,9 +67,8 @@ __PACKAGE__->table("sample");
 
 =head2 sample_description
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 255
 
 =head2 comments
 
@@ -126,7 +125,7 @@ __PACKAGE__->add_columns(
   "sample_type",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "sample_description",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "text", is_nullable => 1 },
   "comments",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "taxon_id",
@@ -283,8 +282,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-12 09:58:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bGdIA/IHcVkDnqe3MB2tnQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-15 10:29:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3U7dRyjsg2QZ4Ss0408YUQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

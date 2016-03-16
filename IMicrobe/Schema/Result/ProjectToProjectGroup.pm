@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::ProjectFile;
+package IMicrobe::Schema::Result::ProjectToProjectGroup;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::ProjectFile
+IMicrobe::Schema::Result::ProjectToProjectGroup
 
 =cut
 
@@ -18,19 +18,26 @@ use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 
-=head1 TABLE: C<project_file>
+=head1 TABLE: C<project_to_project_group>
 
 =cut
 
-__PACKAGE__->table("project_file");
+__PACKAGE__->table("project_to_project_group");
 
 =head1 ACCESSORS
 
-=head2 project_file_id
+=head2 project_to_project_group_id
 
   data_type: 'integer'
   extra: {unsigned => 1}
   is_auto_increment: 1
+  is_nullable: 0
+
+=head2 project_group_id
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_foreign_key: 1
   is_nullable: 0
 
 =head2 project_id
@@ -40,27 +47,21 @@ __PACKAGE__->table("project_file");
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 project_file_type_id
-
-  data_type: 'integer'
-  extra: {unsigned => 1}
-  is_foreign_key: 1
-  is_nullable: 0
-
-=head2 file
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 255
-
 =cut
 
 __PACKAGE__->add_columns(
-  "project_file_id",
+  "project_to_project_group_id",
   {
     data_type => "integer",
     extra => { unsigned => 1 },
     is_auto_increment => 1,
+    is_nullable => 0,
+  },
+  "project_group_id",
+  {
+    data_type => "integer",
+    extra => { unsigned => 1 },
+    is_foreign_key => 1,
     is_nullable => 0,
   },
   "project_id",
@@ -70,46 +71,19 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable => 0,
   },
-  "project_file_type_id",
-  {
-    data_type => "integer",
-    extra => { unsigned => 1 },
-    is_foreign_key => 1,
-    is_nullable => 0,
-  },
-  "file",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
 
 =over 4
 
-=item * L</project_file_id>
+=item * L</project_to_project_group_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("project_file_id");
-
-=head1 UNIQUE CONSTRAINTS
-
-=head2 C<project_id>
-
-=over 4
-
-=item * L</project_id>
-
-=item * L</project_file_type_id>
-
-=item * L</file>
-
-=back
-
-=cut
-
-__PACKAGE__->add_unique_constraint("project_id", ["project_id", "project_file_type_id", "file"]);
+__PACKAGE__->set_primary_key("project_to_project_group_id");
 
 =head1 RELATIONS
 
@@ -125,27 +99,27 @@ __PACKAGE__->belongs_to(
   "project",
   "IMicrobe::Schema::Result::Project",
   { project_id => "project_id" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
-=head2 project_file_type
+=head2 project_group
 
 Type: belongs_to
 
-Related object: L<IMicrobe::Schema::Result::ProjectFileType>
+Related object: L<IMicrobe::Schema::Result::ProjectGroup>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "project_file_type",
-  "IMicrobe::Schema::Result::ProjectFileType",
-  { project_file_type_id => "project_file_type_id" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  "project_group",
+  "IMicrobe::Schema::Result::ProjectGroup",
+  { project_group_id => "project_group_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-02-08 10:53:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:j+qVCfSP2HvRzl50j64aqg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-15 10:29:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oMo35NRa6CW9AMxOfYrHMg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

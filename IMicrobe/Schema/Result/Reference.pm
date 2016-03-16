@@ -36,8 +36,8 @@ __PACKAGE__->table("reference");
 =head2 file
 
   data_type: 'varchar'
-  is_nullable: 0
-  size: 20
+  is_nullable: 1
+  size: 255
 
 =head2 name
 
@@ -83,7 +83,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "file",
-  { data_type => "varchar", is_nullable => 0, size => 20 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 100 },
   "revision",
@@ -127,8 +127,8 @@ __PACKAGE__->set_primary_key("reference_id");
 __PACKAGE__->add_unique_constraint("file", ["file", "name"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-26 16:37:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yIa190Dz7BJudfkFQvpbdA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-02-08 10:53:01
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Oh5kpfbWumQTZYHVnC+j2w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

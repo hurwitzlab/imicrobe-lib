@@ -11,9 +11,8 @@ use JSON::XS 'decode_json';
 use Pod::Usage;
 use Readonly;
 
+Readonly my $PROTOCOLS_URL_VIEW => 'https://www.protocols.io/view/';
 Readonly my $PROTOCOLS_URL_JSON => 
-    'https://www.protocols.io/api/v2/get_protocol?uri=';
-Readonly my $PROTOCOLS_URL_VIEW => 
     'https://www.protocols.io/api/v2/get_protocol?uri=';
 
 main();

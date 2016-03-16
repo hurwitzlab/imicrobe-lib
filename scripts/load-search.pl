@@ -16,11 +16,12 @@ use Readonly;
 use String::Trim qw(trim);
 
 Readonly my %INDEX_FLDS = (
-    assembly     => [qw(assembly_code assembly_name organism)],
-    project      => [qw(project_code project_name pi institution description)],
-    project_page => [qw(title contents)],
-    publication  => [qw(journal pub_code author title pubmed_id doi)],
-    sample       => [qw(sample_acc sample_name sample_type sample_description
+    assembly      => [qw(assembly_code assembly_name organism)],
+    project       => [qw(project_code project_name pi institution description)],
+    project_page  => [qw(title contents)],
+    project_group => [qw(group_name description)],
+    publication   => [qw(journal pub_code author title pubmed_id doi)],
+    sample        => [qw(sample_acc sample_name sample_type sample_description
                     comments)],
     combined_assembly => [qw( 
         assembly_name phylum class family genus species strain
@@ -170,8 +171,9 @@ sub process {
             my @tmp;
             for my $w (split(/\s+/, $raw)) {
                 push @tmp, $w;
-                if ($w =~ /_/) {
+                if ($w =~ /[_-]/) {
                     $w =~ s/_/ /g;
+                    $w =~ s/-//g;
                     push @tmp, $w;
                 }
             }

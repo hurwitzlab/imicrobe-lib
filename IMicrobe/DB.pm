@@ -35,7 +35,7 @@ has dsn => (
 has db_options => (
     is         => 'rw',
     isa        => 'HashRef',
-    default    => sub { { RaiseError => 1 } },
+    default    => sub { { RaiseError => 1, mysql_enable_utf8 => 1 } },
 );
 
 has host => (

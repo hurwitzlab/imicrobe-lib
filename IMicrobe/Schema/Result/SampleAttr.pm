@@ -53,6 +53,12 @@ __PACKAGE__->table("sample_attr");
   is_nullable: 0
   size: 255
 
+=head2 unit
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -79,6 +85,8 @@ __PACKAGE__->add_columns(
   },
   "attr_value",
   { data_type => "varchar", is_nullable => 0, size => 255 },
+  "unit",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -147,8 +155,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-25 11:03:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1wDHpYOKNEv0qi07Vrr6sA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-01 12:52:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QV2P/me8TseNuiligYqAOA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

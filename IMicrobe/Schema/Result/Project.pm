@@ -266,6 +266,36 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 project_to_project_groups
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::ProjectToProjectGroup>
+
+=cut
+
+__PACKAGE__->has_many(
+  "project_to_project_groups",
+  "IMicrobe::Schema::Result::ProjectToProjectGroup",
+  { "foreign.project_id" => "self.project_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 project_to_protocols
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::ProjectToProtocol>
+
+=cut
+
+__PACKAGE__->has_many(
+  "project_to_protocols",
+  "IMicrobe::Schema::Result::ProjectToProtocol",
+  { "foreign.project_id" => "self.project_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 publications
 
 Type: has_many
@@ -297,8 +327,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-25 11:03:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sgHwyGomNErdS4cjM6BaoA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-15 10:29:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/ovjRrQjodySCxrXC+XZdg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

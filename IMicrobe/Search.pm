@@ -44,8 +44,9 @@ sub search {
     }
 
     return {
-        results => \@results,
-        types   => \%types,
+        results   => \@results,
+        types     => \%types,
+        num_found => scalar(@results),
     };
 }
 
