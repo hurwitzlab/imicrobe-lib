@@ -246,6 +246,21 @@ CREATE TABLE `project_file_type` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `project_group`
+--
+
+DROP TABLE IF EXISTS `project_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `project_group` (
+  `project_group_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `group_name` varchar(255) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`project_group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `project_page`
 --
 
@@ -283,6 +298,25 @@ CREATE TABLE `project_to_domain` (
   CONSTRAINT `project_to_domain_ibfk_2` FOREIGN KEY (`domain_id`) REFERENCES `domain` (`domain_id`),
   CONSTRAINT `project_to_domain_ibfk_3` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=226 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `project_to_project_group`
+--
+
+DROP TABLE IF EXISTS `project_to_project_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `project_to_project_group` (
+  `project_to_project_group_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_group_id` int(10) unsigned NOT NULL,
+  `project_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`project_to_project_group_id`),
+  KEY `project_group_id` (`project_group_id`),
+  KEY `project_id` (`project_id`),
+  CONSTRAINT `project_to_project_group_ibfk_1` FOREIGN KEY (`project_group_id`) REFERENCES `project_group` (`project_group_id`) ON DELETE CASCADE,
+  CONSTRAINT `project_to_project_group_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -397,7 +431,7 @@ CREATE TABLE `query_log` (
   `time` double DEFAULT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`query_log_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10668 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=10746 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -578,7 +612,7 @@ CREATE TABLE `search` (
   `search_text` longtext,
   PRIMARY KEY (`search_id`),
   FULLTEXT KEY `search_text` (`search_text`)
-) ENGINE=MyISAM AUTO_INCREMENT=342778 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=355944 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -590,4 +624,4 @@ CREATE TABLE `search` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-14 14:51:21
+-- Dump completed on 2016-03-16 10:27:17
