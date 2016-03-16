@@ -44,6 +44,12 @@ __PACKAGE__->table("project_group");
   data_type: 'text'
   is_nullable: 1
 
+=head2 url
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -58,6 +64,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "description",
   { data_type => "text", is_nullable => 1 },
+  "url",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -90,8 +98,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-15 10:29:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2SF23hxlnq3oJjtOA3tLnw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-16 13:27:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CCf0fh3EwqW4OQy8a+EFDA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
