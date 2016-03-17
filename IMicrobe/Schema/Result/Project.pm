@@ -68,6 +68,12 @@ __PACKAGE__->table("project");
   data_type: 'text'
   is_nullable: 1
 
+=head2 url
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
 =head2 read_file
 
   data_type: 'varchar'
@@ -132,6 +138,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "description",
   { data_type => "text", is_nullable => 1 },
+  "url",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "read_file",
   { data_type => "varchar", is_nullable => 1, size => 100 },
   "meta_file",
@@ -266,6 +274,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 project_to_investigators
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::ProjectToInvestigator>
+
+=cut
+
+__PACKAGE__->has_many(
+  "project_to_investigators",
+  "IMicrobe::Schema::Result::ProjectToInvestigator",
+  { "foreign.project_id" => "self.project_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 project_to_project_groups
 
 Type: has_many
@@ -327,8 +350,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-15 10:29:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/ovjRrQjodySCxrXC+XZdg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-17 14:23:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NuOp4Omu7NhGQwwPxJ+ffw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

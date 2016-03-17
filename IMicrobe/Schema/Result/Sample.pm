@@ -72,9 +72,8 @@ __PACKAGE__->table("sample");
 
 =head2 comments
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 255
 
 =head2 taxon_id
 
@@ -89,6 +88,12 @@ __PACKAGE__->table("sample");
   size: 255
 
 =head2 longitude
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=head2 url
 
   data_type: 'varchar'
   is_nullable: 1
@@ -127,12 +132,14 @@ __PACKAGE__->add_columns(
   "sample_description",
   { data_type => "text", is_nullable => 1 },
   "comments",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "text", is_nullable => 1 },
   "taxon_id",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "latitude",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "longitude",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
+  "url",
   { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
@@ -266,6 +273,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sample_to_investigators
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::SampleToInvestigator>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sample_to_investigators",
+  "IMicrobe::Schema::Result::SampleToInvestigator",
+  { "foreign.sample_id" => "self.sample_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 sample_to_ontologies
 
 Type: has_many
@@ -282,8 +304,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-15 10:29:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3U7dRyjsg2QZ4Ss0408YUQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-17 14:23:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+rTijtG6K8aiaCx3EpUEhw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

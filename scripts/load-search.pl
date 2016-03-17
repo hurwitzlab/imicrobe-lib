@@ -17,7 +17,8 @@ use String::Trim qw(trim);
 
 Readonly my %INDEX_FLDS = (
     assembly      => [qw(assembly_code assembly_name organism)],
-    project       => [qw(project_code project_name pi institution description)],
+    investigator  => [qw(investigator_name institution)],
+    project       => [qw(project_code project_name institution description)],
     project_page  => [qw(title contents)],
     project_group => [qw(group_name description)],
     publication   => [qw(journal pub_code author title pubmed_id doi)],
