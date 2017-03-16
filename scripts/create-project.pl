@@ -15,9 +15,11 @@ main();
 # --------------------------------------------------
 sub main {
     my ($help, $man_page);
+    my $db = 'imicrobe';
     GetOptions(
-        'help' => \$help,
-        'man'  => \$man_page,
+        'db|d=s' => \$db,
+        'help'   => \$help,
+        'man'    => \$man_page,
     ) or pod2usage(2);
 
     if ($help || $man_page) {
@@ -27,7 +29,7 @@ sub main {
         });
     }; 
 
-    my $db = IMicrobe::DB->new;
+    my $db = IMicrobe::DB->new(name => $db);
     my $schema = $db->schema;
 
     if (my $file = shift @ARGV) {
@@ -141,6 +143,7 @@ create-project.pl - creates an iMicrobe project
 
 Options:
 
+  -d|--db  imicrobe, muscope
   --help   Show brief help and exit
   --man    Show full documentation
 

@@ -22,7 +22,7 @@ my $data         = parse_irods($irods);
 my @contents     = @{ $data->{$irods_dir} || [] } 
                    or die "Nothing in $irods_dir\n";
 my %file_type    = (
-    '<<DO_NOT_LINK>>' => 0,
+    '<<SKIP>>' => 0,
     (map { $_->type, $_->id } $schema->resultset('ProjectFileType')->all)
 );
 

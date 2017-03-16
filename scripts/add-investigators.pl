@@ -22,7 +22,7 @@ sub main {
 
     my @investigators = @ARGV or pod2usage('Missing investigators');
     my $project_id = $args{'project_id'} or pod2usage('Missing --project_id');
-    my $schema     = IMicrobe::DB->new->schema;
+    my $schema     = IMicrobe::DB->new(name => $args{'db'})->schema;
     my $Project    = $schema->resultset('Project')->find($project_id)
                      or die "Bad project_id ($project_id)\n";
 
@@ -46,9 +46,10 @@ sub main {
 
 # --------------------------------------------------
 sub get_args {
-    my %args;
+    my %args = (db => 'imicrobe');
     GetOptions(
         \%args,
+        'db:s',
         'project_id:i',
         'help',
         'man',
@@ -69,10 +70,12 @@ add-investigators.pl - a script
 
 =head1 SYNOPSIS
 
-  add-investigators.pl 
+  add-investigators.pl -p 1 'Edward Delong'
 
 Options:
 
+  -p       Project ID
+  -d       imicrobe/muscope
   --help   Show brief help and exit
   --man    Show full documentation
 

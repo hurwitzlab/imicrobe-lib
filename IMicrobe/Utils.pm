@@ -100,7 +100,7 @@ sub link_sample_file {
 
 # --------------------------------------------------
 sub add_sample_attr {
-    my $rec    = shift;
+    my $rec    = ref $_[0] eq 'HASH' ? shift : { @_ };
     my $schema = _schema();
     my $MAX_ATTR_VALUE_LEN = 255;
 

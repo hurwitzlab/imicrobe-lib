@@ -38,6 +38,7 @@ main();
 # --------------------------------------------------
 sub get_args {
     my %args = (
+        db          => 'imicrobe',
         project_id  => 0,
         sample_file => '',
         site_file   => '',
@@ -47,6 +48,7 @@ sub get_args {
     );
 
     GetOptions(\%args,
+        'db|d=s',
         'project_id|p=i',
         'sample_file|s=s',
         'site_file|i:s',
@@ -90,7 +92,7 @@ sub file_parse {
 # --------------------------------------------------
 sub main {
     my %args   = get_args;
-    my $db     = IMicrobe::DB->new;
+    my $db     = IMicrobe::DB->new(name => $args{'db'});
     my $schema = $db->schema;
 
     my $samples   = file_parse($args{'sample_file'});
@@ -300,11 +302,12 @@ process.pl - a script
 
 Required Arguments:
 
-  -p|--project_id   Project ID (integer)
   -s|--sample_file  Sample file name
 
 Options:
 
+  -d|--db           Database (imicrobe, muscope)
+  -p|--project_id   Project ID (integer)
   -i|--site_file    Site file name 
   -f|--fasta_dir    Directory of sample FASTA files
   --help            Show brief help and exit

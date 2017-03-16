@@ -35,6 +35,10 @@ Readonly my %MONGO_SQL => {
           from   sample
           where  sample_id=?
         ',
+        q'select "specimen__file" as name, file as value
+          from   sample_file
+          where  sample_id=?
+        ',
         q'select "specimen__project_id" as name, project_id as value
           from   sample
           where  sample_id=?
@@ -96,8 +100,10 @@ main();
 sub main {
     my $tables = '';
     my $list   = '';
+    my $db     = 'imicrobe';
     my ($help, $man_page);
     GetOptions(
+        'db|d=s'     => \$db,
         'l|list'     => \$list,
         't|tables:s' => \$tables,
         'help'       => \$help,
@@ -128,13 +134,14 @@ sub main {
         die join "\n", "Bad tables:", (map { "  - $_" } @bad), '';
     }
 
-    process(@tables);
+    process($db, @tables);
 }
 
 # --------------------------------------------------
 sub process {
+    my $db         = shift;
     my @tables     = @_;
-    my $db         = IMicrobe::DB->new;
+    my $db         = IMicrobe::DB->new(name => $db);
     my $mongo_conf = IMicrobe::Config->new->get('mongo');
     my $dbh        = $db->dbh;
     my $mongo      = $db->mongo;

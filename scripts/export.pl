@@ -12,14 +12,16 @@ use Readonly;
 
 Readonly my @BASE_TABLES => qw(
     domain
-    metadata_type
+    ontology_type
     ontology
     pubchase
     pubchase_rec
     sample_attr_type
     sample_attr_type_alias
     sample_file_type
+    project_file_type
 );
+#    metadata_type
 
 main();
 
