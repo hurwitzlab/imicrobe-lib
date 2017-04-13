@@ -15,7 +15,7 @@ use Pod::Usage;
 use Readonly;
 use String::Trim qw(trim);
 
-Readonly my %INDEX_FLDS = (
+Readonly my %INDEX_FLDS => (
     assembly      => [qw(assembly_code assembly_name organism)],
     investigator  => [qw(investigator_name institution)],
     project       => [qw(project_code project_name institution description)],
@@ -139,16 +139,16 @@ sub main {
 
 # --------------------------------------------------
 sub process {
-    my $db         = shift;
+    my $db_name    = shift;
     my @tables     = @_;
-    my $db         = IMicrobe::DB->new(name => $db);
+    my $db         = IMicrobe::DB->new(name => $db_name);
     my $mongo_conf = IMicrobe::Config->new->get('mongo');
     my $dbh        = $db->dbh;
     my $mongo      = $db->mongo;
-    my $db_name    = $mongo_conf->{'dbname'};
+    my $mdb_name   = $mongo_conf->{'dbname'};
     my $host       = $mongo_conf->{'host'};
     my $coll_name  = 'sampleKeys';
-    my $mdb        = $mongo->get_database($db_name);
+    my $mdb        = $mongo->get_database($mdb_name);
     $mdb->drop($coll_name);
 
     for my $table (@tables) {
@@ -234,7 +234,7 @@ sub process {
 
     say "Updating Mongo keys";
 
-    `/usr/bin/mongo $host/$db_name --quiet --eval "var collection = 'sample', outputFormat='json'" /usr/local/imicrobe/variety/variety.js | mongoimport --host $host --db $db_name --collection $coll_name --jsonArray`;
+    `/usr/bin/mongo $host/$mdb_name --quiet --eval "var collection = 'sample', outputFormat='json'" /usr/local/imicrobe/variety/variety.js | mongoimport --host $host --db $mdb_name --collection $coll_name --jsonArray`;
 
     say "Done.";
 }
