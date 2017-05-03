@@ -89,6 +89,12 @@ Readonly my %MONGO_SQL => {
           where  a.sample_attr_type_id=t.sample_attr_type_id
           and    a.sample_id=?
         ',
+        q'select distinct concat("data__", replace(t.type, ".", "_")) as name, 
+                 "true" as value
+          from   sample_file f, sample_file_type t
+          where  f.sample_file_type_id=t.sample_file_type_id
+          and    f.sample_id=?
+        ',
     ],
 };
 
