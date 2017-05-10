@@ -240,7 +240,7 @@ sub process {
 
     say "Updating Mongo keys";
 
-    `/usr/bin/mongo $host/$mdb_name --quiet --eval "var collection = 'sample', outputFormat='json'" /usr/local/imicrobe/variety/variety.js | mongoimport --host $host --db $mdb_name --collection $coll_name --jsonArray`;
+    `variety $mdb_name/sample --host $host --quiet --outputFormat json | mongoimport --host $host --db $mdb_name --collection $coll_name --jsonArray`;
 
     say "Done.";
 }
