@@ -123,7 +123,7 @@ sub _build_dbh {
     my $dbh;
 
     eval {
-        $dbh = DBI->connect(
+        $dbh = DBI->connect_cached(
             $self->dsn, 
             $self->user, 
             $self->password, 
