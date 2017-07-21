@@ -14,9 +14,10 @@ use Pod::Usage;
 use Readonly;
 use String::Trim qw(trim);
 
+# add the parent directory to @INC so IMicrobe::DB will be found
 use FindBin;
-use lib $FindBin::Bin;
-
+use FileSpec;
+use lib File::Spec->catdir($FindBin::Bin, '..');
 use IMicrobe::DB;
 
 Readonly my %INDEX_FLDS => (
