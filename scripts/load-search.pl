@@ -7,13 +7,17 @@ use feature 'say';
 use Data::Dump 'dump';
 use Getopt::Long;
 use HTTP::Request;
-use IMicrobe::DB;
 use MongoDB;
 use JSON::XS;
 use LWP::UserAgent;
 use Pod::Usage;
 use Readonly;
 use String::Trim qw(trim);
+
+use FindBin;
+use lib $FindBin::Bin;
+
+use IMicrobe::DB;
 
 Readonly my %INDEX_FLDS => (
     assembly      => [qw(assembly_code assembly_name organism)],
@@ -24,7 +28,7 @@ Readonly my %INDEX_FLDS => (
     publication   => [qw(journal pub_code author title pubmed_id doi)],
     sample        => [qw(sample_acc sample_name sample_type sample_description
                     comments)],
-    combined_assembly => [qw( 
+    combined_assembly => [qw(
         assembly_name phylum class family genus species strain
     )],
 );
@@ -48,7 +52,7 @@ Readonly my %MONGO_SQL => {
           where  s.sample_id=?
           and    s.project_id=p.project_id
         ',
-        q'select "specimen__is_metagenome" as name, 
+        q'select "specimen__is_metagenome" as name,
                  sample_type like "metagenome" as value
           from   sample
           where  sample_id=?
@@ -76,20 +80,20 @@ Readonly my %MONGO_SQL => {
           and    s.project_id=pr.project_id
           and    pr.project_id=p.project_id
         ',
-        q'select "publication__title" as name, 
+        q'select "publication__title" as name,
                  concat_ws(" ", p.title, p.author) as value
           from   publication p, sample s, project pr
           where  s.sample_id=?
           and    s.project_id=pr.project_id
           and    pr.project_id=p.project_id
         ',
-        q'select concat_ws("__", t.category, t.type) as name, 
+        q'select concat_ws("__", t.category, t.type) as name,
                  a.attr_value as value
           from   sample_attr a, sample_attr_type t
           where  a.sample_attr_type_id=t.sample_attr_type_id
           and    a.sample_id=?
         ',
-        q'select distinct concat("data__", replace(t.type, ".", "_")) as name, 
+        q'select distinct concat("data__", replace(t.type, ".", "_")) as name,
                  "true" as value
           from   sample_file f, sample_file_type t
           where  f.sample_file_type_id=t.sample_file_type_id
@@ -121,10 +125,10 @@ sub main {
             -exitval => 0,
             -verbose => $man_page ? 2 : 1
         });
-    }; 
+    };
 
     if ($list) {
-        say join "\n", 
+        say join "\n",
             "Valid tables:",
             (map { " - $_" } sort keys %INDEX_FLDS),
             '',
@@ -135,7 +139,7 @@ sub main {
     my %valid  = map { $_, 1 } keys %INDEX_FLDS;
     my @tables = $tables ? split /\s*,\s*/, $tables : keys %valid;
     my @bad    = grep { !$valid{ $_ } } @tables;
-    
+
     if (@bad) {
         die join "\n", "Bad tables:", (map { "  - $_" } @bad), '';
     }
@@ -162,11 +166,11 @@ sub process {
         $coll->drop();
 
         my @flds    = @{ $INDEX_FLDS{$table} } or next;
-        my $pk_name = $table . '_id'; 
+        my $pk_name = $table . '_id';
         unshift @flds, $pk_name;
 
         my @records = @{$dbh->selectall_arrayref(
-            sprintf('select %s from %s', join(', ', @flds), $table), 
+            sprintf('select %s from %s', join(', ', @flds), $table),
             { Columns => {} }
         )};
 
@@ -179,7 +183,7 @@ sub process {
         my $i;
         for my $rec (@records) {
             my $pk  = $rec->{ $pk_name } or next;
-            my $raw = join(' ', map { trim($rec->{$_} // '') } 
+            my $raw = join(' ', map { trim($rec->{$_} // '') }
                       grep { $_ ne $pk } @flds);
 
             my @tmp;
@@ -216,7 +220,7 @@ sub process {
                     }
                 }
 
-                $mongo_rec{'text'} = join(' ', 
+                $mongo_rec{'text'} = join(' ',
                     grep { ! /^-?\d+(\.\d+)?$/ }
                     map  { split(/\s+/, $_) }
                     values %mongo_rec
@@ -279,7 +283,7 @@ load-search.pl - a script
 
 =head1 SYNOPSIS
 
-  load-search.pl 
+  load-search.pl
 
 Options:
 
