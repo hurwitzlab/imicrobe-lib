@@ -16,7 +16,7 @@ use String::Trim qw(trim);
 
 # add the parent directory to @INC so IMicrobe::DB will be found
 use FindBin;
-use FileSpec;
+use File::Spec;
 use lib File::Spec->catdir($FindBin::Bin, '..');
 use IMicrobe::DB;
 
