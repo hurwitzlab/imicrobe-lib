@@ -36,31 +36,36 @@ __PACKAGE__->table("project");
 =head2 project_code
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =head2 project_name
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =head2 pi
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =head2 institution
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =head2 project_type
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =head2 description
@@ -71,49 +76,57 @@ __PACKAGE__->table("project");
 =head2 url
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =head2 read_file
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 100
 
 =head2 meta_file
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 100
 
 =head2 assembly_file
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 100
 
 =head2 peptide_file
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 100
 
 =head2 email
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =head2 read_pep_file
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 100
 
 =head2 nt_file
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 100
 
 =cut
@@ -127,33 +140,33 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "project_code",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "project_name",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "pi",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "institution",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "project_type",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "description",
   { data_type => "text", is_nullable => 1 },
   "url",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "read_file",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
   "meta_file",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
   "assembly_file",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
   "peptide_file",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
   "email",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "read_pep_file",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
   "nt_file",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
 );
 
 =head1 PRIMARY KEY
@@ -350,8 +363,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-17 14:23:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NuOp4Omu7NhGQwwPxJ+ffw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-08-08 09:40:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZAGzn7KPKp4IeQLz7CN22w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

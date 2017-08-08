@@ -29,6 +29,17 @@ Readonly my %INDEX_FLDS => (
     )],
 );
 
+Readonly my %NAME_FLD => (
+    assembly          => 'assembly_name',
+    investigator      => 'investigator_name',
+    project           => 'project_name',
+    project_page      => 'title',
+    project_group     => 'group_name',
+    publication       => 'title',
+    sample            => 'sample_name',
+    combined_assembly => 'assembly_name'
+);
+
 Readonly my %MONGO_SQL => {
     sample => [
         q'select "specimen__sample_id" as name, sample_id as value
@@ -161,8 +172,9 @@ sub process {
         my $coll = $mdb->get_collection($table);
         $coll->drop();
 
-        my @flds    = @{ $INDEX_FLDS{$table} } or next;
-        my $pk_name = $table . '_id'; 
+        my $name_fld = $NAME_FLD{ $table }      or next;
+        my @flds     = @{ $INDEX_FLDS{$table} } or next;
+        my $pk_name  = $table . '_id'; 
         unshift @flds, $pk_name;
 
         my @records = @{$dbh->selectall_arrayref(
@@ -228,11 +240,14 @@ sub process {
             $dbh->do(
                 q[
                     insert
-                    into   search (table_name, primary_key, search_text)
-                    values (?, ?, ?)
+                    into   search 
+                           (table_name, primary_key, object_name, search_text)
+                    values (?, ?, ?, ?)
                 ],
                 {},
-                ($table, $pk, join(' ', $text, $mongo_rec{'text'} // ''))
+                ( $table, $pk, substr($rec->{$name_fld}, 0, 254)
+                , join(' ', $text, $mongo_rec{'text'} // '')
+                )
             );
         }
         print "\n";

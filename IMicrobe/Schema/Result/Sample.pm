@@ -56,13 +56,15 @@ __PACKAGE__->table("sample");
 =head2 sample_name
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =head2 sample_type
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =head2 sample_description
@@ -78,7 +80,8 @@ __PACKAGE__->table("sample");
 =head2 taxon_id
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =head2 latitude
@@ -96,7 +99,8 @@ __PACKAGE__->table("sample");
 =head2 url
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =cut
@@ -126,21 +130,21 @@ __PACKAGE__->add_columns(
   "sample_acc",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "sample_name",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "sample_type",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "sample_description",
   { data_type => "text", is_nullable => 1 },
   "comments",
   { data_type => "text", is_nullable => 1 },
   "taxon_id",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "latitude",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "longitude",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "url",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -304,8 +308,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-17 14:23:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+rTijtG6K8aiaCx3EpUEhw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-08-08 09:40:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/q4GJjpNL1S/kKoFdPbZSA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

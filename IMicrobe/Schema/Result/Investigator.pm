@@ -36,10 +36,18 @@ __PACKAGE__->table("investigator");
 =head2 investigator_name
 
   data_type: 'varchar'
-  is_nullable: 1
+  default_value: (empty string)
+  is_nullable: 0
   size: 255
 
 =head2 institution
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 0
+  size: 255
+
+=head2 url
 
   data_type: 'varchar'
   is_nullable: 1
@@ -56,8 +64,10 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "investigator_name",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "institution",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
+  "url",
   { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
@@ -106,8 +116,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-17 12:36:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mHPXEO6Xec68zYXpeHxSzQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-08-08 09:40:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Zkap94YhL2S8F3MiJW3gDQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

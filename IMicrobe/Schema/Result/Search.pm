@@ -45,6 +45,12 @@ __PACKAGE__->table("search");
   extra: {unsigned => 1}
   is_nullable: 1
 
+=head2 object_name
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
 =head2 search_text
 
   data_type: 'longtext'
@@ -64,6 +70,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 100 },
   "primary_key",
   { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 1 },
+  "object_name",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "search_text",
   { data_type => "longtext", is_nullable => 1 },
 );
@@ -81,8 +89,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("search_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 15:54:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UN169t3cY+rtzhhFMLtDGQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-08-08 09:40:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aWwCwlXlKzRspqwB6f1A2w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

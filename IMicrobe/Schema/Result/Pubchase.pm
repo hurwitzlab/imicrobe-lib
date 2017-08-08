@@ -58,7 +58,7 @@ __PACKAGE__->table("pubchase");
 
 =head2 authors
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 article_date
@@ -75,7 +75,7 @@ __PACKAGE__->table("pubchase");
 
 =head2 url
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =cut
@@ -97,13 +97,13 @@ __PACKAGE__->add_columns(
   "doi",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "authors",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "article_date",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "created_on",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "url",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -133,8 +133,8 @@ __PACKAGE__->set_primary_key("pubchase_id");
 __PACKAGE__->add_unique_constraint("article_id", ["article_id"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 15:54:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gMb2yyOoW1LczqKbz5VYCg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-08-08 09:40:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bG2BslItudqqLTX/OwEuHg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
