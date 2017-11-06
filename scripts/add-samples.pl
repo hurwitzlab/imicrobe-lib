@@ -259,7 +259,7 @@ sub main {
             );
 
             printf "       %25s => %s\n", 'reads_file', $reads_file;
-            $Sample->reads_file($reads_file);
+            #$Sample->reads_file($reads_file);
             $schema->resultset('SampleFile')->find_or_create({
                 sample_id           => $Sample->id,
                 sample_file_type_id => $ReadsType->id,

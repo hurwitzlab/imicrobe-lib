@@ -16,7 +16,7 @@ use WWW::Mechanize;
 
 use lib "$Bin/..";
 
-Readonly my $URL => 'https://www.pubchase.com/api/v1/recommendations?key=';
+Readonly my $URL => 'http://www.pubchase.com/api/v1/recommendations?key=';
 Readonly my $KEY_FILE => '/usr/local/hurwitzlab/configs/pubchase/api-key.';
 
 main();
@@ -53,7 +53,7 @@ sub main {
         $db = $db_class->new->dbh;
     }
 
-    my $www = WWW::Mechanize->new;
+    my $www = WWW::Mechanize->new('ssl_opts' => { 'verify_hostname' => 0 });
     my $res = $www->get($URL . $api_key);
 
     if ($res->is_success) {

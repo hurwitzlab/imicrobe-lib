@@ -277,6 +277,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sample_to_centrifuges
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::SampleToCentrifuge>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sample_to_centrifuges",
+  "IMicrobe::Schema::Result::SampleToCentrifuge",
+  { "foreign.sample_id" => "self.sample_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 sample_to_investigators
 
 Type: has_many
@@ -307,9 +322,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sample_to_uprocs
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-08-08 09:40:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/q4GJjpNL1S/kKoFdPbZSA
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::SampleToUproc>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sample_to_uprocs",
+  "IMicrobe::Schema::Result::SampleToUproc",
+  { "foreign.sample_id" => "self.sample_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-11-01 16:19:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rSOYRRee69loXJJ8bzkPGQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

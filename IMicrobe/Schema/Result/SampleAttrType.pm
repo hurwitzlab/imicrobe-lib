@@ -47,7 +47,7 @@ __PACKAGE__->table("sample_attr_type");
 
 =head2 description
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 category
@@ -71,7 +71,7 @@ __PACKAGE__->add_columns(
   "url_template",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "description",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "category",
   { data_type => "varchar", is_nullable => 1, size => 100 },
 );
@@ -135,8 +135,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-26 14:08:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iJ/7t6JAUotvvRA9gB4IcQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-10-03 16:47:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6wkkv3hV7+SxRCsSrnwi+Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::App;
+package IMicrobe::Schema::Result::AppDataType;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::App
+IMicrobe::Schema::Result::AppDataType
 
 =cut
 
@@ -18,77 +18,62 @@ use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 
-=head1 TABLE: C<app>
+=head1 TABLE: C<app_data_type>
 
 =cut
 
-__PACKAGE__->table("app");
+__PACKAGE__->table("app_data_type");
 
 =head1 ACCESSORS
 
-=head2 app_id
+=head2 app_data_type_id
 
   data_type: 'integer'
   extra: {unsigned => 1}
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 app_name
+=head2 name
 
   data_type: 'varchar'
   is_nullable: 0
   size: 50
 
-=head2 is_active
+=head2 alias
 
-  data_type: 'tinyint'
-  default_value: 1
+  data_type: 'varchar'
   is_nullable: 1
+  size: 255
 
 =cut
 
 __PACKAGE__->add_columns(
-  "app_id",
+  "app_data_type_id",
   {
     data_type => "integer",
     extra => { unsigned => 1 },
     is_auto_increment => 1,
     is_nullable => 0,
   },
-  "app_name",
+  "name",
   { data_type => "varchar", is_nullable => 0, size => 50 },
-  "is_active",
-  { data_type => "tinyint", default_value => 1, is_nullable => 1 },
+  "alias",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
 
 =over 4
 
-=item * L</app_id>
+=item * L</app_data_type_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("app_id");
+__PACKAGE__->set_primary_key("app_data_type_id");
 
 =head1 RELATIONS
-
-=head2 app_runs
-
-Type: has_many
-
-Related object: L<IMicrobe::Schema::Result::AppRun>
-
-=cut
-
-__PACKAGE__->has_many(
-  "app_runs",
-  "IMicrobe::Schema::Result::AppRun",
-  { "foreign.app_id" => "self.app_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
 
 =head2 app_to_app_data_types
 
@@ -101,28 +86,13 @@ Related object: L<IMicrobe::Schema::Result::AppToAppDataType>
 __PACKAGE__->has_many(
   "app_to_app_data_types",
   "IMicrobe::Schema::Result::AppToAppDataType",
-  { "foreign.app_id" => "self.app_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 app_to_app_tags
-
-Type: has_many
-
-Related object: L<IMicrobe::Schema::Result::AppToAppTag>
-
-=cut
-
-__PACKAGE__->has_many(
-  "app_to_app_tags",
-  "IMicrobe::Schema::Result::AppToAppTag",
-  { "foreign.app_id" => "self.app_id" },
+  { "foreign.app_data_type_id" => "self.app_data_type_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-11-01 16:19:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2BVrmTZKhBYoaVPEam6mqQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-10-19 15:41:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2y4LeILxZfAo76B+CoaOIw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
