@@ -34,7 +34,7 @@ sub main {
         last;
     }
 
-    say "OK";
+    say "Done";
 }
 
 # --------------------------------------------------
@@ -86,6 +86,15 @@ sub process {
     die "Bad cruise ($cruise)\n" unless $Cruise;
     printf "CRUISE: %s (%s)\n", $Cruise->cruise_name, $Cruise->cruise_id;
 
+    my %sample_fields_to_attr = (
+        station_number   => '',
+        cast_number      => '',
+        latitude_start   => 'latitude',
+        longitude_start  => 'longitude',
+        depth            => '',
+        collection_start => 'collection_start_time',
+    );
+
     my $i = 0;
     for my $MSample ($Cruise->samples) {
         my $ISample     = $imicrobe->resultset('Sample')->find_or_create({
@@ -107,20 +116,22 @@ sub process {
             $ISample->update;
         }
 
-        my $investigator_name = join(' ',
-            $MSample->investigator->first_name,
-            $MSample->investigator->last_name
-        );
+        for my $S2I ($MSample->sample_to_investigators) {
+            my $investigator_name = join(' ',
+                $S2I->investigator->first_name,
+                $S2I->investigator->last_name
+            );
 
-        my $IInv = $imicrobe->resultset('Investigator')->find_or_create({
-            investigator_name => $investigator_name
-        });
+            my $IInv = $imicrobe->resultset('Investigator')->find_or_create({
+                investigator_name => $investigator_name
+            });
 
-        my $ISampleToInv = 
-        $imicrobe->resultset('SampleToInvestigator')->find_or_create({
-            sample_id       => $ISample->id,
-            investigator_id => $IInv->id
-        });
+            my $ISampleToInv = 
+            $imicrobe->resultset('SampleToInvestigator')->find_or_create({
+                sample_id       => $ISample->id,
+                investigator_id => $IInv->id
+            });
+        }
 
         for my $MAttr ($MSample->sample_attrs) {
             next if lc($MAttr->value) == 'unknown';
@@ -152,12 +163,13 @@ sub process {
             printf "  Attr %s => %s\n", $IAttrType->type, $IAttr->attr_value;
         }
 
-        for my $fld (qw[ latitude longitude ]) {
-            my $val = $MSample->cast->station->$fld or next;
-            say "  Attr $fld => $val";
+        for my $fld (keys %sample_fields_to_attr) {
+            my $val = $MSample->$fld or next;
+            my $imicrobe_sample_type = $sample_fields_to_attr{$fld} || $fld;
+            say "  Attr $fld => $imicrobe_sample_type '$val'";
             my $IAttrType = 
                 $imicrobe->resultset('SampleAttrType')->find_or_create({
-                    type => $fld
+                    type => $imicrobe_sample_type
                 });
 
             my $IAttr = $imicrobe->resultset('SampleAttr')->find_or_create({
@@ -165,15 +177,12 @@ sub process {
                 sample_id           => $ISample->id,
                 attr_value          => $val,
             });
-
-            $ISample->$fld($val);
-            $ISample->update;
         }
 
-        for my $File ($MSample->sample_files) {
-            my $type = $File->sample_file_type->type;
-            printf "  File %s (%s)\n", $File->file, $type;
-
+#        for my $File ($MSample->sample_files) {
+#            my $type = $File->sample_file_type->type;
+#            printf "  File %s (%s)\n", $File->file, $type;
+#
 #            my $FType = 
 #            $imicrobe->resultset('SampleFileType')->find_or_create({
 #                type => $File->sample_file_type->type
@@ -184,8 +193,7 @@ sub process {
 #                sample_id           => $ISample->id,
 #                attr_value          => $val,
 #            });
-        }
-        last;
+#        }
     }
 }
 
