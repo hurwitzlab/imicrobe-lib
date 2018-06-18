@@ -15,7 +15,8 @@ Readonly my $MAX_ATTR_VALUE_LEN => 255;
 Readonly my %SPLITTABLE_FIELDS  => map { $_, 1 } qw(
     ncbi_sra_seq_run
 );
-Readonly my @SAMPLE_TABLE_FIELDS => qw(latitude longitude);
+Readonly my @SAMPLE_TABLE_FIELDS => qw();
+Readonly my $COMMA_SPACE => qr/\s*,\s*/;
 
 main();
 
@@ -24,7 +25,6 @@ sub get_args {
     my %args = (
         project_id  => 0,
         sample_file => '',
-        site_file   => '',
         fasta_dir   => '',
         help        => 0,
         man_page    => 0,
@@ -33,7 +33,6 @@ sub get_args {
     GetOptions(\%args,
         'project_id|p=i',
         'sample_file|s=s',
-        'site_file|i:s',
         'fasta_dir|f:s',
         'help',
         'man'
@@ -58,126 +57,140 @@ sub get_args {
 }
 
 # --------------------------------------------------
-sub file_parse {
-    my $file = shift;
-
-    if ($file && -e $file) {
-        my $p = Text::RecordParser::Tab->new($file);
-        $p->header_filter(sub { $_ = shift; s/\s+/_/g; lc $_ });
-        return $p->fetchall_arrayref({ Columns => {} });
-    }
-    else {
-        return [];
-    }
-}
-
-# --------------------------------------------------
 sub main {
-    my %args   = get_args;
-    my $db     = IMicrobe::DB->new;
-    my $schema = $db->schema;
+    my %args      = get_args;
+    my $db        = IMicrobe::DB->new;
+    my $schema    = $db->schema;
+    my $meta_file = $args{'sample_file'};
+
+    unless (-f $meta_file) {
+        die "-s $meta_file is not a file\n";
+    }
 
     my $Project = $schema->resultset('Project')->find($args{'project_id'})
         or die "Cannot find project id '$args{project_id}'\n";
 
     printf "Project '%s' (%s)\n", $Project->project_name, $Project->id;
 
-    my $samples    = file_parse($args{'sample_file'});
-    my $sites      = file_parse($args{'site_file'});
-    my %attr_fld   = map { $_->type, $_->id } 
-                     $schema->resultset('SampleAttrType')->all;
-    my $iplant_dir = sprintf(
-        '/iplant/home/shared/imicrobe/projects/%s/samples/', $Project->id
-    );
+    my $p = Text::RecordParser::Tab->new($meta_file);
+    $p->header_filter(sub { $_ = shift; s/\s+/_/g; lc $_ });
+
+    #
+    # Get all the possible sample_attr/aliases
+    #
+    my %attr_fld = map { $_->type, $_->id } 
+                   $schema->resultset('SampleAttrType')->all;
+
+    for my $Alias ($schema->resultset('SampleAttrTypeAlias')->all) {
+        $attr_fld{ $Alias->alias } = $Alias->sample_attr_type_id;
+    }
+
     my $ReadsType = $schema->resultset('SampleFileType')->find_or_create({ 
         type => 'Reads'
     });
 
-    printf "%s samples, %s sites\n", scalar @$samples, scalar @$sites;
-
-    my $nsamples = scalar @$samples;
-    for my $i (0..$nsamples - 1) {
-        my $sample = $samples->[$i];
-        my $site   = @$sites 
-                     ? defined $sites->[$i] ? $sites->[$i] : $sites->[0]
-                     : {};
-
+    my $i = 0;
+    while (my $sample = $p->fetchrow_hashref) {
         next unless $sample->{'sample_name'};
 
         my $Sample = $schema->resultset('Sample')->find_or_create({
             project_id   => $Project->id,
             sample_name  => $sample->{'sample_name'},
-            sample_acc   => join('_', 
-                $Project->project_code, $sample->{'sample_name'}
-            ),
         });
 
+        my $sample_type = $sample->{'sequence_type'} 
+                       || $sample->{'sample_type'};
+
+        if ($sample_type) {
+            $Sample->sample_type($sample_type);
+            $Sample->update;
+        }
+
+        printf "%5d: Sample '%s' (%s)\n", 
+            ++$i, $Sample->sample_name, $Sample->id;
+
+        my @PIs;
+        if (my $pis = $sample->{'pi'}) {
+            for my $pi_name (split $COMMA_SPACE, $pis) {
+                my $PI;
+                if ($pi_name =~ /^\d+$/) {
+                    ($PI) = $schema->resultset('Investigator')->find($pi_name);
+                }
+                else {
+                    ($PI) = $schema->resultset('Investigator')->find_or_create(
+                        { investigator_name => $pi_name }
+                    );
+                }
+
+                if ($PI) {
+                    $schema->resultset('SampleToInvestigator')->find_or_create(
+                        { investigator_id => $PI->id 
+                        , sample_id       => $Sample->id
+                        }
+                    );
+                }
+                else {
+                    warn "Cannot find or create PI '$pi_name'\n";
+                }
+            }
+        }
+        elsif (my @ProjectToInvs = $Project->project_to_investigators) {
+            for my $P2I (@ProjectToInvs) {
+                $schema->resultset('SampleToInvestigator')->find_or_create(
+                    { investigator_id => $P2I->investigaor->id 
+                    , sample_id       => $Sample->id
+                    }
+                );
+            }
+        }
+
         for my $fld (@SAMPLE_TABLE_FIELDS) {
-            my $val = trim($sample->{$fld} // $site->{$fld});
+            my $val = trim($sample->{$fld});
             if (defined $val && $val ne '') {
                 $Sample->$fld($val);
                 $Sample->update;
             }
         } 
 
-        printf "%5d: Sample '%s' (%s)\n", 
-            $i + 1, $Sample->sample_name, $Sample->id;
-
         for my $fld (keys %attr_fld) {
-            my @vals = ($sample->{ $fld } // $site->{ $fld });
+            my @tmp;
             if ($SPLITTABLE_FIELDS{ $fld }) {
-                @vals = map { split(/\s*,\s*/, $_) } @vals; 
+                @tmp = map { split($COMMA_SPACE, $_) } $sample->{ $fld };
             }
+            else {
+                @tmp = ($sample->{ $fld });
+            }
+
+            my @vals = grep { defined $_ && $_ ne '' } @tmp;
+
+            ($fld = lc $fld) =~ s/\s+/_/g; # to match normalization in parser
 
             for my $val (@vals) {
-                if (defined $val && $val ne '') {
-                    my $attr_id = $attr_fld{ $fld };
-                    printf "       %25s (%s) => %s\n", 
-                           $fld, $attr_id, substr($val, 0, 25);
+                my $attr_id = $attr_fld{ $fld };
+                printf "       %25s (%s) => %s\n", 
+                       $fld, $attr_id, substr($val, 0, 25);
 
-                    my ($SampleAttr) =
-                    $schema->resultset('SampleAttr')->find_or_create({
-                        sample_id           => $Sample->id,
-                        sample_attr_type_id => $attr_id,
-                        attr_value          => 
-                            length($val) > $MAX_ATTR_VALUE_LEN
-                            ? substr($val, 0, $MAX_ATTR_VALUE_LEN - 1)
-                            : $val
-                    });
-                }
+                my ($SampleAttr) =
+                $schema->resultset('SampleAttr')->find_or_create({
+                    sample_id           => $Sample->id,
+                    sample_attr_type_id => $attr_id,
+                    attr_value          => 
+                        length($val) > $MAX_ATTR_VALUE_LEN
+                        ? substr($val, 0, $MAX_ATTR_VALUE_LEN - 1)
+                        : $val
+                });
             }
         }
 
-#        for my $fld (
-#            $schema->resultset('Sample')->result_source->columns
-#        ) {
-#            next if $fld =~ /_file$/;
-#            my $val = $sample->{ $fld } // $site->{ $fld };
-#            if (defined $val && $val ne '') {
-#                printf "       %25s => %s\n", $fld, substr($val, 0, 25);
-#                $Sample->$fld($val);
-#            }
-#        }
-
-        my @reads = split(/\s*,\s*/, $sample->{'reads_file'});
-
-        if (!@reads && defined $args{'fasta_dir'} && -d $args{'fasta_dir'}) {
-            my $reads_file = 
-                catfile($args{'fasta_dir'}, $Sample->sample_name . '.fa');
-
-            if (-e $reads_file) {
-                push @reads, $reads_file;
+        if (my $reads = $sample->{'seq_name'} || $sample->{'reads_file'}) {
+            for my $file (split($COMMA_SPACE, $reads)) {
+                printf "       %25s => %s\n", 'Reads', $file;
+                $schema->resultset('SampleFile')->find_or_create({
+                    sample_id           => $Sample->id,
+                    sample_file_type_id => $ReadsType->id,
+                    file                => $file,
+                });
             }
-        }
-
-        for my $reads_file (@reads) {
-            printf "       %25s => %s\n", 'reads_file', $reads_file;
-            $Sample->reads_file($reads_file);
-            $schema->resultset('SampleFile')->find_or_create({
-                sample_id           => $Sample->id,
-                sample_file_type_id => $ReadsType->id,
-                file                => catfile($iplant_dir, $reads_file),
-            });
         }
 
         $Sample->update;
@@ -198,7 +211,7 @@ process.pl - a script
 
 =head1 SYNOPSIS
 
-  add-samples.pl -p 129 -s samples.tab [-i sites.tab]
+  add-samples.pl -p 129 -s samples.tab
 
 Required Arguments:
 
@@ -207,7 +220,6 @@ Required Arguments:
 
 Options:
 
-  -i|--site_file    Site file name 
   -f|--fasta_dir    Directory of sample FASTA files
   --help            Show brief help and exit
   --man             Show full documentation
