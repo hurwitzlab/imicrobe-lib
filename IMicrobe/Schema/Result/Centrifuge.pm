@@ -82,18 +82,6 @@ __PACKAGE__->set_primary_key("centrifuge_id");
 
 =head1 UNIQUE CONSTRAINTS
 
-=head2 C<name>
-
-=over 4
-
-=item * L</name>
-
-=back
-
-=cut
-
-__PACKAGE__->add_unique_constraint("name", ["name"]);
-
 =head2 C<tax_id>
 
 =over 4
@@ -124,8 +112,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-11-01 16:25:49
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4eeDq2bfjvuiSAhaYgMO8Q
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 10:10:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R/SNR7FHtsK8QD3qashGBA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

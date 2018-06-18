@@ -103,6 +103,12 @@ __PACKAGE__->table("sample");
   is_nullable: 0
   size: 255
 
+=head2 biome
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 100
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -145,6 +151,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "url",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
+  "biome",
+  { data_type => "varchar", is_nullable => 1, size => 100 },
 );
 
 =head1 PRIMARY KEY
@@ -292,6 +300,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sample_to_domains
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::SampleToDomain>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sample_to_domains",
+  "IMicrobe::Schema::Result::SampleToDomain",
+  { "foreign.sample_id" => "self.sample_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 sample_to_investigators
 
 Type: has_many
@@ -322,24 +345,54 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 sample_to_uprocs
+=head2 sample_to_proteins
 
 Type: has_many
 
-Related object: L<IMicrobe::Schema::Result::SampleToUproc>
+Related object: L<IMicrobe::Schema::Result::SampleToProtein>
 
 =cut
 
 __PACKAGE__->has_many(
-  "sample_to_uprocs",
-  "IMicrobe::Schema::Result::SampleToUproc",
+  "sample_to_proteins",
+  "IMicrobe::Schema::Result::SampleToProtein",
+  { "foreign.sample_id" => "self.sample_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 uproc_kegg_results
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::UprocKeggResult>
+
+=cut
+
+__PACKAGE__->has_many(
+  "uproc_kegg_results",
+  "IMicrobe::Schema::Result::UprocKeggResult",
+  { "foreign.sample_id" => "self.sample_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 uproc_pfam_results
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::UprocPfamResult>
+
+=cut
+
+__PACKAGE__->has_many(
+  "uproc_pfam_results",
+  "IMicrobe::Schema::Result::UprocPfamResult",
   { "foreign.sample_id" => "self.sample_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-11-01 16:19:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rSOYRRee69loXJJ8bzkPGQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 10:10:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R40WnQYIOyjd4187bwUR+g
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

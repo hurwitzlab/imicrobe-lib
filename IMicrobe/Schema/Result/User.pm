@@ -39,6 +39,13 @@ __PACKAGE__->table("user");
   is_nullable: 0
   size: 50
 
+=head2 date
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -51,6 +58,13 @@ __PACKAGE__->add_columns(
   },
   "user_name",
   { data_type => "varchar", is_nullable => 0, size => 50 },
+  "date",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
+    is_nullable => 0,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -112,8 +126,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-05-03 10:02:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4DrblojwJP2nuasH+IeI0g
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 10:10:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KSiZagX5l+MhD/m7zFljUw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

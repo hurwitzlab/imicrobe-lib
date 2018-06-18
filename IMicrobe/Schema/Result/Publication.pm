@@ -144,9 +144,24 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 publication_to_project_files
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-02-08 10:53:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HCrHwmWuAaatFUTcGXGkBw
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::PublicationToProjectFile>
+
+=cut
+
+__PACKAGE__->has_many(
+  "publication_to_project_files",
+  "IMicrobe::Schema::Result::PublicationToProjectFile",
+  { "foreign.publication_id" => "self.publication_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 10:10:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kiXOjxWJ4E0QKQdjUJU5AA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -154,7 +154,7 @@ __PACKAGE__->belongs_to(
   "sample",
   "IMicrobe::Schema::Result::Sample",
   { sample_id => "sample_id" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 =head2 sample_file_type
@@ -169,12 +169,12 @@ __PACKAGE__->belongs_to(
   "sample_file_type",
   "IMicrobe::Schema::Result::SampleFileType",
   { sample_file_type_id => "sample_file_type_id" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-01 12:52:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Y13IOJKyUU64mnh8Yn4IFw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 10:10:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jJbD/LmJ1oc0d2/t6fyNZA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

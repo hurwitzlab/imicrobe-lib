@@ -157,8 +157,13 @@ sub process {
                 sample_attr_type_id => $IAttrType->id,
                 sample_id           => $ISample->id,
                 attr_value          => $MAttr->value,
-                unit                => $MType->unit,
             });
+
+            
+            if (my $unit = $MType->unit) {
+                $IAttr->unit($unit);
+                $IAttr->update;
+            }
             
             printf "  Attr %s => %s\n", $IAttrType->type, $IAttr->attr_value;
         }
@@ -177,6 +182,11 @@ sub process {
                 sample_id           => $ISample->id,
                 attr_value          => $val,
             });
+
+            if ($fld eq 'depth') {
+                $IAttr->unit('m');
+                $IAttr->update;
+            }
         }
 
 #        for my $File ($MSample->sample_files) {

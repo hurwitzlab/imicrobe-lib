@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.17, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.22, for Linux (x86_64)
 --
 -- Host: localhost    Database: imicrobe
 -- ------------------------------------------------------
--- Server version	5.7.17
+-- Server version	5.7.22
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -26,8 +26,40 @@ CREATE TABLE `app` (
   `app_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `app_name` varchar(50) NOT NULL,
   `is_active` tinyint(4) DEFAULT '1',
+  `provider_name` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`app_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `app_data_type`
+--
+
+DROP TABLE IF EXISTS `app_data_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `app_data_type` (
+  `app_data_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `alias` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`app_data_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `app_result`
+--
+
+DROP TABLE IF EXISTS `app_result`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `app_result` (
+  `app_result_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `app_id` int(10) unsigned NOT NULL,
+  `app_data_type_id` int(10) unsigned NOT NULL,
+  `path` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`app_result_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,7 +80,59 @@ CREATE TABLE `app_run` (
   KEY `app_id` (`app_id`),
   CONSTRAINT `app_run_ibfk_1` FOREIGN KEY (`app_id`) REFERENCES `app` (`app_id`),
   CONSTRAINT `app_run_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=474 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `app_tag`
+--
+
+DROP TABLE IF EXISTS `app_tag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `app_tag` (
+  `app_tag_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `value` varchar(50) NOT NULL,
+  PRIMARY KEY (`app_tag_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `app_to_app_data_type`
+--
+
+DROP TABLE IF EXISTS `app_to_app_data_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `app_to_app_data_type` (
+  `app_to_app_data_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `app_id` int(10) unsigned NOT NULL,
+  `app_data_type_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`app_to_app_data_type_id`),
+  KEY `app_id` (`app_id`),
+  KEY `app_data_type_id` (`app_data_type_id`),
+  CONSTRAINT `app_to_app_data_type_ibfk_1` FOREIGN KEY (`app_id`) REFERENCES `app` (`app_id`),
+  CONSTRAINT `app_to_app_data_type_ibfk_2` FOREIGN KEY (`app_data_type_id`) REFERENCES `app_data_type` (`app_data_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `app_to_app_tag`
+--
+
+DROP TABLE IF EXISTS `app_to_app_tag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `app_to_app_tag` (
+  `app_to_app_tag_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `app_id` int(10) unsigned NOT NULL,
+  `app_tag_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`app_to_app_tag_id`),
+  KEY `app_id` (`app_id`),
+  KEY `app_tag_id` (`app_tag_id`),
+  CONSTRAINT `app_to_app_tag_ibfk_1` FOREIGN KEY (`app_id`) REFERENCES `app` (`app_id`),
+  CONSTRAINT `app_to_app_tag_ibfk_2` FOREIGN KEY (`app_tag_id`) REFERENCES `app_tag` (`app_tag_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,6 +159,24 @@ CREATE TABLE `assembly` (
   CONSTRAINT `assembly_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE,
   CONSTRAINT `assembly_ibfk_2` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1069 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `centrifuge`
+--
+
+DROP TABLE IF EXISTS `centrifuge`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `centrifuge` (
+  `centrifuge_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tax_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`centrifuge_id`),
+  UNIQUE KEY `tax_id` (`tax_id`),
+  KEY `tax_id_2` (`tax_id`),
+  KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=10027 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,11 +269,30 @@ DROP TABLE IF EXISTS `investigator`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `investigator` (
   `investigator_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `investigator_name` varchar(255) DEFAULT NULL,
-  `institution` varchar(255) DEFAULT NULL,
+  `investigator_name` varchar(255) NOT NULL DEFAULT '',
+  `institution` varchar(255) NOT NULL DEFAULT '',
+  `url` varchar(255) DEFAULT NULL,
+  `orcid` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`investigator_id`),
   KEY `investigator_name` (`investigator_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=220 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=224 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `kegg_annotation`
+--
+
+DROP TABLE IF EXISTS `kegg_annotation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `kegg_annotation` (
+  `kegg_annotation_id` varchar(16) NOT NULL,
+  `name` varchar(80) DEFAULT NULL,
+  `definition` text,
+  `pathway` text,
+  `module` text,
+  PRIMARY KEY (`kegg_annotation_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,7 +309,7 @@ CREATE TABLE `login` (
   PRIMARY KEY (`login_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `login_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1003 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -232,7 +353,7 @@ CREATE TABLE `ontology` (
   KEY `ontology_acc` (`ontology_acc`),
   KEY `ontology_type_id` (`ontology_type_id`),
   CONSTRAINT `ontology_ibfk_1` FOREIGN KEY (`ontology_type_id`) REFERENCES `ontology_type` (`ontology_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -252,6 +373,24 @@ CREATE TABLE `ontology_type` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `pfam_annotation`
+--
+
+DROP TABLE IF EXISTS `pfam_annotation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pfam_annotation` (
+  `uproc_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `accession` varchar(16) DEFAULT NULL,
+  `identifier` varchar(16) DEFAULT NULL,
+  `name` varchar(80) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`uproc_id`),
+  UNIQUE KEY `accession` (`accession`)
+) ENGINE=InnoDB AUTO_INCREMENT=17623 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `project`
 --
 
@@ -260,23 +399,23 @@ DROP TABLE IF EXISTS `project`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project` (
   `project_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `project_code` varchar(255) DEFAULT NULL,
-  `project_name` varchar(255) DEFAULT NULL,
-  `pi` varchar(255) DEFAULT NULL,
-  `institution` varchar(255) DEFAULT NULL,
-  `project_type` varchar(255) DEFAULT NULL,
+  `project_code` varchar(255) NOT NULL DEFAULT '',
+  `project_name` varchar(255) NOT NULL DEFAULT '',
+  `pi` varchar(255) NOT NULL DEFAULT '',
+  `institution` varchar(255) NOT NULL DEFAULT '',
+  `project_type` varchar(255) NOT NULL DEFAULT '',
   `description` text,
-  `url` varchar(255) DEFAULT NULL,
-  `read_file` varchar(100) DEFAULT NULL,
-  `meta_file` varchar(100) DEFAULT NULL,
-  `assembly_file` varchar(100) DEFAULT NULL,
-  `peptide_file` varchar(100) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `read_pep_file` varchar(100) DEFAULT NULL,
-  `nt_file` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`project_id`),
-  UNIQUE KEY `project_code` (`project_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=262 DEFAULT CHARSET=utf8;
+  `url` varchar(255) NOT NULL DEFAULT '',
+  `read_file` varchar(100) NOT NULL DEFAULT '',
+  `meta_file` varchar(100) NOT NULL DEFAULT '',
+  `assembly_file` varchar(100) NOT NULL DEFAULT '',
+  `peptide_file` varchar(100) NOT NULL DEFAULT '',
+  `email` varchar(255) NOT NULL DEFAULT '',
+  `read_pep_file` varchar(100) NOT NULL DEFAULT '',
+  `nt_file` varchar(100) NOT NULL DEFAULT '',
+  `private` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`project_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=274 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -291,13 +430,14 @@ CREATE TABLE `project_file` (
   `project_id` int(10) unsigned NOT NULL,
   `project_file_type_id` int(10) unsigned NOT NULL,
   `file` varchar(255) DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`project_file_id`),
   UNIQUE KEY `project_id` (`project_id`,`project_file_type_id`,`file`),
   KEY `project_id_2` (`project_id`),
   KEY `project_file_type_id` (`project_file_type_id`),
   CONSTRAINT `project_file_ibfk_1` FOREIGN KEY (`project_file_type_id`) REFERENCES `project_file_type` (`project_file_type_id`),
   CONSTRAINT `project_file_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=500 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=854 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -312,7 +452,7 @@ CREATE TABLE `project_file_type` (
   `type` varchar(255) NOT NULL,
   PRIMARY KEY (`project_file_type_id`),
   UNIQUE KEY `type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -327,8 +467,29 @@ CREATE TABLE `project_group` (
   `group_name` varchar(255) DEFAULT NULL,
   `description` text,
   `url` varchar(255) DEFAULT NULL,
+  `private` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`project_group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `project_group_to_user`
+--
+
+DROP TABLE IF EXISTS `project_group_to_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `project_group_to_user` (
+  `project_group_to_user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_group_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `permission` int(4) unsigned DEFAULT NULL,
+  PRIMARY KEY (`project_group_to_user_id`),
+  KEY `project_group_id` (`project_group_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `project_group_to_user_ibfk_1` FOREIGN KEY (`project_group_id`) REFERENCES `project_group` (`project_group_id`) ON DELETE CASCADE,
+  CONSTRAINT `project_group_to_user_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -368,7 +529,7 @@ CREATE TABLE `project_to_domain` (
   KEY `domain_id` (`domain_id`),
   CONSTRAINT `project_to_domain_ibfk_2` FOREIGN KEY (`domain_id`) REFERENCES `domain` (`domain_id`),
   CONSTRAINT `project_to_domain_ibfk_3` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=227 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=264 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -387,7 +548,7 @@ CREATE TABLE `project_to_investigator` (
   KEY `investigator_id` (`investigator_id`),
   CONSTRAINT `project_to_investigator_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE,
   CONSTRAINT `project_to_investigator_ibfk_2` FOREIGN KEY (`investigator_id`) REFERENCES `investigator` (`investigator_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=215 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=223 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -406,7 +567,7 @@ CREATE TABLE `project_to_project_group` (
   KEY `project_id` (`project_id`),
   CONSTRAINT `project_to_project_group_ibfk_1` FOREIGN KEY (`project_group_id`) REFERENCES `project_group` (`project_group_id`) ON DELETE CASCADE,
   CONSTRAINT `project_to_project_group_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -426,6 +587,75 @@ CREATE TABLE `project_to_protocol` (
   CONSTRAINT `project_to_protocol_ibfk_1` FOREIGN KEY (`protocol_id`) REFERENCES `protocol` (`protocol_id`) ON DELETE CASCADE,
   CONSTRAINT `project_to_protocol_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `project_to_user`
+--
+
+DROP TABLE IF EXISTS `project_to_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `project_to_user` (
+  `project_to_user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `permission` int(4) unsigned DEFAULT NULL,
+  PRIMARY KEY (`project_to_user_id`),
+  KEY `project_id` (`project_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `project_to_user_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE,
+  CONSTRAINT `project_to_user_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `protein`
+--
+
+DROP TABLE IF EXISTS `protein`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `protein` (
+  `protein_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `protein_type_id` int(10) unsigned NOT NULL,
+  `accession` varchar(100) NOT NULL,
+  `description` text,
+  PRIMARY KEY (`protein_id`),
+  UNIQUE KEY `accession` (`accession`),
+  KEY `fk_pfkpt` (`protein_type_id`),
+  CONSTRAINT `fk_pfkpt` FOREIGN KEY (`protein_type_id`) REFERENCES `protein_type` (`protein_type_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=32447 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `protein_evidence_type`
+--
+
+DROP TABLE IF EXISTS `protein_evidence_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `protein_evidence_type` (
+  `protein_evidence_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(100) NOT NULL,
+  PRIMARY KEY (`protein_evidence_type_id`),
+  UNIQUE KEY `type` (`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `protein_type`
+--
+
+DROP TABLE IF EXISTS `protein_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `protein_type` (
+  `protein_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`protein_type_id`),
+  UNIQUE KEY `type` (`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -457,13 +687,13 @@ CREATE TABLE `pubchase` (
   `title` varchar(255) DEFAULT NULL,
   `journal_title` varchar(255) DEFAULT NULL,
   `doi` varchar(255) DEFAULT NULL,
-  `authors` text,
+  `authors` mediumtext,
   `article_date` date DEFAULT NULL,
   `created_on` date DEFAULT NULL,
-  `url` text,
+  `url` mediumtext,
   PRIMARY KEY (`pubchase_id`),
   UNIQUE KEY `article_id` (`article_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=454 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=656 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -478,7 +708,7 @@ CREATE TABLE `pubchase_rec` (
   `rec_date` datetime DEFAULT NULL,
   `checksum` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pubchase_rec_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -501,7 +731,26 @@ CREATE TABLE `publication` (
   PRIMARY KEY (`publication_id`),
   KEY `project_id` (`project_id`),
   CONSTRAINT `publication_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `publication_to_project_file`
+--
+
+DROP TABLE IF EXISTS `publication_to_project_file`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `publication_to_project_file` (
+  `publication_to_project_file_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `publication_id` int(10) unsigned NOT NULL,
+  `project_file_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`publication_to_project_file_id`),
+  KEY `publication_id` (`publication_id`),
+  KEY `project_file_id` (`project_file_id`),
+  CONSTRAINT `publication_to_project_file_ibfk_2` FOREIGN KEY (`publication_id`) REFERENCES `publication` (`publication_id`),
+  CONSTRAINT `publication_to_project_file_ibfk_3` FOREIGN KEY (`project_file_id`) REFERENCES `project_file` (`project_file_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -521,7 +770,7 @@ CREATE TABLE `query_log` (
   `time` double DEFAULT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`query_log_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=25140 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=31690 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -557,20 +806,21 @@ CREATE TABLE `sample` (
   `project_id` int(10) unsigned DEFAULT NULL,
   `combined_assembly_id` int(10) unsigned DEFAULT NULL,
   `sample_acc` varchar(255) DEFAULT NULL,
-  `sample_name` varchar(255) DEFAULT NULL,
-  `sample_type` varchar(255) DEFAULT NULL,
+  `sample_name` varchar(255) NOT NULL DEFAULT '',
+  `sample_type` varchar(255) NOT NULL DEFAULT '',
   `sample_description` text,
   `comments` text,
-  `taxon_id` varchar(255) DEFAULT NULL,
+  `taxon_id` varchar(255) NOT NULL DEFAULT '',
   `latitude` varchar(255) DEFAULT NULL,
   `longitude` varchar(255) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
+  `url` varchar(255) NOT NULL DEFAULT '',
+  `biome` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`sample_id`),
   UNIQUE KEY `project_id` (`project_id`,`sample_acc`),
   KEY `combined_assembly_id` (`combined_assembly_id`),
   CONSTRAINT `sample_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE,
   CONSTRAINT `sample_ibfk_2` FOREIGN KEY (`combined_assembly_id`) REFERENCES `combined_assembly` (`combined_assembly_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5172 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5764 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -591,7 +841,7 @@ CREATE TABLE `sample_attr` (
   KEY `sample_attr_type_id` (`sample_attr_type_id`),
   CONSTRAINT `sample_attr_ibfk_1` FOREIGN KEY (`sample_attr_type_id`) REFERENCES `sample_attr_type` (`sample_attr_type_id`),
   CONSTRAINT `sample_attr_ibfk_2` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=312658 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=333255 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -605,12 +855,12 @@ CREATE TABLE `sample_attr_type` (
   `sample_attr_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(255) NOT NULL,
   `url_template` varchar(255) DEFAULT NULL,
-  `description` text,
+  `description` mediumtext,
   `category` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`sample_attr_type_id`),
   UNIQUE KEY `type` (`type`),
   KEY `category` (`category`)
-) ENGINE=InnoDB AUTO_INCREMENT=937 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=960 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -650,9 +900,9 @@ CREATE TABLE `sample_file` (
   UNIQUE KEY `sample_id` (`sample_id`,`sample_file_type_id`,`file`),
   KEY `sample_id_2` (`sample_id`),
   KEY `sample_file_type_id` (`sample_file_type_id`),
-  CONSTRAINT `sample_file_ibfk_2` FOREIGN KEY (`sample_file_type_id`) REFERENCES `sample_file_type` (`sample_file_type_id`),
-  CONSTRAINT `sample_file_ibfk_3` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18522 DEFAULT CHARSET=latin1;
+  CONSTRAINT `sample_file_ibfk_1` FOREIGN KEY (`sample_file_type_id`) REFERENCES `sample_file_type` (`sample_file_type_id`) ON DELETE CASCADE,
+  CONSTRAINT `sample_file_ibfk_2` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=85998 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -667,7 +917,48 @@ CREATE TABLE `sample_file_type` (
   `type` varchar(255) NOT NULL,
   PRIMARY KEY (`sample_file_type_id`),
   UNIQUE KEY `type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sample_to_centrifuge`
+--
+
+DROP TABLE IF EXISTS `sample_to_centrifuge`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sample_to_centrifuge` (
+  `sample_to_centrifuge_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sample_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `centrifuge_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `num_reads` int(10) unsigned NOT NULL DEFAULT '0',
+  `num_unique_reads` int(10) unsigned NOT NULL DEFAULT '0',
+  `abundance` double unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`sample_to_centrifuge_id`),
+  UNIQUE KEY `sample_id` (`sample_id`,`centrifuge_id`),
+  KEY `centrifuge_id` (`centrifuge_id`),
+  CONSTRAINT `sample_to_centrifuge_ibfk_1` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`) ON DELETE CASCADE,
+  CONSTRAINT `sample_to_centrifuge_ibfk_2` FOREIGN KEY (`centrifuge_id`) REFERENCES `centrifuge` (`centrifuge_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7586838 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sample_to_domain`
+--
+
+DROP TABLE IF EXISTS `sample_to_domain`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sample_to_domain` (
+  `sample_to_domain_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sample_id` int(10) unsigned NOT NULL,
+  `domain_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`sample_to_domain_id`),
+  KEY `sample_id` (`sample_id`),
+  KEY `domain_id` (`domain_id`),
+  CONSTRAINT `sample_to_domain_ibfk_1` FOREIGN KEY (`domain_id`) REFERENCES `domain` (`domain_id`),
+  CONSTRAINT `sample_to_domain_ibfk_2` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6737 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -686,7 +977,7 @@ CREATE TABLE `sample_to_investigator` (
   KEY `investigator_id` (`investigator_id`),
   CONSTRAINT `sample_to_investigator_ibfk_1` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`) ON DELETE CASCADE,
   CONSTRAINT `sample_to_investigator_ibfk_2` FOREIGN KEY (`investigator_id`) REFERENCES `investigator` (`investigator_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=701 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1140 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -705,7 +996,30 @@ CREATE TABLE `sample_to_ontology` (
   KEY `ontology_id` (`ontology_id`),
   CONSTRAINT `sample_to_ontology_ibfk_2` FOREIGN KEY (`ontology_id`) REFERENCES `ontology` (`ontology_id`),
   CONSTRAINT `sample_to_ontology_ibfk_3` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4723 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sample_to_protein`
+--
+
+DROP TABLE IF EXISTS `sample_to_protein`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sample_to_protein` (
+  `sample_to_protein_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sample_id` int(10) unsigned NOT NULL,
+  `protein_id` int(10) unsigned NOT NULL,
+  `protein_evidence_type_id` int(10) unsigned NOT NULL,
+  `read_count` int(11) NOT NULL,
+  PRIMARY KEY (`sample_to_protein_id`),
+  KEY `fk_stpfks` (`sample_id`),
+  KEY `fk_stpfkp` (`protein_id`),
+  KEY `fk_stpfkpet` (`protein_evidence_type_id`),
+  CONSTRAINT `fk_stpfkp` FOREIGN KEY (`protein_id`) REFERENCES `protein` (`protein_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_stpfkpet` FOREIGN KEY (`protein_evidence_type_id`) REFERENCES `protein_evidence_type` (`protein_evidence_type_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_stpfks` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=17596452 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -719,10 +1033,51 @@ CREATE TABLE `search` (
   `search_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `table_name` varchar(100) DEFAULT NULL,
   `primary_key` int(10) unsigned DEFAULT NULL,
+  `object_name` varchar(255) DEFAULT NULL,
   `search_text` longtext,
   PRIMARY KEY (`search_id`),
   FULLTEXT KEY `search_text` (`search_text`)
-) ENGINE=MyISAM AUTO_INCREMENT=430722 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=775138 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `uproc_kegg_result`
+--
+
+DROP TABLE IF EXISTS `uproc_kegg_result`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `uproc_kegg_result` (
+  `uproc_kegg_result_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sample_id` int(10) unsigned NOT NULL,
+  `kegg_annotation_id` varchar(16) NOT NULL,
+  `read_count` int(11) DEFAULT NULL,
+  PRIMARY KEY (`uproc_kegg_result_id`),
+  UNIQUE KEY `kegg_annotation_id` (`kegg_annotation_id`,`sample_id`),
+  KEY `sample_id` (`sample_id`),
+  CONSTRAINT `uproc_kegg_result_ibfk_1` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`) ON DELETE CASCADE,
+  CONSTRAINT `uproc_kegg_result_ibfk_2` FOREIGN KEY (`kegg_annotation_id`) REFERENCES `kegg_annotation` (`kegg_annotation_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9615907 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `uproc_pfam_result`
+--
+
+DROP TABLE IF EXISTS `uproc_pfam_result`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `uproc_pfam_result` (
+  `sample_to_uproc_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sample_id` int(10) unsigned NOT NULL,
+  `uproc_id` int(10) unsigned NOT NULL,
+  `read_count` int(11) DEFAULT NULL,
+  PRIMARY KEY (`sample_to_uproc_id`),
+  UNIQUE KEY `sample_id` (`sample_id`,`uproc_id`),
+  KEY `uproc_id` (`uproc_id`),
+  CONSTRAINT `uproc_pfam_result_ibfk_1` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`sample_id`) ON DELETE CASCADE,
+  CONSTRAINT `uproc_pfam_result_ibfk_2` FOREIGN KEY (`uproc_id`) REFERENCES `pfam_annotation` (`uproc_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7888929 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -735,9 +1090,13 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_name` varchar(50) NOT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `orcid` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_name` (`user_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -749,4 +1108,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-03 10:03:15
+-- Dump completed on 2018-06-18 10:02:33

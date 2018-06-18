@@ -82,9 +82,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sample_to_domains
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2014-12-01 15:54:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aIOfGtK3QDos4UxN/0ky4A
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::SampleToDomain>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sample_to_domains",
+  "IMicrobe::Schema::Result::SampleToDomain",
+  { "foreign.domain_id" => "self.domain_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 10:10:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EQK2OUBUeZ1vXeYRUkcL9w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

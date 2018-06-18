@@ -16,14 +16,17 @@ use Readonly;
 use String::Trim qw(trim);
 
 Readonly my %INDEX_FLDS => (
-    assembly      => [qw(assembly_code assembly_name organism)],
-    investigator  => [qw(investigator_name institution)],
-    project       => [qw(project_code project_name institution description)],
-    project_page  => [qw(title contents)],
-    project_group => [qw(group_name description)],
-    publication   => [qw(journal pub_code author title pubmed_id doi)],
-    sample        => [qw(sample_acc sample_name sample_type sample_description
-                    comments)],
+    centrifuge      => [qw(name tax_id)],
+    assembly        => [qw(assembly_code assembly_name organism)],
+    investigator    => [qw(investigator_name institution)],
+    project         => [qw(project_code project_name institution description)],
+    project_page    => [qw(title contents)],
+    project_group   => [qw(group_name description)],
+    publication     => [qw(journal pub_code author title pubmed_id doi)],
+    #pfam_annotation => [qw(accession identifier name description)],
+    #kegg_annotation => [qw(name definition pathway module)],
+    sample          => [qw(sample_acc sample_name sample_type 
+                        sample_description comments)],
     combined_assembly => [qw( 
         assembly_name phylum class family genus species strain
     )],
@@ -31,7 +34,10 @@ Readonly my %INDEX_FLDS => (
 
 Readonly my %NAME_FLD => (
     assembly          => 'assembly_name',
+    centrifuge        => 'name',
     investigator      => 'investigator_name',
+    #kegg_annotation   => 'name',
+    #pfam_annotation   => 'identifier',
     project           => 'project_name',
     project_page      => 'title',
     project_group     => 'group_name',
@@ -42,6 +48,12 @@ Readonly my %NAME_FLD => (
 
 Readonly my %MONGO_SQL => {
     sample => [
+#        q'select "specimen__domain" as name, d.domain_name as value
+#          from   sample s, sample_to_domain s2d, domain d
+#          where  s.sample_id=?
+#          and    s.sample_id=s2d.sample_id
+#          and    s2d.domain_id=d.domain_id
+#        ',
         q'select "specimen__sample_id" as name, sample_id as value
           from   sample
           where  sample_id=?
@@ -100,12 +112,26 @@ Readonly my %MONGO_SQL => {
           where  a.sample_attr_type_id=t.sample_attr_type_id
           and    a.sample_id=?
         ',
-        q'select distinct concat("data__", replace(t.type, ".", "_")) as name, 
-                 "true" as value
-          from   sample_file f, sample_file_type t
-          where  f.sample_file_type_id=t.sample_file_type_id
-          and    f.sample_id=?
-        ',
+#        q'select distinct concat("data__", replace(t.type, ".", "_")) as name, 
+#                 "true" as value
+#          from   sample_file f, sample_file_type t
+#          where  f.sample_file_type_id=t.sample_file_type_id
+#          and    f.sample_id=?
+#        ',
+#        q'select "PFAM_ID" as name, u.identifier as value
+#          from   sample_to_uproc s, uproc u
+#          where  s.sample_id=?
+#          and    s.uproc_id=u.uproc_id
+#        ',
+#        q'select "KEGG_ID" as name, k.kegg_annotation_id as value
+#          from   uproc_kegg_result k
+#          where  k.sample_id=?
+#        ',
+#        q'select "Taxomomy" as name, c.name as value
+#          from   centrifuge c, sample_to_centrifuge s
+#          where  s.sample_id=?
+#          and    s.centrifuge_id=c.centrifuge_id
+#        ',
     ],
 };
 
@@ -151,7 +177,7 @@ sub main {
         die join "\n", "Bad tables:", (map { "  - $_" } @bad), '';
     }
 
-    process($db, @tables);
+    process($db, sort @tables);
 }
 
 # --------------------------------------------------

@@ -45,6 +45,13 @@ __PACKAGE__->table("app");
   default_value: 1
   is_nullable: 1
 
+=head2 provider_name
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 0
+  size: 30
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -59,6 +66,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 50 },
   "is_active",
   { data_type => "tinyint", default_value => 1, is_nullable => 1 },
+  "provider_name",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 30 },
 );
 
 =head1 PRIMARY KEY
@@ -121,8 +130,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-11-01 16:19:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2BVrmTZKhBYoaVPEam6mqQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 10:10:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oa9YShmguCY5jhU0rxUDxw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
