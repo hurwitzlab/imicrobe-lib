@@ -1,12 +1,12 @@
 use utf8;
-package IMicrobe::Schema::Result::AppRun;
+package IMicrobe::Schema::Result::ProjectToUser;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-IMicrobe::Schema::Result::AppRun
+IMicrobe::Schema::Result::ProjectToUser
 
 =cut
 
@@ -18,22 +18,22 @@ use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 
-=head1 TABLE: C<app_run>
+=head1 TABLE: C<project_to_user>
 
 =cut
 
-__PACKAGE__->table("app_run");
+__PACKAGE__->table("project_to_user");
 
 =head1 ACCESSORS
 
-=head2 app_run_id
+=head2 project_to_user_id
 
   data_type: 'integer'
   extra: {unsigned => 1}
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 app_id
+=head2 project_id
 
   data_type: 'integer'
   extra: {unsigned => 1}
@@ -47,28 +47,23 @@ __PACKAGE__->table("app_run");
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 app_ran_at
+=head2 permission
 
-  data_type: 'datetime'
-  datetime_undef_if_invalid: 1
-  is_nullable: 1
-
-=head2 params
-
-  data_type: 'text'
+  data_type: 'integer'
+  extra: {unsigned => 1}
   is_nullable: 1
 
 =cut
 
 __PACKAGE__->add_columns(
-  "app_run_id",
+  "project_to_user_id",
   {
     data_type => "integer",
     extra => { unsigned => 1 },
     is_auto_increment => 1,
     is_nullable => 0,
   },
-  "app_id",
+  "project_id",
   {
     data_type => "integer",
     extra => { unsigned => 1 },
@@ -82,42 +77,36 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable => 0,
   },
-  "app_ran_at",
-  {
-    data_type => "datetime",
-    datetime_undef_if_invalid => 1,
-    is_nullable => 1,
-  },
-  "params",
-  { data_type => "text", is_nullable => 1 },
+  "permission",
+  { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
 
 =over 4
 
-=item * L</app_run_id>
+=item * L</project_to_user_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("app_run_id");
+__PACKAGE__->set_primary_key("project_to_user_id");
 
 =head1 RELATIONS
 
-=head2 app
+=head2 project
 
 Type: belongs_to
 
-Related object: L<IMicrobe::Schema::Result::App>
+Related object: L<IMicrobe::Schema::Result::Project>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "app",
-  "IMicrobe::Schema::Result::App",
-  { app_id => "app_id" },
+  "project",
+  "IMicrobe::Schema::Result::Project",
+  { project_id => "project_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
@@ -137,8 +126,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-06-20 14:34:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Qr3Ah1ooxSrc0qE24jH/jg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-06-18 15:43:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zo7rL0C+TqoCTn4StDRgeg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -33,6 +33,13 @@ __PACKAGE__->table("sample_attr_type");
   is_auto_increment: 1
   is_nullable: 0
 
+=head2 sample_attr_type_category_id
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_foreign_key: 1
+  is_nullable: 1
+
 =head2 type
 
   data_type: 'varchar'
@@ -56,6 +63,19 @@ __PACKAGE__->table("sample_attr_type");
   is_nullable: 1
   size: 100
 
+=head2 units
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 0
+  size: 50
+
+=head2 is_numeric
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -66,6 +86,13 @@ __PACKAGE__->add_columns(
     is_auto_increment => 1,
     is_nullable => 0,
   },
+  "sample_attr_type_category_id",
+  {
+    data_type => "integer",
+    extra => { unsigned => 1 },
+    is_foreign_key => 1,
+    is_nullable => 1,
+  },
   "type",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "url_template",
@@ -74,6 +101,10 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "category",
   { data_type => "varchar", is_nullable => 1, size => 100 },
+  "units",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 50 },
+  "is_numeric",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -119,6 +150,26 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sample_attr_type_category
+
+Type: belongs_to
+
+Related object: L<IMicrobe::Schema::Result::SampleAttrTypeCategory>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "sample_attr_type_category",
+  "IMicrobe::Schema::Result::SampleAttrTypeCategory",
+  { sample_attr_type_category_id => "sample_attr_type_category_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "RESTRICT",
+  },
+);
+
 =head2 sample_attrs
 
 Type: has_many
@@ -135,8 +186,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-10-03 16:47:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6wkkv3hV7+SxRCsSrnwi+Q
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-06-20 14:34:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+qlVnPEiHCDHoHcaV2NlVA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

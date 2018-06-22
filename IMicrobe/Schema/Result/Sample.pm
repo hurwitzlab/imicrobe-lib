@@ -72,43 +72,6 @@ __PACKAGE__->table("sample");
   data_type: 'text'
   is_nullable: 1
 
-=head2 comments
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 taxon_id
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
-  size: 255
-
-=head2 latitude
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 255
-
-=head2 longitude
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 255
-
-=head2 url
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
-  size: 255
-
-=head2 biome
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -141,18 +104,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "sample_description",
   { data_type => "text", is_nullable => 1 },
-  "comments",
-  { data_type => "text", is_nullable => 1 },
-  "taxon_id",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
-  "latitude",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
-  "longitude",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
-  "url",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
-  "biome",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
 );
 
 =head1 PRIMARY KEY
@@ -391,8 +342,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 10:10:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R40WnQYIOyjd4187bwUR+g
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-06-20 14:34:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JJB40wdfK8K8f1KyZ4AyVQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

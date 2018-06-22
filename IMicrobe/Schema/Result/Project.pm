@@ -129,6 +129,11 @@ __PACKAGE__->table("project");
   is_nullable: 0
   size: 100
 
+=head2 private
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -167,6 +172,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
   "nt_file",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
+  "private",
+  { data_type => "tinyint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -180,20 +187,6 @@ __PACKAGE__->add_columns(
 =cut
 
 __PACKAGE__->set_primary_key("project_id");
-
-=head1 UNIQUE CONSTRAINTS
-
-=head2 C<project_code>
-
-=over 4
-
-=item * L</project_code>
-
-=back
-
-=cut
-
-__PACKAGE__->add_unique_constraint("project_code", ["project_code"]);
 
 =head1 RELATIONS
 
@@ -332,6 +325,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 project_to_users
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::ProjectToUser>
+
+=cut
+
+__PACKAGE__->has_many(
+  "project_to_users",
+  "IMicrobe::Schema::Result::ProjectToUser",
+  { "foreign.project_id" => "self.project_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 publications
 
 Type: has_many
@@ -363,8 +371,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-08-08 09:40:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZAGzn7KPKp4IeQLz7CN22w
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-06-18 15:43:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bVdpdMXAkRsQHign7Ih83g
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
