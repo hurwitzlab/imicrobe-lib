@@ -92,15 +92,13 @@ sub process {
         latitude_start   => 'latitude',
         longitude_start  => 'longitude',
         depth            => '',
-        collection_start => 'collection_start_time',
+        collection_start => 'collection_time',
     );
 
     my $i = 0;
     for my $MSample ($Cruise->samples) {
         my $ISample     = $imicrobe->resultset('Sample')->find_or_create({
             project_id  => $Project->id,
-            sample_acc  => join('-', 
-                           $Project->project_code, $MSample->sample_name),
             sample_name => $MSample->sample_name,
         });
 
@@ -134,7 +132,8 @@ sub process {
         }
 
         for my $MAttr ($MSample->sample_attrs) {
-            next if lc($MAttr->value) == 'unknown';
+            my $val = $MAttr->value;
+            next if lc($val) == 'unknown';
 
             my $MType = $MAttr->sample_attr_type;
 
@@ -143,35 +142,38 @@ sub process {
                 type => $MType->type
             });
 
-            unless ($IAttrType->category) {
-                $IAttrType->category('miscellaneous');
-                $IAttrType->update;
-            }
-
-            if (my $desc = $MType->description) {
-                $IAttrType->description($desc);
-                $IAttrType->update;
-            }
-
             my $IAttr = $imicrobe->resultset('SampleAttr')->find_or_create({
                 sample_attr_type_id => $IAttrType->id,
                 sample_id           => $ISample->id,
-                attr_value          => $MAttr->value,
+                attr_value          => $val,
             });
-
             
-            if (my $unit = $MType->unit) {
-                $IAttr->unit($unit);
-                $IAttr->update;
-            }
-            
-            printf "  Attr %s => %s\n", $IAttrType->type, $IAttr->attr_value;
+            printf "  Attr %s => %s\n", $IAttrType->type, $val;
         }
 
         for my $fld (keys %sample_fields_to_attr) {
             my $val = $MSample->$fld or next;
+
+            if ($fld =~ /^collection_st(art|op)$/) {
+                my ($date, $time) = split /\s+/, $val;
+                my $IDateType = 
+                    $imicrobe->resultset('SampleAttrType')->find_or_create({
+                        type => 'collection_date'
+                    });
+
+                printf "  Fld  %s => %s '%s'\n", $fld, $IDateType->type, $date;
+
+                my $IDate = $imicrobe->resultset('SampleAttr')->find_or_create({
+                    sample_attr_type_id => $IDateType->id,
+                    sample_id           => $ISample->id,
+                    attr_value          => $date,
+                });
+
+                $val = $time;
+            }
+
             my $imicrobe_sample_type = $sample_fields_to_attr{$fld} || $fld;
-            say "  Attr $fld => $imicrobe_sample_type '$val'";
+            say "  Fld  $fld => $imicrobe_sample_type '$val'";
             my $IAttrType = 
                 $imicrobe->resultset('SampleAttrType')->find_or_create({
                     type => $imicrobe_sample_type
@@ -182,11 +184,6 @@ sub process {
                 sample_id           => $ISample->id,
                 attr_value          => $val,
             });
-
-            if ($fld eq 'depth') {
-                $IAttr->unit('m');
-                $IAttr->update;
-            }
         }
 
 #        for my $File ($MSample->sample_files) {
