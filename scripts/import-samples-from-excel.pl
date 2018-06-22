@@ -3,18 +3,28 @@
 use common::sense;
 use autodie;
 use Data::Dump 'dump';
-use Getopt::Long;
+use DateTime;
 use File::Spec::Functions 'catfile';
+use Getopt::Long;
+use IMicrobe::DB;
 use Pod::Usage;
 use Readonly;
-use Text::RecordParser::Tab;
-use IMicrobe::DB;
 use String::Trim 'trim';
+use Text::RecordParser::Tab;
+use Time::ParseDate 'parsedate';
 
 Readonly my $MAX_ATTR_VALUE_LEN => 255;
 Readonly my %SPLITTABLE_FIELDS  => map { $_, 1 } qw(
     ncbi_sra_seq_run
 );
+Readonly my @CORE_FIELDS => qw[ 
+    sample_name
+    sequence_type
+    sample_type
+    pi
+    seq_name
+    reads_file
+];
 Readonly my @SAMPLE_TABLE_FIELDS => qw();
 Readonly my $COMMA_SPACE => qr/\s*,\s*/;
 
@@ -89,6 +99,8 @@ sub main {
         type => 'Reads'
     });
 
+    my %not_attr = map { $_, 1 } @SAMPLE_TABLE_FIELDS, @CORE_FIELDS;
+
     my $i = 0;
     while (my $sample = $p->fetchrow_hashref) {
         next unless $sample->{'sample_name'};
@@ -152,7 +164,14 @@ sub main {
             }
         } 
 
-        for my $fld (keys %attr_fld) {
+        FLD:
+        for my $fld (grep { !defined $not_attr{$_} } keys %$sample) {
+            unless (defined $attr_fld{ $fld }) {
+                printf STDERR "Unknown attr '%s' (%s), skipping\n", 
+                    $fld, $sample->{$fld} ne '' ? $sample->{$fld} : 'NULL';
+                next FLD;
+            }
+
             my @tmp;
             if ($SPLITTABLE_FIELDS{ $fld }) {
                 @tmp = map { split($COMMA_SPACE, $_) } $sample->{ $fld };
@@ -163,22 +182,45 @@ sub main {
 
             my @vals = grep { defined $_ && $_ ne '' } @tmp;
 
-            ($fld = lc $fld) =~ s/\s+/_/g; # to match normalization in parser
+            #($fld = lc $fld) =~ s/\s+/_/g; # to match normalization in parser
 
             for my $val (@vals) {
                 my $attr_id = $attr_fld{ $fld };
                 printf "       %25s (%s) => %s\n", 
                        $fld, $attr_id, substr($val, 0, 25);
 
+                if ($fld eq 'collection_date') {
+                    my $p  = parsedate($val);
+                    my $dt = DateTime->from_epoch(epoch => $p);
+                    $val   = $dt->ymd;
+                }
+                elsif ($fld eq 'collection_time') {
+                    if ($val =~ /(\d{1,2}):(\d{2})(:\d{2})?(\s([A|P])M)?/i) {
+                        my $hour = $1;
+                        my $min  = $2;
+                        my $sec  = $3 || ':00';
+                        if (my $ampm = uc($4)) {
+                            $hour -= 12 if $ampm eq 'A' && $hour == 12;
+                            $hour += 12 if $ampm eq 'P' && $hour != 12;
+                        }
+                        $val = sprintf('%02d:%s%s', $hour, $min, $sec);
+                    }
+                    else {
+                        $val = '';
+                    }
+                }
+
+                next unless $val =~ /\S+/;
+
                 my ($SampleAttr) =
-                $schema->resultset('SampleAttr')->find_or_create({
-                    sample_id           => $Sample->id,
-                    sample_attr_type_id => $attr_id,
-                    attr_value          => 
-                        length($val) > $MAX_ATTR_VALUE_LEN
-                        ? substr($val, 0, $MAX_ATTR_VALUE_LEN - 1)
-                        : $val
-                });
+                    $schema->resultset('SampleAttr')->find_or_create({
+                        sample_id           => $Sample->id,
+                        sample_attr_type_id => $attr_id,
+                        attr_value          => 
+                            length($val) > $MAX_ATTR_VALUE_LEN
+                            ? substr($val, 0, $MAX_ATTR_VALUE_LEN - 1)
+                            : $val
+                    });
             }
         }
 
