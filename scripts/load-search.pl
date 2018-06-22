@@ -26,7 +26,7 @@ Readonly my %INDEX_FLDS => (
     #pfam_annotation => [qw(accession identifier name description)],
     #kegg_annotation => [qw(name definition pathway module)],
     sample          => [qw(sample_acc sample_name sample_type 
-                        sample_description comments)],
+        sample_description )],
     combined_assembly => [qw( 
         assembly_name phylum class family genus species strain
     )],
