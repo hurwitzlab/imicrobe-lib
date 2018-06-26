@@ -102,7 +102,8 @@ sub process {
             sample_name => $MSample->sample_name,
         });
 
-        printf "%3d: %s => %s\n", ++$i, $MSample->sample_name, $ISample->id;
+        printf "%3d: %s %s => %s\n", 
+            ++$i, $MSample->sample_name, $MSample->id, $ISample->id;
 
         my ($seq_type) = 
             map  { $_->value }
@@ -133,7 +134,7 @@ sub process {
 
         for my $MAttr ($MSample->sample_attrs) {
             my $val = $MAttr->value;
-            next if lc($val) == 'unknown';
+            next if lc($val) eq 'unknown';
 
             my $MType = $MAttr->sample_attr_type;
 
@@ -154,8 +155,11 @@ sub process {
         for my $fld (keys %sample_fields_to_attr) {
             my $val = $MSample->$fld or next;
 
-            if ($fld =~ /^collection_st(art|op)$/) {
-                my ($date, $time) = split /\s+/, $val;
+            if ($fld =~ /^collection_st(art|op)$/ 
+                &&
+                $val =~ /(\d{4}-\d{2}-\d{2})\s+(\d{1,2}:\d{2}:\d{2})/
+            ) {
+                my ($date, $time) = ($1, $2);
                 my $IDateType = 
                     $imicrobe->resultset('SampleAttrType')->find_or_create({
                         type => 'collection_date'
