@@ -6,6 +6,7 @@ use Getopt::Long;
 use IMicrobe::DB;
 use Pod::Usage;
 use Readonly;
+use IO::Prompt 'prompt';
 
 main();
 
@@ -15,8 +16,6 @@ sub main {
     my $main_id   = $args{'main_id'} or pod2usage('No -i id');
     my @other_ids = split /,/, $args{'other_ids'} 
                     or pod2usage('No -o other ids');;
-
-    printf "other (%s) => $main_id\n", join(', ', @other_ids);
 
     if ($args{'help'} || $args{'man_page'}) {
         pod2usage({
@@ -33,6 +32,13 @@ sub main {
         my $Other = $schema->resultset('Investigator')->find($id)
                     or die "Bad id ($id)\n";
 
+        my $ok = prompt -yn, 
+            sprintf("OK to merge %s -> %s? [yn] ", 
+                sprintf('%s (%s)', $Other->investigator_name, $Other->id),
+                sprintf('%s (%s)', $Inv->investigator_name, $Inv->id)
+            );
+
+        next unless $ok;
         my @P2I = $schema->resultset('ProjectToInvestigator')->search({
             investigator_id => $Other->id
         });
@@ -55,9 +61,15 @@ sub main {
             $S2I->investigator_id($Inv->id);
             $S2I->update();
         }
+
+        if ($args{'delete'}) {
+            if (prompt -yn, "OK to delete? ") {
+                $Other->delete();
+            }
+        }
     }
 
-    say "OK";
+    say "Done.";
 }
 
 # --------------------------------------------------
@@ -69,6 +81,7 @@ sub get_args {
         'man',
         'main_id|i=i',
         'other_ids|o=s',
+        'delete|d'
     ) or pod2usage(2);
 
     return %args;
@@ -90,17 +103,16 @@ merge-investigator.pl - a script
 
 Options:
 
-  --help   Show brief help and exit
-  --man    Show full documentation
+  --main_id|-i    The investigator you want to keep
+  --other_ids|-o  Comma-separated list of the IDs you want to remove
+  --delete|-d     Delete the "other" investigator
+  --help          Show brief help and exit
+  --man           Show full documentation
 
 =head1 DESCRIPTION
 
-Describe what the script does, what input it expects, what output it
-creates, etc.
-
-=head1 SEE ALSO
-
-perl.
+Merges "other" investigator's projects and samples to a target, optionally
+deleting the "other" when done. Don't worry, you'll be prompted.
 
 =head1 AUTHOR
 
