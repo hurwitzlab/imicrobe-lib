@@ -71,11 +71,6 @@ Readonly my %MONGO_SQL => {
           where  s.sample_id=?
           and    s.project_id=p.project_id
         ',
-        q'select "specimen__is_metagenome" as name, 
-                 sample_type like "metagenome" as value
-          from   sample
-          where  sample_id=?
-        ',
         q'select "specimen__domain_of_life" as name, d.domain_name as value
           from   sample s, project p, project_to_domain p2d, domain d
           where  s.sample_id=?

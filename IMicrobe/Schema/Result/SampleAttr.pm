@@ -53,12 +53,6 @@ __PACKAGE__->table("sample_attr");
   is_nullable: 0
   size: 255
 
-=head2 unit
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 255
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -85,8 +79,6 @@ __PACKAGE__->add_columns(
   },
   "attr_value",
   { data_type => "varchar", is_nullable => 0, size => 255 },
-  "unit",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -151,12 +143,12 @@ __PACKAGE__->belongs_to(
   "sample_attr_type",
   "IMicrobe::Schema::Result::SampleAttrType",
   { sample_attr_type_id => "sample_attr_type_id" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-01 12:52:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QV2P/me8TseNuiligYqAOA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-06-26 13:10:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9NhudEKHS2zH8/hWcMj+Uw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

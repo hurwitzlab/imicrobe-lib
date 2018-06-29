@@ -40,13 +40,6 @@ __PACKAGE__->table("sample");
   is_foreign_key: 1
   is_nullable: 1
 
-=head2 combined_assembly_id
-
-  data_type: 'integer'
-  extra: {unsigned => 1}
-  is_foreign_key: 1
-  is_nullable: 1
-
 =head2 sample_acc
 
   data_type: 'varchar'
@@ -83,13 +76,6 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "project_id",
-  {
-    data_type => "integer",
-    extra => { unsigned => 1 },
-    is_foreign_key => 1,
-    is_nullable => 1,
-  },
-  "combined_assembly_id",
   {
     data_type => "integer",
     extra => { unsigned => 1 },
@@ -134,6 +120,20 @@ __PACKAGE__->set_primary_key("sample_id");
 
 __PACKAGE__->add_unique_constraint("project_id", ["project_id", "sample_acc"]);
 
+=head2 C<project_id_2>
+
+=over 4
+
+=item * L</project_id>
+
+=item * L</sample_name>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("project_id_2", ["project_id", "sample_name"]);
+
 =head1 RELATIONS
 
 =head2 assemblies
@@ -149,26 +149,6 @@ __PACKAGE__->has_many(
   "IMicrobe::Schema::Result::Assembly",
   { "foreign.sample_id" => "self.sample_id" },
   { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 combined_assembly
-
-Type: belongs_to
-
-Related object: L<IMicrobe::Schema::Result::CombinedAssembly>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "combined_assembly",
-  "IMicrobe::Schema::Result::CombinedAssembly",
-  { combined_assembly_id => "combined_assembly_id" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "RESTRICT",
-    on_update     => "RESTRICT",
-  },
 );
 
 =head2 combined_assembly_to_samples
@@ -311,6 +291,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sample_to_sample_file_attrs
+
+Type: has_many
+
+Related object: L<IMicrobe::Schema::Result::SampleToSampleFileAttr>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sample_to_sample_file_attrs",
+  "IMicrobe::Schema::Result::SampleToSampleFileAttr",
+  { "foreign.sample_id" => "self.sample_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 uproc_kegg_results
 
 Type: has_many
@@ -342,8 +337,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-06-20 14:34:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JJB40wdfK8K8f1KyZ4AyVQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-06-26 13:10:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rRcmModz9nV5Ee2k2/sPLg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

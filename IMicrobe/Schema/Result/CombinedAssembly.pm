@@ -213,24 +213,9 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
-=head2 samples
 
-Type: has_many
-
-Related object: L<IMicrobe::Schema::Result::Sample>
-
-=cut
-
-__PACKAGE__->has_many(
-  "samples",
-  "IMicrobe::Schema::Result::Sample",
-  { "foreign.combined_assembly_id" => "self.combined_assembly_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-12 09:58:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BPfayYqChBlNsDIbBKrk3w
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-06-26 13:10:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SZDZMpOTZ56fvLWKTVJLhw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

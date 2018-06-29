@@ -109,12 +109,12 @@ __PACKAGE__->belongs_to(
   "sample_attr_type",
   "IMicrobe::Schema::Result::SampleAttrType",
   { sample_attr_type_id => "sample_attr_type_id" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "RESTRICT" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-26 14:08:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Db0uUX5/3gCG56OqE4B8cQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-06-25 16:10:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XwstV9oqZGspseJoxy6EUw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
