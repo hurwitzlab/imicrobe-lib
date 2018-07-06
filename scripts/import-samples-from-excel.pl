@@ -83,7 +83,9 @@ sub main {
     printf "Project '%s' (%s)\n", $Project->project_name, $Project->id;
 
     my $p = Text::RecordParser::Tab->new($meta_file);
-    $p->header_filter(sub { $_ = shift; s/\s+/_/g; lc $_ });
+    $p->header_filter(
+        sub { $_ = shift; s/^\s*|\s*$//g; s/[\s-]+/_/g; lc $_ }
+    );
 
     #
     # Get all the possible sample_attr/aliases
@@ -165,7 +167,9 @@ sub main {
         } 
 
         FLD:
-        for my $fld (grep { !defined $not_attr{$_} } keys %$sample) {
+        for my $fld (
+            grep { $_ =~ /\S+/ && !defined $not_attr{$_} } keys %$sample
+        ) {
             unless (defined $attr_fld{ $fld }) {
                 printf STDERR "Unknown attr '%s' (%s), skipping\n", 
                     $fld, $sample->{$fld} ne '' ? $sample->{$fld} : 'NULL';
@@ -186,7 +190,7 @@ sub main {
 
             for my $val (@vals) {
                 my $attr_id = $attr_fld{ $fld };
-                printf "       %25s (%s) => %s\n", 
+                printf "       %35s (%s) => %s\n", 
                        $fld, $attr_id, substr($val, 0, 25);
 
                 if ($fld eq 'collection_date') {
@@ -211,6 +215,7 @@ sub main {
                 }
 
                 next unless $val =~ /\S+/;
+                next if lc($val) eq 'unknown' || lc($val) eq 'null';
 
                 my ($SampleAttr) =
                     $schema->resultset('SampleAttr')->find_or_create({
