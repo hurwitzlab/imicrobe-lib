@@ -101,9 +101,10 @@ Readonly my %MONGO_SQL => {
           and    s.project_id=pr.project_id
           and    pr.project_id=p.project_id
         ',
-        q'select concat_ws("__", t.category, t.type) as name, 
+        q'select concat_ws("__", c.category, t.type) as name, 
                  a.attr_value as value
           from   sample_attr a, sample_attr_type t
+          join   sample_attr_type_category c
           where  a.sample_attr_type_id=t.sample_attr_type_id
           and    a.sample_id=?
         ',
