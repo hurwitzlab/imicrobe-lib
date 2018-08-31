@@ -102,11 +102,11 @@ Readonly my %MONGO_SQL => {
           and    pr.project_id=p.project_id
         ',
         q'select concat_ws("__", c.category, t.type) as name, 
-                 a.attr_value as value
-          from   sample_attr a, sample_attr_type t
-          join   sample_attr_type_category c
-          where  a.sample_attr_type_id=t.sample_attr_type_id
-          and    a.sample_id=?
+          a.attr_value as value
+          from   sample_attr a, sample_attr_type t, sample_attr_type_category c
+          where  a.sample_id=?
+          and    a.sample_attr_type_id=t.sample_attr_type_id
+          and    t.sample_attr_type_category_id=c.sample_attr_type_category_id
         ',
 #        q'select distinct concat("data__", replace(t.type, ".", "_")) as name, 
 #                 "true" as value
@@ -232,7 +232,7 @@ sub process {
 
             printf "%-78s\r", ++$i;
 
-            my %mongo_rec;
+            my %mongo_rec = ( sample_name => $rec->{$name_fld} );
             if ($table eq 'sample') {
                 for my $sql (@mongo_sql) {
                     my $data =
